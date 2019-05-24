@@ -1,6 +1,7 @@
 #some GUI drawing basics
 
 from tkinter import *
+import math
 
 class MouseMover():
   
@@ -17,8 +18,6 @@ class MouseMover():
     self.y = yc
     canvas.x = xc
     canvas.y = yc
-    print ("self.x",self.x,"self.y",self.y)
-    print("canvas.x",canvas.x,"canvas.y",canvas.y)
     checkerboard(canvas)
     
     
@@ -29,8 +28,10 @@ class MouseMover():
     canvas.move(self.item, xc-self.previous[0], yc-self.previous[1])
     self.previous = (xc, yc)
 
-
-
+def getClosestTile(n):
+	print ("n",n)
+	n = math.floor(n)
+	return n
 def checkerboard(self):
 	w=self.winfo_width()
 	h=self.winfo_height()
@@ -43,11 +44,9 @@ def checkerboard(self):
 				fillcolor='white'
 				self.create_rectangle(col*cellwidth,row*cellheight,(col+1)*cellwidth,(row+1)*cellheight,fill=fillcolor)
 
-		self.init = 0
-	else:
-		row = self.y/10
-		col = self.x/10
-		print(self.x,self.y)
+		row = getClosestTile(self.y/cellheight)
+		col = getClosestTile(self.x/cellwidth)	
+		print("row",row,'col',col)
 		fillcolor='red'
 	self.create_rectangle(col*cellwidth,row*cellheight,(col+1)*cellwidth,(row+1)*cellheight,fill=fillcolor)
 
