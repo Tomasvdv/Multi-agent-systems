@@ -15,6 +15,11 @@ class MouseMover():
     self.item = widget.find_closest(xc, yc)[0]        # ID for closest
     self.x = xc
     self.y = yc
+    canvas.x = xc
+    canvas.y = yc
+    print ("self.x",self.x,"self.y",self.y)
+    print("canvas.x",canvas.x,"canvas.y",canvas.y)
+    checkerboard(canvas)
     
     
   
@@ -40,20 +45,20 @@ def checkerboard(self):
 
 		self.init = 0
 	else:
-		row = self.y
-		col = self.x
+		row = self.y/10
+		col = self.x/10
 		print(self.x,self.y)
 		fillcolor='red'
 	self.create_rectangle(col*cellwidth,row*cellheight,(col+1)*cellwidth,(row+1)*cellheight,fill=fillcolor)
 
 
 def buttonhandler(event):
-    if event.widget==thebutton:
+	if event.widget==thebutton:
 		canvas.init = 1
 		checkerboard(canvas)
     # if event.widget==select:
-    else:
-        canvas.delete('all')
+	else:
+	    canvas.delete('all')
 window=Tk()
 canvas = Canvas(window, width=500,height=500)
 canvas.grid(row=0,column=0,columnspan=2)
