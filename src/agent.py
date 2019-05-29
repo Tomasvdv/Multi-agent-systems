@@ -2,16 +2,22 @@ import random
 import numpy as np
 
 class Agent:
-	def __init__(self, name):
+	def __init__(self, name, x, y, model):
 		self.FAIL_PROB = 0.9	
 		self.knowledge = set([]) #sets can't contain duplicates.
-		self.sent_messages = [] 
+		self.sent_messages = []
 		self.received_messages = []
-
 		self.agents = []		#connected agents
 		self.name = str(name)
 		self.messageidx = 0
 		self.confirmed = {} #dict of identifiers of all messages sent
+
+		self.x = x
+		self.y = y
+
+		self.pos = np.array((x, y))
+
+		self.model = model
 
 	def broadcast(self, message):
 		#send message to all connected agents
@@ -28,9 +34,10 @@ class Agent:
 
 		return resent_this_epoch
 
-	def get_KB(self):
-		#return knowledge base in some format.
-		return self.knowledge
+	def printKB(self):
+		print("KB of agent ",self.name)
+		for k in self.knowledge:
+			print("\t", k)
 
 	def send_new_message(self, other, message):
 		identifier = str(self.messageidx) + self.name
@@ -65,39 +72,45 @@ class Agent:
 
 		self.knowledge.add(reply) #add the reply to knowledge base
 
-		if reply.count("K_%s" % self.name) == 2 and reply.count("K") == 4: #e.g. K_a(K_b(K_a(K_b(1))))
+		if reply.count("K_%s" % self.name) == 2 and reply.count("K_") == 4: #e.g. K_a(K_b(K_a(K_b(1))))
 			self.confirmed[identifier] = 1
 		else:
 			self.sent_messages.append((reply, identifier, other))
-			print("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))
+			print("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))
 			other.receive_message(self, reply, identifier)
 
 
 if __name__ == '__main__':
-	A = Agent("A")
-	B = Agent("B")
-	C = Agent("C")
-	D = Agent("D")
+	A = Agent("A", 0, 1)
+	B = Agent("B", 0, 0)
+	C = Agent("C", 1, 0)
+	D = Agent("D", 1, 1)
 
 	A.agents = [B, C, D]
 	B.agents = [A, C, D]
 
-messages_A = ['hello', 'spam', 'message', 'bye']
-messages_B = ['hi', 'spam2', 'empty', 'goodbye']
+	agents = [A, B, C, D]
+
+	messages_A = ['hello', 'spam', 'message', 'bye']
+	messages_B = ['hi', 'spam2', 'empty', 'goodbye']
 
 
-for message in messages_A:
-	A.broadcast(message)
+	for message in messages_A:
+		A.broadcast(message)
 
-for message in messages_A:
-	B.broadcast(message)
+	for message in messages_A:
+		B.broadcast(message)
 
 
 
-running = True
-while running:
-	running = False
-	if A.update():
-		running = True
-	if B.update():
-		running = True
+	running = True
+	while running:
+		running = False
+		if A.update():
+			running = True
+		if B.update():
+			running = True
+
+	print("---Final KB---")
+	for a in agents:
+		a.printKB()
