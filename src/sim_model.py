@@ -1,6 +1,5 @@
 import random
 import numpy as np
-from agent import Agent
 from plane import Plane
 from turret import Turret
 
@@ -26,8 +25,8 @@ class Model:
 		#add turret to set of turrets
 		self.turrets.append(new_turret)
 
-	def add_plane(self, name, x, y, dx, dy):
-		self.planes.append(Plane(name, x, y, dx, dy, self))
+	def add_plane(self, name, x, y, dx, dy, isfriendly):
+		self.planes.append(Plane(name, x, y, dx, dy, isfriendly, self))
 
 	def run_epoch(self):
 		for t in self.turrets:
@@ -45,7 +44,7 @@ if __name__ == "__main__":
 	m.add_turret("B", 1, 0)
 	m.add_turret("C", 1, 1)
 
-	m.add_plane("P", 0, 6, 0, -1) #plane spawns south of the turrets, moves north
+	m.add_plane("P", 0, 6, 0, -1, False) #plane spawns south of the turrets, moves north
 
 	for idx in range(10):
 		# m.turrets[0].broadcast("plane")
