@@ -3,7 +3,9 @@ The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
 2. Then run the code with: ```python3 main.py```
 
-![](/img/aircraft.jpg "Airplane")
+<p align="center">
+  <img width="460" height="300" src="/img/aircraft.jpg">
+</p>
 
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
