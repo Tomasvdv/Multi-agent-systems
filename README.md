@@ -3,7 +3,7 @@ The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
 2. Then run the code with: ```python3 main.py```
 
-Reference-style: 
+
 ![alt text][logo]
 
 <br />
