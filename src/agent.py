@@ -76,19 +76,21 @@ class Agent:
 if __name__ == '__main__':
 	A = Agent("A")
 	B = Agent("B")
+	C = Agent("C")
+	D = Agent("D")
 
-	A.agents.append(B)
-	B.agents.append(A)
+	A.agents = [B, C, D]
+	B.agents = [A, C, D]
 
 messages_A = ['hello', 'spam', 'message', 'bye']
 messages_B = ['hi', 'spam2', 'empty', 'goodbye']
 
 
 for message in messages_A:
-	A.send_new_message(B, message)
+	A.broadcast(message)
 
 for message in messages_A:
-	B.send_new_message(A, message)
+	B.broadcast(message)
 
 
 
