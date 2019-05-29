@@ -19,8 +19,6 @@ The code for this project has been written in Python3.
     max-height:100%;
 }
 
-[//]: # ![](/img/aircraft.jpg "Aircraft" )
-
 
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
