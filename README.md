@@ -1,5 +1,8 @@
 # Run instructions
 1. Clone the git repository
+´´´
+git clone https://github.com/Tomasvdv/Multi-agent-systems.git
+´´´
 2. 
 
 # Multi-agent-systems Project Report
