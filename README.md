@@ -5,6 +5,8 @@ The code for this project has been written in Python3.
 
 Reference-style: 
 ![alt text][logo]
+
+<br />
 [logo]: https://github.com/Tomasvdv/Multi-agent-systems/img/aircraft.jpg "Logo Title Text 2" 
 
 # Multi-agent-systems Project Report
