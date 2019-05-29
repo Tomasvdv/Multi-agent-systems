@@ -1,7 +1,7 @@
 # Run instructions
 The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
-2. Then run the: ```python3 main.py´´´
+2. Then run the: ```python3 main.py```
 
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
