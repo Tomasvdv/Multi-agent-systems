@@ -24,15 +24,19 @@ class MouseMover():
 		self.y = yc
 		canvas.x = xc
 		canvas.y = yc
-		self.selectedTurrets.append = getTurret(self,self.x,self.y) 
+		turret = getTurret(self,getClosestTile(self.x/canvas.model.cellwidth),getClosestTile(self.y/canvas.model.cellheight))
+		print(turret)
+		self.selectedTurrets.append(turret) 
 		self.turretCounter += 1 
 
-		if turretCounter > 1:
-			x1 = self.selectedTurrets[turretCounter-1]["col"]
-			x2 = self.selectedTurrets[turretCounter]["col"]
-			y = self.selectedTurrets[turretCounter-1]["row"]
-			y2 = self.selectedTurrets[turretCounter]["row"]
-			canvas.create_line(x1, y1, x2, y2)  	 
+		if self.turretCounter > 1:
+			turret =self.selectedTurrets[self.turretCounter]
+			print("turret",turret)
+			# x1 = self.selectedTurrets[self.turretCounter-1]["col"]
+			# x2 = self.selectedTurrets[self.turretCounter]["col"]
+			# y = self.selectedTurrets[self.turretCounter-1]["row"]
+			# y2 = self.selectedTurrets[self.turretCounter]["row"]
+			# canvas.create_line(x1, y1, x2, y2)  	 
 
 
 
@@ -63,8 +67,11 @@ def create_circle(x, y, r, canvas): #center coordinates, radius
     return canvas.create_oval(x0, y0, x1, y1)
 
 def getTurret(self,row,col):
+	# print ("(row,col)", row,col)
 	for idx in canvas.model.defences:
+		# print ("idx",idx)
 		if idx["row"] == row and idx["col"] == col:
+			# print ("Found")
 			return idx
 
 def loadTextures(canvas,cellwidth,cellheight):
@@ -79,30 +86,70 @@ def drawState(self):
 	w=self.winfo_width()
 	h=self.winfo_height()
 
+	plane = 1
 	cellwidth = w//10	
 	cellheight=h//10
 	canvas.model.cellheight = cellheight
 	canvas.model.cellwidth = cellwidth
 	
 	if self.init ==1:
+		self.previousX = -1
+		self.previousY = -1
 		self.init = 0
-		
+		counter = 0
 		loadTextures(canvas,cellwidth,cellheight)
-		row = random.randint(0,5)
-		col = random.randint(0,5)
-		canvas.model.plane={
-		"name": "plane1",
-		"row": row,
-		"col": col,
-		"health": 100
-		}
-		canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
-		print("Plane initialized at:",row,col)
-
+		
 		for row in range(10):
 			for col in range(10):
 				canvas.create_image(col*cellwidth,row*cellheight,image=canvas.land,anchor=NW)
 		
+		for row in range(10):
+			for col in range(10):
+				rand= random.random()
+				
+				if rand > 0.8 and counter != 3:
+					counter += 1
+					print ("turret at(row,col",row,col)
+					canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
+					create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
+
+					defence =	{
+					"name": canvas.model.defenceCounter,
+					"row": row,
+					"col": col,
+					"health": 100
+					}
+
+				
+					if canvas.model.defenceCounter ==0:
+						canvas.model.defences = [defence]
+						canvas.model.defenceCounter+=1
+						self.previousX = col
+						self.previousY = row
+						print ("previous set to",row,col)
+
+					else:
+						if counter > 1:
+							print("line created at",self.previousX*cellwidth, self.previousY*cellheight, col*cellwidth, row*cellheight)
+							canvas.create_line(self.previousX*cellwidth, self.previousY*cellheight, col*cellwidth, row*cellheight,fill='red')
+						self.previousX = col
+						self.previousY = row
+						print ("previous set to",row,col) 
+						canvas.model.defences.append(defence)
+						canvas.model.defenceCounter+=1
+						
+		row = random.randint(0,5)
+		col = random.randint(0,5)
+		canvas.model.plane={
+			"name": "plane1",
+			"row": row,
+			"col": col,
+			"health": 100
+			}
+		
+		canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
+		print("Plane initialized at:",row,col)
+							
 	else:
 		drawPlanes(canvas)
 
