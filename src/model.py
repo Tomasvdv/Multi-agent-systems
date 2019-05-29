@@ -4,28 +4,42 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 #Defaults
-EDGELIST = [('A', 'D'), ('D','A'), ('B', 'A'), ('C','E'), ('A','C'), ('F','F')]
-EDGE_LABELS = ['a,b,c', 'b,c']
+EDGELIST = [('P', '!P'), ('!P', 'P'), ('P', 'P')]
+EDGE_LABELS = ['a,b,c',]
+NODE_LABELS = ['refl: ', 'refl: ']
 
 class Kripke_model():
 	def __init__(self):
 		self.NODE_SIZE = 200
+		self.NODE_SIZE_REFL = 20
 		self.ARROW_SIZE = 50
 		self.EDGE_WIDTH = 2
+		self.REFL_FONTSIZE = 8
+
+	# get knowledge from knowledge dictionary
+	def get_knowledge(self, knowledge_dict):
+		for key, val in knowledge_dict.items():
+			#Read stuff
+
+			pass
 
 	def construct_model(self, connected_agents=EDGELIST, agent_knowledge_list=EDGE_LABELS):
 		# Build your graph
 		G = nx.MultiDiGraph()
 		G.add_edges_from(EDGELIST)
 		# Plot it
-		#nx.draw_networkx(G, with_labels=True, edge_color='r', arrows=True, arrowstyle='->', arrowsize=1.0)
-		pos = nx.layout.circular_layout(G)
+		#pos = nx.layout.circular_layout(G)
+		pos = nx.layout.spring_layout(G)
+		print(pos)
+
 		nx.draw_networkx_labels(G, pos, color='white')
+		labels = dict()
+		for idx, (key, value) in enumerate(pos.items()):
+			labels.update({key:'\n\n\n'+str(NODE_LABELS[idx])})
+		print(labels)
+		nx.draw_networkx_labels(G, pos, labels=labels, color='white', font_size=self.REFL_FONTSIZE)
+		
 		nx.draw_networkx_nodes(G, pos, with_labels=True, node_size=self.NODE_SIZE, node_color='green')
-		'''
-		edges = nx.draw_networkx_edges(G, pos, node_size=NODE_SIZE, arrows=True, arrowstyle='->', 
-			edge_color='red', width=EDGE_WIDTH)
-		'''
 		nx.draw_networkx_edges(G, pos, edgelist=EDGELIST, edge_color='r', arrowstyle='<->')
 		labels = dict()
 		for idx, edge in enumerate(EDGELIST):
@@ -33,7 +47,7 @@ class Kripke_model():
 				labels[edge] = EDGE_LABELS[idx]
 			except:
 				labels[edge] = ''
-		print(labels)
+		#print(labels)
 		nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
 
 	def put_data_in_model(self, connected_agents=EDGELIST, agent_knowledge_list=EDGE_LABELS):
