@@ -7,7 +7,7 @@ Reference-style:
 ![alt text][logo]
 
 <br />
-[logo]: https://github.com/Tomasvdv/Multi-agent-systems/img/aircraft.jpg "Logo Title Text 2" 
+[logo]: https://github.com/Tomasvdv/Multi-agent-systems/tree/master/img/aircraft.jpg "Logo Title Text 2" 
 
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
