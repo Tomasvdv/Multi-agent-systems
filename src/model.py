@@ -42,6 +42,7 @@ class Kripke_model():
 	def show_model(self):
 		plt.show()
 
-model = Kripke_model()
-model.put_data_in_model()
-model.show_model()
+if __name__ == '__main__':
+	model = Kripke_model()
+	model.put_data_in_model()
+	model.show_model()
