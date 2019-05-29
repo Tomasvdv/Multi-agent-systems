@@ -4,10 +4,8 @@ The code for this project has been written in Python3.
 2. Then run the code with: ```python3 main.py```
 
 
-![alt text][logo]
+![alt text](https://github.com/Tomasvdv/Multi-agent-systems/tree/master/img/aircraft.jpg "Logo Title Text 2" )
 
-<br />
-[logo]: https://github.com/Tomasvdv/Multi-agent-systems/tree/master/img/aircraft.jpg "Logo Title Text 2" 
 
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
