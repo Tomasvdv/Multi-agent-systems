@@ -1,0 +1,18 @@
+TODO
+
+#Graphics
+-Airplanes fly in different directions
+-Connect turrets
+-Send message to message sender:
+	-Which turrets are connected
+	-Which turret detects the plane
+
+#Message sender
+-Takes message:
+	-Which turrets are connected
+	-Which turret detects the plane
+-Sends message to Kripke model:
+	-List of knowledge per agent
+
+#Kripke model
+-Takes list of knowledge per agent
