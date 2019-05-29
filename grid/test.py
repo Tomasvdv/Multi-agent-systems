@@ -24,15 +24,15 @@ class MouseMover():
 		self.y = yc
 		canvas.x = xc
 		canvas.y = yc
-		turret = getTurret(self,getClosestTile(self.x/canvas.model.cellwidth),getClosestTile(self.y/canvas.model.cellheight))
-		print(turret)
-		self.selectedTurrets.append(turret) 
-		self.turretCounter += 1 
+		# turret = getTurret(self,getClosestTile(self.x/canvas.model.cellwidth),getClosestTile(self.y/canvas.model.cellheight))
+		# print(turret)
+		# self.selectedTurrets.append(turret) 
+		# self.turretCounter += 1 
 
-		if self.turretCounter > 1:
-			turret =self.selectedTurrets[self.turretCounter]
-			print("turret",turret)
-			# x1 = self.selectedTurrets[self.turretCounter-1]["col"]
+		# if self.turretCounter > 1:
+		# 	turret =self.selectedTurrets[self.turretCounter]
+		# 	print("turret",turret)
+		# 	# x1 = self.selectedTurrets[self.turretCounter-1]["col"]
 			# x2 = self.selectedTurrets[self.turretCounter]["col"]
 			# y = self.selectedTurrets[self.turretCounter-1]["row"]
 			# y2 = self.selectedTurrets[self.turretCounter]["row"]
@@ -51,7 +51,7 @@ class Model():
 		self.planes = {}
 		self.planesCounter = 0
 		self.defenceCounter = 0
-
+		self.lines = [] 
 
 
 
@@ -99,47 +99,47 @@ def drawState(self):
 		counter = 0
 		loadTextures(canvas,cellwidth,cellheight)
 		
+	
 		for row in range(10):
 			for col in range(10):
 				canvas.create_image(col*cellwidth,row*cellheight,image=canvas.land,anchor=NW)
 		
-		for row in range(10):
-			for col in range(10):
-				rand= random.random()
-				
-				if rand > 0.8 and counter != 3:
-					counter += 1
-					print ("turret at(row,col",row,col)
-					canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
-					create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
 
-					defence =	{
-					"name": canvas.model.defenceCounter,
-					"row": row,
-					"col": col,
-					"health": 100
-					}
+		for idx in range (3):
+			row = random.randint(0,9)
+			col = random.randint(0,9)
+			print ("turret at(row,col",row,col)
+			canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
+			create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
 
-				
-					if canvas.model.defenceCounter ==0:
-						canvas.model.defences = [defence]
-						canvas.model.defenceCounter+=1
-						self.previousX = col
-						self.previousY = row
-						print ("previous set to",row,col)
+			defence =	{
+			"name": canvas.model.defenceCounter,
+			"row": row,
+			"col": col,
+			"health": 100
+			}
 
-					else:
-						if counter > 1:
-							print("line created at",self.previousX*cellwidth, self.previousY*cellheight, col*cellwidth, row*cellheight)
-							canvas.create_line(self.previousX*cellwidth, self.previousY*cellheight, col*cellwidth, row*cellheight,fill='red')
-						self.previousX = col
-						self.previousY = row
-						print ("previous set to",row,col) 
-						canvas.model.defences.append(defence)
-						canvas.model.defenceCounter+=1
-						
-		row = random.randint(0,5)
-		col = random.randint(0,5)
+		
+			if idx ==0:
+				canvas.model.defences = [defence]
+				canvas.model.defenceCounter+=1
+				self.previousX = col
+				self.previousY = row
+				# print ("first update",row,col)
+
+			else:
+				# print("line created at",self.previousX*cellwidth, self.previousY*cellheight, col*cellwidth, row*cellheight)
+				canvas.create_line((self.previousX+0.5)*cellwidth, (self.previousY + 0.5)* cellheight, (col+0.5)*cellwidth, (row+0.5)*cellheight,fill='red',width = 5)
+				line = {"x1": (self.previousX+0.5)*cellwidth, "y1":(self.previousY + 0.5)* cellheight, "x2": (col+0.5) * cellwidth, "y2" : (row+0.5)*cellheight }
+				canvas.model.lines.append(line)
+				self.previousX = col
+				self.previousY = row
+				# print ("previous set to",row,col) 
+				canvas.model.defences.append(defence)
+				canvas.model.defenceCounter+=1
+		
+		row = random.randint(1,3)
+		col = random.randint(1,3)
 		canvas.model.plane={
 			"name": "plane1",
 			"row": row,
@@ -149,9 +149,9 @@ def drawState(self):
 		
 		canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
 		print("Plane initialized at:",row,col)
-							
+										
 	else:
-		drawPlanes(canvas)
+		drawStep(canvas)
 
 def createDefence(self):
 		w=self.winfo_width()
@@ -178,7 +178,31 @@ def createDefence(self):
 		else:
 			canvas.model.defences.append(defence)
 		canvas.model.defenceCounter+=1
- 
+def drawStep(self):
+	canvas.delete("all")
+	cellheight = canvas.model.cellheight
+	cellwidth = canvas.model.cellwidth
+
+	for row in range(10):
+		for col in range(10):
+			canvas.create_image(col*cellwidth,row*cellheight,image=canvas.land,anchor=NW)
+	print("Done drawing grass")
+	drawPlanes(self)
+	print("plane update")
+	for row in range(10):
+		for col in range(10):			
+			for defence in canvas.model.defences:
+				if defence["row"] == row and defence["col"] == col:
+					canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
+					create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
+	for line in canvas.model.lines:
+		x1 = line["x1"]
+		x2 = line["x2"]
+		y1 = line["y1"]
+		y2 = line["y2"]
+		canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
+		print ("Done with drawing step")
+
 def drawPlanes(self):
 	plane = canvas.model.plane
 	row = plane.get("row")
@@ -189,29 +213,25 @@ def drawPlanes(self):
 	canvas.model.plane["col"] = col
 	cellwidth = canvas.model.cellwidth	
 	cellheight= canvas.model.cellheight
-	print("Plane: (row,col)",row,col)
+	
 	
 	canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
-	row = row - speed
-	print("Land:(row,col)",row,col)
-	canvas.create_image(col*cellwidth,row*cellheight,image=canvas.land,anchor=NW)
-				
 		
 
 def buttonhandler(event):
-	if event.widget==draw:
-		drawState(canvas)
+	# if event.widget==draw:
+	# 	drawState(canvas)
 
-	if event.widget==placeTurret:
-		createDefence(canvas)
+	# if event.widget==placeTurret:
+	# 	createDefence(canvas)
 
-	if event.widget==erase:
-	    canvas.delete('all')
+	# if event.widget==erase:
+	#     canvas.delete('all')
 
-	if event.widget==selectTurret:
-	    selectTurret(canvas,event)
+	# if event.widget==selectTurret:
+	#     selectTurret(canvas,event)
 	
-	else:
+	# else:
 		drawState(canvas)
 
 window=Tk()
@@ -227,20 +247,20 @@ canvas.bind("<Button-1>", mm.selectTurret)
 canvas.bind("<B1-Motion>", mm.drag)
 draw=Button(window,text="Draw")
 draw.grid(row=1,column=3)
-placeTurret=Button(window,text="Place turret")
-placeTurret.grid(row=1,column=4)
-selectTurret=Button(window, text="Select Turret")
-selectTurret.grid(row=1,column =2)
-erase=Button(window,text="Erase")
-erase.grid(row=1,column=1)
+# placeTurret=Button(window,text="Place turret")
+# placeTurret.grid(row=1,column=4)
+# selectTurret=Button(window, text="Select Turret")
+# selectTurret.grid(row=1,column =2)
+# erase=Button(window,text="Erase")
+# erase.grid(row=1,column=1)
 
 window.update_idletasks()
 canvas.x = mm.x
 canvas.y = mm.y
 draw.bind('<Button-1>',buttonhandler)
-erase.bind('<Button-1>',buttonhandler)
-selectTurret.bind('<Button-1>',buttonhandler)
-placeTurret.bind('<Button-1>',buttonhandler)
+# erase.bind('<Button-1>',buttonhandler)
+# selectTurret.bind('<Button-1>',buttonhandler)
+# placeTurret.bind('<Button-1>',buttonhandler)
 #drawState(canvas)
 window.mainloop()
     
