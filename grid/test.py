@@ -66,6 +66,12 @@ def create_circle(x, y, r, canvas): #center coordinates, radius
     y1 = y + r
     return canvas.create_oval(x0, y0, x1, y1)
 
+def planeInRange(self):
+	for dic in self.model.defences:
+		if self.model.plane.get("row") <= dic.get("row")+2 and 	dic.get("row") -2 <= self.model.plane.get("row") and self.model.plane.get("col") <= dic.get("col")+2 and dic.get("col")-2 <= self.model.plane.get("col") :
+			dic["plane in range"] = 1  
+			print ("plane detected!")
+
 def getTurret(self,row,col):
 	# print ("(row,col)", row,col)
 	for idx in canvas.model.defences:
@@ -82,6 +88,23 @@ def loadTextures(canvas,cellwidth,cellheight):
 	canvas.airplane = Image.open("plane.jpg")
 	canvas.airplane = ImageTk.PhotoImage(canvas.airplane.resize((cellwidth,cellheight), Image.ANTIALIAS))
 
+def initializePlane(self):
+
+	row = random.randint(1,3)
+	col = random.randint(1,3)
+	cellwidth = canvas.model.cellwidth
+	cellheight = canvas.model.cellheight
+	canvas.model.plane={
+	"name": "plane1",
+	"row": row,
+	"col": col,
+	"direction": random.randint(0,4),
+	"health": 100
+	}
+
+	canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
+	# print("Plane initialized at:",row,col)
+	planeInRange(self)
 def drawState(self):
 	w=self.winfo_width()
 	h=self.winfo_height()
@@ -110,12 +133,13 @@ def drawState(self):
 			col = random.randint(0,9)
 			print ("turret at(row,col",row,col)
 			canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
-			create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
+			create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, 2*cellheight, canvas)
 
 			defence =	{
 			"name": canvas.model.defenceCounter,
 			"row": row,
 			"col": col,
+			"plane in range" : 0,
 			"health": 100
 			}
 
@@ -138,18 +162,7 @@ def drawState(self):
 				canvas.model.defences.append(defence)
 				canvas.model.defenceCounter+=1
 		
-		row = random.randint(1,3)
-		col = random.randint(1,3)
-		canvas.model.plane={
-			"name": "plane1",
-			"row": row,
-			"col": col,
-			"health": 100
-			}
-		
-		canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
-		print("Plane initialized at:",row,col)
-										
+		initializePlane(canvas)								
 	else:
 		drawStep(canvas)
 
@@ -161,9 +174,8 @@ def createDefence(self):
 		cellheight=h//10
 		row = getClosestTile(self.y/cellheight)
 		col = getClosestTile(self.x/cellwidth)	
-		print("row,col",row,col)
 		canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
-		create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
+		create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, 2*cellheight, canvas)
 
 		defence =	{
 		"name": canvas.model.defenceCounter,
@@ -178,6 +190,7 @@ def createDefence(self):
 		else:
 			canvas.model.defences.append(defence)
 		canvas.model.defenceCounter+=1
+
 def drawStep(self):
 	canvas.delete("all")
 	cellheight = canvas.model.cellheight
@@ -186,38 +199,47 @@ def drawStep(self):
 	for row in range(10):
 		for col in range(10):
 			canvas.create_image(col*cellwidth,row*cellheight,image=canvas.land,anchor=NW)
-	print("Done drawing grass")
+	# print("Done drawing grass")
 	drawPlanes(self)
-	print("plane update")
+	# print("plane update")
 	for row in range(10):
 		for col in range(10):			
 			for defence in canvas.model.defences:
 				if defence["row"] == row and defence["col"] == col:
 					canvas.create_image(col*cellwidth,row*cellheight,image=canvas.flak,anchor=NW)
-					create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, cellheight, canvas)
+					create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, 2*cellheight, canvas)
 	for line in canvas.model.lines:
 		x1 = line["x1"]
 		x2 = line["x2"]
 		y1 = line["y1"]
 		y2 = line["y2"]
 		canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
-		print ("Done with drawing step")
+		# print ("Done with drawing step")
 
 def drawPlanes(self):
 	plane = canvas.model.plane
 	row = plane.get("row")
 	col = plane.get("col")
 	speed = 1
-	row = row+speed
+	if plane.get("direction") == 1:
+		row = row + speed
+	if plane.get("direction") == 2:
+		row = row - speed
+	if plane.get("direction") == 3:
+		col = col + speed
+	else:
+		col = col - speed
+		
 	canvas.model.plane["row"] = row
 	canvas.model.plane["col"] = col
 	cellwidth = canvas.model.cellwidth	
 	cellheight= canvas.model.cellheight
 	
-	
 	canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
-		
-
+	
+	if row > 10 or row < 0 or col > 10 or col < 0	:
+		initializePlane(canvas)
+	planeInRange(self)		
 def buttonhandler(event):
 	# if event.widget==draw:
 	# 	drawState(canvas)
