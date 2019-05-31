@@ -105,6 +105,7 @@ def initializePlane(self):
 	canvas.create_image(col*cellwidth,row*cellheight,image=canvas.airplane,anchor=NW)
 	# print("Plane initialized at:",row,col)
 	planeInRange(self)
+	
 def drawState(self):
 	w=self.winfo_width()
 	h=self.winfo_height()
@@ -239,7 +240,8 @@ def drawPlanes(self):
 	
 	if row > 10 or row < 0 or col > 10 or col < 0	:
 		initializePlane(canvas)
-	planeInRange(self)		
+	planeInRange(self)	
+		
 def buttonhandler(event):
 	# if event.widget==draw:
 	# 	drawState(canvas)
