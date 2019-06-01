@@ -13,6 +13,8 @@ class Plane(Agent):
 	def run_epoch(self):
 		self.pos[0] += self.dx
 		self.pos[1] += self.dy
+		if self.pos[1] > 10 or self.pos[1]  < 0 or self.pos[0] > 10 or self.pos[0] < 0:
+			self.destroy()
 		print('xpos: %d, ypos: %d' % (self.pos[0], self.pos[1]))
 
 		if "indentify" in self.knowledge:
@@ -27,3 +29,4 @@ class Plane(Agent):
 			self.model.planes.remove(self)
 		self.isdestroyed = True
 		self.isvisible = False
+		print("plane destroyed")

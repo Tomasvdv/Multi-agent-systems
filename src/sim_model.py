@@ -7,6 +7,7 @@ class Model:
 	def __init__(self):
 		self.turrets = []
 		self.planes = []
+		self.connections = []
 
 	def getKB():
 		kb = {}
@@ -28,6 +29,12 @@ class Model:
 	def add_plane(self, name, x, y, dx, dy, isfriendly):
 		self.planes.append(Plane(name, x, y, dx, dy, isfriendly, self))
 
+	def add_connection (self):
+		idx = len(self.turrets)-1
+		name1 = self.turrets[idx-1]
+		name2 = self.turrets[idx]
+		self.connections.append((name1,name2))
+
 	def run_epoch(self):
 		for t in self.turrets:
 			t.run_epoch()
@@ -40,12 +47,12 @@ class Model:
 if __name__ == "__main__":
 
 	m = Model()
-	m.add_turret("A", 0, 1)
-	m.add_turret("B", 1, 0)
-	m.add_turret("C", 1, 1)
+	# m.add_turret("A", 0, 1)
+	# m.add_turret("B", 1, 0)
+	# m.add_turret("C", 1, 1)
 
-	m.add_plane("P", 0, 6, 0, -1, False) #plane spawns south of the turrets, moves north
+	# m.add_plane("P", 0, 6, 0, -1, False) #plane spawns south of the turrets, moves north
 
-	for idx in range(10):
-		# m.turrets[0].broadcast("plane")
-		m.run_epoch()
+	# for idx in range(10):
+	# 	# m.turrets[0].broadcast("plane")
+	# 	m.run_epoch()

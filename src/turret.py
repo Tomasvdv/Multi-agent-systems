@@ -1,7 +1,7 @@
 import numpy as np
 from agent import Agent
 
-TURRET_RANGE = 10
+TURRET_RANGE = 2
 
 class Turret(Agent):
 	def __init__(self, name, x, y, model):
