@@ -167,7 +167,9 @@ class Demo():
 			(col, row) = turret.pos
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
-	
+
+		self.draw_shots(cellwidth)
+
 		# for line in self.lines:
 		# 	x1 = line["x1"]
 		# 	x2 = line["x2"]
@@ -175,9 +177,6 @@ class Demo():
 		# 	y2 = line["y2"]
 		# 	self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
 		# 	# print ("Done with drawing step")
-
-		
-
 
 	def drawPlanes(self,flag):
 		cellwidth = self.canvas.cellwidth	
@@ -191,7 +190,19 @@ class Demo():
 				print("row,col",row,col)
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 				
+	def draw_shots(self, cellwidth):
+		for turret in self.model.turrets:
+			for plane in self.model.planes:
+				if np.linalg.norm(turret.pos - plane.pos) <= turret.turret_range:
+					print("SHOOT!")
+					x1 = (turret.pos[0] + 0.5)*cellwidth
+					y1 = (turret.pos[1] + 0.5)*cellwidth
+					x2 = (plane.pos[0] + 0.5)*cellwidth
+					y2 = (plane.pos[1] + 0.5)*cellwidth
+					print(x1, x2, y1, y2)
+					self.canvas.create_line(x1,y1,x2,y2,fill='blue',width = 5, dash=(4,4))
 
+	
 demo = Demo()
 window=Tk()
 mm = mouseMover()

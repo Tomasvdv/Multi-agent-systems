@@ -30,4 +30,3 @@ class Plane(Agent):
 			self.model.planes.remove(self)
 		self.isdestroyed = True
 		self.isvisible = False
-		print("plane destroyed")
