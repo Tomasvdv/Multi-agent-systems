@@ -10,7 +10,8 @@ from turret import Turret
 from sim_model import Model
 import time
 
-TURRET_RANGE = 3
+TURRET_RANGE = 5
+SPEED = 0.5
 
 class Demo():
 
@@ -43,8 +44,11 @@ class Demo():
 		self.canvas.land = ImageTk.PhotoImage(self.canvas.land.resize((cellwidth, cellheight), Image.ANTIALIAS))
 		self.canvas.airplane = Image.open("plane.jpg")
 		self.canvas.airplane = ImageTk.PhotoImage(self.canvas.airplane.resize((cellwidth,cellheight), Image.ANTIALIAS))
-
+		self.canvas.friendly = Image.open("friendly.jpg")
+		self.canvas.friendly = ImageTk.PhotoImage(self.canvas.friendly.resize((cellwidth,cellheight), Image.ANTIALIAS))
+	
 	def initializePlane(self):
+		friendly = random.random()
 		dx = 0
 		dy = 0
 		row = random.randint(1,9)
@@ -59,17 +63,21 @@ class Demo():
 		else:
 			dx = -1
 
-		if random.random() > 0.25:
+		if random.random() < 0.25:
 			dx = 0
-		elif random.random() > 0.25:
+		elif random.random() < 0.25:
 			dy = 0
 		#leaves 50% chance that the plane will go diagonal
 
 		cellwidth = self.canvas.cellwidth
 		cellheight = self.canvas.cellheight
 		name = "Plane_" + str(self.planeCounter)
-		self.model.add_plane(name, col, row, dx, dy, False)
-		self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+		if friendly > 0.25:
+			self.model.add_plane(name, col, row, dx, dy, False)
+			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+		else:
+			self.model.add_plane(name, col, row, dx, dy, True)
+			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 		self.planeCounter += 1
 		print(name + " added")
 		
@@ -130,12 +138,11 @@ class Demo():
 		else:
 			self.drawStep()
 
+
 	def drawStep(self):
 		flag = 0
-		# previousCount = len(self.model.planes)
 		self.model.run_epoch()
 		self.canvas.delete("all")
-		# self.planeCounter = len(self.model.planes)
 
 		if len(self.model.planes) == 0:
 			self.initializePlane()
@@ -167,16 +174,8 @@ class Demo():
 			(col, row) = turret.pos
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
-
 		self.draw_shots(cellwidth)
 
-		# for line in self.lines:
-		# 	x1 = line["x1"]
-		# 	x2 = line["x2"]
-		# 	y1 = line["y1"]
-		# 	y2 = line["y2"]
-		# 	self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
-		# 	# print ("Done with drawing step")
 
 	def drawPlanes(self,flag):
 		cellwidth = self.canvas.cellwidth	
@@ -188,12 +187,15 @@ class Demo():
 				col = plane.pos[0]
 				row = plane.pos[1]
 				print("row,col",row,col)
-				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
-				
+				if plane.isfriendly == 0:
+					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+				else:
+					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)		
+
 	def draw_shots(self, cellwidth):
 		for turret in self.model.turrets:
 			for plane in self.model.planes:
-				if np.linalg.norm(turret.pos - plane.pos) <= turret.turret_range:
+				if np.linalg.norm(turret.pos - plane.pos) <= turret.turret_range and not plane.isfriendly:
 					print("SHOOT!")
 					x1 = (turret.pos[0] + 0.5)*cellwidth
 					y1 = (turret.pos[1] + 0.5)*cellwidth
@@ -201,7 +203,6 @@ class Demo():
 					y2 = (plane.pos[1] + 0.5)*cellwidth
 					print(x1, x2, y1, y2)
 					self.canvas.create_line(x1,y1,x2,y2,fill='blue',width = 5, dash=(4,4))
-
 	
 demo = Demo()
 window=Tk()
@@ -212,12 +213,12 @@ demo.canvas.draw=Button(window,text="Draw")
 demo.canvas.draw.grid(row=1,column=3)
 demo.canvas.bind("<Button-1>", mm.select)
 demo.canvas.draw.bind('<Button-1>',demo.buttonhandler)
-# window.resizable(0,0)
-# window.wm_attributes("-topmost", 1)
-# demo.canvas.pack()
-window.mainloop()
+demo.canvas.update()
+demo.drawState()
 running = True
 
-# while running:
-# 	demo.drawState()
-# 	time.sleep(1.0)
+while running:
+	demo.drawState()
+	time.sleep(SPEED)
+	window.update_idletasks()
+	window.update()
