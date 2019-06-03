@@ -26,7 +26,7 @@ class Kripke_model():
 	def construct_model(self, connected_agents=EDGELIST, agent_knowledge_list=EDGE_LABELS):
 		# Build your graph
 		G = nx.MultiDiGraph()
-		G.add_edges_from(EDGELIST)
+		G.add_edges_from(connected_agents)
 		# Plot it
 		#pos = nx.layout.circular_layout(G)
 		pos = nx.layout.spring_layout(G)
@@ -40,18 +40,20 @@ class Kripke_model():
 		nx.draw_networkx_labels(G, pos, labels=labels, color='white', font_size=self.REFL_FONTSIZE)
 		
 		nx.draw_networkx_nodes(G, pos, with_labels=True, node_size=self.NODE_SIZE, node_color='green')
-		nx.draw_networkx_edges(G, pos, edgelist=EDGELIST, edge_color='r', arrowstyle='<->')
+		nx.draw_networkx_edges(G, pos, edgelist=connected_agents, edge_color='r', arrowstyle='<->')
 		labels = dict()
-		for idx, edge in enumerate(EDGELIST):
+		for idx, edge in enumerate(connected_agents):
+			print(edge)
 			try:
-				labels[edge] = EDGE_LABELS[idx]
+				labels[edge] += agent_knowledge_list[idx]+'\n'
 			except:
-				labels[edge] = ''
-		#print(labels)
+				labels[edge] = agent_knowledge_list[0]+'\n'
+		print("LABELS: ", labels)
 		nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+		#print(labels)
 
-	def put_data_in_model(self, connected_agents=EDGELIST, agent_knowledge_list=EDGE_LABELS):
-		model.construct_model(connected_agents, agent_knowledge_list)
+	def put_data_in_model(self, knowledge=EDGELIST, agent_names=EDGE_LABELS):
+		self.construct_model(knowledge, agent_names)
 
 	def show_model(self):
 		plt.show()

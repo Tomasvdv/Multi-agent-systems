@@ -11,6 +11,7 @@ class Agent:
 		self.name = str(name)
 		self.messageidx = 0
 		self.confirmed = {} #dict of identifiers of all messages sent
+		self.kripke_knowledge = {} #dict of knowledge that is used to construct Kripke model
 
 		self.x = x
 		self.y = y
@@ -33,6 +34,13 @@ class Agent:
 				resent_this_epoch = True
 
 		return resent_this_epoch
+
+	def to_model(self):
+		main_knowledge = min(self.knowledge, key=len) #Take shortest knowledge element for now, for simplicity
+		if (main_knowledge == 'friendly') or (main_knowledge == 'not_friendly'):
+			self.kripke_knowledge[self.name] = [main_knowledge]
+		else: #The turret is still in doubt about the status of the plane, so add both possibilities
+			self.kripke_knowledge[self.name] = ['friendly', 'not_friendly']
 
 	def printKB(self):
 		print("KB of agent ",self.name)
@@ -81,18 +89,18 @@ class Agent:
 
 
 if __name__ == '__main__':
-	A = Agent("A", 0, 1)
-	B = Agent("B", 0, 0)
-	C = Agent("C", 1, 0)
-	D = Agent("D", 1, 1)
+	A = Agent("A", 0, 1, None)
+	B = Agent("B", 0, 0, None)
+	C = Agent("C", 1, 0, None)
+	D = Agent("D", 1, 1, None)
 
 	A.agents = [B, C, D]
 	B.agents = [A, C, D]
 
 	agents = [A, B, C, D]
 
-	messages_A = ['hello', 'spam', 'message', 'bye']
-	messages_B = ['hi', 'spam2', 'empty', 'goodbye']
+	messages_A = ['hello'] #['hello', 'spam', 'message', 'bye']
+	messages_B = ['hi'] #['hi', 'spam2', 'empty', 'goodbye']
 
 
 	for message in messages_A:

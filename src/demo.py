@@ -4,14 +4,15 @@ import math
 import random
 import numpy as np
 from mouse_mover import mouseMover
-from agent import Agent 
 from plane import Plane
 from turret import Turret
 from sim_model import Model
+from model import Kripke_model
 import time
 
-TURRET_RANGE = 5
-SPEED = 0.5
+TURRET_RANGE = 3
+SPEED = 3 #0.5
+NUMBER_TURRETS = 3
 
 class Demo():
 
@@ -22,6 +23,7 @@ class Demo():
 		self.planeCounter = 0;
 		# self.lines = []
 		self.model = Model()
+		self.kripke = Kripke_model()
 
 	def buttonhandler(self,event):
 		self.drawState()
@@ -105,38 +107,23 @@ class Demo():
 			
 
 			#init and draw turrets
-			for idx in range (3):
+			for idx in range (NUMBER_TURRETS):
 				row = random.randint(0,9)
 				col = random.randint(0,9)
 				name = "Turret_" + str(self.turretCounter)
 				self.model.add_turret(name,col,row)
 				self.model.turrets[idx].turret_range = TURRET_RANGE
-				print("HERE: ", TURRET_RANGE)
 				self.canvas.create_image(col*cellwidth,row*cellheight,image= self.canvas.flak,anchor=NW)
 				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
-				self.turretCounter += 1 
-
-			
-				# if idx ==0:
-				# 	self.turretCounter += 1
-				# 	self.previousX = col
-				# 	self.previousY = row
-				# 	# print ("first update",row,col)
-
-				# else:
-				# 	# print("line created at",self.previousX*cellwidth, self.previousY*cellheight, col*cellwidth, row*cellheight)
-				# 	self.canvas.create_line((self.previousX+0.5)*cellwidth, (self.previousY + 0.5)* cellheight, (col+0.5)*cellwidth, (row+0.5)*cellheight,fill='red',width = 5)
-				# 	line = {"x1": (self.previousX+0.5)*cellwidth, "y1":(self.previousY + 0.5)* cellheight, "x2": (col+0.5) * cellwidth, "y2" : (row+0.5)*cellheight }
-				# 	self.lines.append(line)
-				# 	self.previousX = col
-				# 	self.previousY = row
-				# 	# print ("previous set to",row,col) 
-				# 	self.turretCounter+=1
+				self.turretCounter += 1
+				turret = self.model.turrets[idx]
+				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
 
 			#init and draw planes
 			self.initializePlane()								
 		else:
 			self.drawStep()
+		self.construct_kripke()
 
 
 	def drawStep(self):
@@ -146,6 +133,8 @@ class Demo():
 
 		if len(self.model.planes) == 0:
 			self.initializePlane()
+			for turret in self.model.turrets: #Previous plane crashed / was shot down. Create new KB
+				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
 
 		cellheight = self.canvas.cellheight
 		cellwidth = self.canvas.cellwidth
@@ -175,7 +164,10 @@ class Demo():
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
 		self.draw_shots(cellwidth)
-
+		for turret in self.model.turrets:
+			print("\n")
+			print(turret.kripke_knowledge)
+			print("\n")
 
 	def drawPlanes(self,flag):
 		cellwidth = self.canvas.cellwidth	
@@ -187,7 +179,7 @@ class Demo():
 				col = plane.pos[0]
 				row = plane.pos[1]
 				print("row,col",row,col)
-				if plane.isfriendly == 0:
+				if not plane.isfriendly:
 					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 				else:
 					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)		
@@ -204,6 +196,26 @@ class Demo():
 					print(x1, x2, y1, y2)
 					self.canvas.create_line(x1,y1,x2,y2,fill='blue',width = 5, dash=(4,4))
 	
+	def construct_kripke(self):
+		all_knowlegde = []
+		turret_names = []
+		knowledge = []
+		for turret in self.model.turrets:
+			print(turret.kripke_knowledge)
+			for key, val in turret.kripke_knowledge.items():
+				if not val in all_knowlegde:
+					all_knowlegde.append(val)
+				if len(val) < 2:
+					tup = (val[0], val[0])
+				else:
+					tup = tuple(val)
+				knowledge.append(tup)
+			turret_names.append(turret.name)
+		print('knowledge: ', knowledge)
+		print('turret names: ', turret_names)
+		self.kripke.put_data_in_model(knowledge= knowledge, agent_names= turret_names)
+		self.kripke.show_model()
+
 demo = Demo()
 window=Tk()
 mm = mouseMover()

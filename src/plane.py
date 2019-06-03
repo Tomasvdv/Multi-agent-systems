@@ -26,6 +26,7 @@ class Plane(Agent):
 					self.send_new_message(sender, "not_friendly")
 
 	def destroy(self):
+		print('plane crashed')
 		if self in self.model.planes: 
 			self.model.planes.remove(self)
 		self.isdestroyed = True

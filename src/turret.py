@@ -1,9 +1,11 @@
 import numpy as np
 from agent import Agent
+from model import Kripke_model
 
 class Turret(Agent):
 	def __init__(self, name, x, y, model):
 		Agent.__init__(self, name, x, y, model)
+		Kripke_model.__init__(self)
 		self.agents = [t for t in model.turrets if t.name != self.name]
 		self.tracked_planes = []
 		self.turret_range = 2
@@ -29,8 +31,11 @@ class Turret(Agent):
 				else:
 					#check if there was a message from the plane
 					for (message, identifier, sender) in self.received_messages:
+						self.to_model()
 						if sender == plane and "not_friendly" in message:
-							self.shoot(plane)
+							#Agent.printKB(self)
+							#self.shoot(plane)
+							pass
 
 	def shoot(self, plane):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
