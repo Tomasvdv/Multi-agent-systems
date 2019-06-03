@@ -1,13 +1,12 @@
 import numpy as np
 from agent import Agent
 
-TURRET_RANGE = 2
-
 class Turret(Agent):
 	def __init__(self, name, x, y, model):
 		Agent.__init__(self, name, x, y, model)
 		self.agents = [t for t in model.turrets if t.name != self.name]
 		self.tracked_planes = []
+		self.turret_range = 2
 
 	def run_epoch(self):
 		#resend possibly missed messages
@@ -16,7 +15,8 @@ class Turret(Agent):
 		#check for any new planes
 		for plane in self.model.planes:
 			print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
-			if np.linalg.norm(self.pos - plane.pos) <= (TURRET_RANGE + 0.5) and plane.isvisible: #plane is visible and in range of the turret
+			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
+
 				if plane not in self.tracked_planes: #plane is not yet being tracked
 					print("turret %s spotted plane %s at loc (%d, %d)" % (self.name, plane.name, plane.pos[0], plane.pos[1]))
 
@@ -33,7 +33,9 @@ class Turret(Agent):
 							self.shoot(plane)
 
 	def shoot(self, plane):
-		if np.linalg.norm(self.pos - plane.pos) <= (TURRET_RANGE + 0.5): #plane is in range of the turret
+		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
+			print("\nPLANE DESTROYED!\n")
+
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
