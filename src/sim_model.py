@@ -22,6 +22,7 @@ class Model:
 		#add connections to existing turrets
 		for t in self.turrets:
 			t.agents.append(new_turret)
+			self.add_connection(t, new_turret)
 
 		#add turret to set of turrets
 		self.turrets.append(new_turret)
@@ -29,11 +30,8 @@ class Model:
 	def add_plane(self, name, x, y, dx, dy, isfriendly):
 		self.planes.append(Plane(name, x, y, dx, dy, isfriendly, self))
 
-	def add_connection (self):
-		idx = len(self.turrets)-1
-		name1 = self.turrets[idx-1]
-		name2 = self.turrets[idx]
-		self.connections.append((name1,name2))
+	def add_connection (self, turret1, turret2):
+		self.connections.append((turret1, turret2))
 
 	def run_epoch(self):
 		for t in self.turrets:

@@ -3,7 +3,7 @@ import numpy as np
 
 class Agent:
 	def __init__(self, name, x, y, model):
-		self.FAIL_PROB = 0.1	
+		self.FAIL_PROB = 0.0	
 		self.knowledge = set([]) #sets can't contain duplicates.
 		self.sent_messages = []
 		self.received_messages = []
@@ -72,7 +72,7 @@ class Agent:
 
 		self.knowledge.add(reply) #add the reply to knowledge base
 
-		if reply.count("K_%s" % self.name) == 2 and reply.count("K_") == 4: #e.g. K_a(K_b(K_a(K_b(1))))
+		if reply.count("K_%s" % self.name) >= 2 and reply.count("K_") == 4: #e.g. K_a(K_b(K_a(K_b(1))))
 			self.confirmed[identifier] = 1
 		else:
 			self.sent_messages.append((reply, identifier, other))
