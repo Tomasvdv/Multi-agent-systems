@@ -2,7 +2,7 @@
 The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
 2. Then run the code with: ```python3 demo.py```
-3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). 
+<!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
 <p align="center">
   <img width="460" height="300" src="/img/aircraft.jpg">
@@ -21,3 +21,9 @@ The latter is due to the fact that the sender can only derive that a plane is fr
 ### Results
 
 ### Discussion
+When the core program works as we want it to we have several possible extensions planned for the program.
+It might be interesting to split the current turret agent up into two seperate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes.
+
+We could also make the simulation more dynamic, by including entry fields for maximal number of planes, maximal number of turrets, turret range and size of the world. This way the simulation doesn't have to be restarted every time the user wants to change some values. 
+
+Another interesting extension would be to expand on or change the communication protocols it uses and the amount of certainty that a turret needs to have before shooting down a plane. 
