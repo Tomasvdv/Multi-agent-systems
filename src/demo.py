@@ -57,9 +57,10 @@ class Demo():
 
 		cellwidth = self.canvas.cellwidth
 		cellheight = self.canvas.cellheight
-		self.model.add_plane("P", row, col, dx, dy, False)
+		name = "Plane" + str(self.planeCounter)
+		self.model.add_plane(name, row, col, dx, dy, False)
 		self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
-		
+		self.planeCounter += 1
 		
 	def drawState(self):
 		w=self.canvas.winfo_width()
@@ -155,8 +156,9 @@ class Demo():
 			self.initializePlane()
 		else:
 			for plane in self.model.planes:
-				row = plane.y
-				col = plane.x
+				row = plane.pos[0]
+				col = plane.pos[1]
+				print("row,col",row,col)
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 				
 
