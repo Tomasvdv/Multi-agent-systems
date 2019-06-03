@@ -1,7 +1,8 @@
 # Run instructions
 The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
-2. Then run the code with: ```python3 demo.py```
+2. move to the right directory: ```cd Multi-agent-systems/src```
+3. Then run the code with: ```python3 demo.py```
 <!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
 <p align="center">
