@@ -10,6 +10,8 @@ from turret import Turret
 from sim_model import Model
 import time
 
+TURRET_RANGE = 3
+
 class Demo():
 
 	def __init__(self):
@@ -100,8 +102,10 @@ class Demo():
 				col = random.randint(0,9)
 				name = "Turret_" + str(self.turretCounter)
 				self.model.add_turret(name,col,row)
+				self.model.turrets[idx].turret_range = TURRET_RANGE
+				print("HERE: ", TURRET_RANGE)
 				self.canvas.create_image(col*cellwidth,row*cellheight,image= self.canvas.flak,anchor=NW)
-				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, 2*cellheight, self.canvas)
+				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
 				self.turretCounter += 1 
 
 			
@@ -162,7 +166,7 @@ class Demo():
 		for turret in self.model.turrets:
 			(col, row) = turret.pos
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
-			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, 2*cellheight, self.canvas)
+			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
 	
 		# for line in self.lines:
 		# 	x1 = line["x1"]
@@ -182,8 +186,8 @@ class Demo():
 			self.initializePlane()
 		else:
 			for plane in self.model.planes:
-				row = plane.pos[0]
-				col = plane.pos[1]
+				col = plane.pos[0]
+				row = plane.pos[1]
 				print("row,col",row,col)
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 				
