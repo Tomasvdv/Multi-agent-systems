@@ -43,8 +43,11 @@ class Demo():
 		self.canvas.land = ImageTk.PhotoImage(self.canvas.land.resize((cellwidth, cellheight), Image.ANTIALIAS))
 		self.canvas.airplane = Image.open("plane.jpg")
 		self.canvas.airplane = ImageTk.PhotoImage(self.canvas.airplane.resize((cellwidth,cellheight), Image.ANTIALIAS))
-
+		self.canvas.friendly = Image.open("friendly.jpg")
+		self.canvas.friendly = ImageTk.PhotoImage(self.canvas.friendly.resize((cellwidth,cellheight), Image.ANTIALIAS))
+	
 	def initializePlane(self):
+		friendly = random.random()
 		dx = 0
 		dy = 0
 		row = random.randint(1,9)
@@ -68,8 +71,12 @@ class Demo():
 		cellwidth = self.canvas.cellwidth
 		cellheight = self.canvas.cellheight
 		name = "Plane_" + str(self.planeCounter)
-		self.model.add_plane(name, col, row, dx, dy, False)
-		self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+		if friendly > 0.25:
+			self.model.add_plane(name, col, row, dx, dy, False)
+			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+		else:
+			self.model.add_plane(name, col, row, dx, dy, True)
+			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 		self.planeCounter += 1
 		print(name + " added")
 		
@@ -189,8 +196,10 @@ class Demo():
 				col = plane.pos[0]
 				row = plane.pos[1]
 				print("row,col",row,col)
-				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
-				
+				if plane.isfriendly == 0:
+					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+				else:
+					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)		
 
 demo = Demo()
 window=Tk()
