@@ -57,9 +57,9 @@ class Demo():
 		else:
 			dx = -1
 
-		if random.random() > 0.25:
+		if random.random() < 0.25:
 			dx = 0
-		elif random.random() > 0.25:
+		elif random.random() < 0.25:
 			dy = 0
 		#leaves 50% chance that the plane will go diagonal
 
@@ -126,6 +126,7 @@ class Demo():
 		else:
 			self.drawStep()
 
+
 	def drawStep(self):
 		flag = 0
 		# previousCount = len(self.model.planes)
@@ -185,7 +186,7 @@ class Demo():
 				row = plane.pos[0]
 				col = plane.pos[1]
 				print("row,col",row,col)
-				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+				self.canvas.create_image(row*cellwidth,col*cellheight,image=self.canvas.airplane,anchor=NW)
 				
 
 demo = Demo()
@@ -197,12 +198,16 @@ demo.canvas.draw=Button(window,text="Draw")
 demo.canvas.draw.grid(row=1,column=3)
 demo.canvas.bind("<Button-1>", mm.select)
 demo.canvas.draw.bind('<Button-1>',demo.buttonhandler)
+demo.canvas.update()
+demo.drawState()
 # window.resizable(0,0)
 # window.wm_attributes("-topmost", 1)
 # demo.canvas.pack()
-window.mainloop()
+# window.mainloop()
 running = True
 
-# while running:
-# 	demo.drawState()
-# 	time.sleep(1.0)
+while running:
+	demo.drawState()
+	time.sleep(1.0)
+	window.update_idletasks()
+	window.update()

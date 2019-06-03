@@ -15,7 +15,8 @@ class Turret(Agent):
 
 		#check for any new planes
 		for plane in self.model.planes:
-			if np.linalg.norm(self.pos - plane.pos) <= TURRET_RANGE and plane.isvisible: #plane is visible and in range of the turret
+			print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
+			if np.linalg.norm(self.pos - plane.pos) <= (TURRET_RANGE + 0.5) and plane.isvisible: #plane is visible and in range of the turret
 				if plane not in self.tracked_planes: #plane is not yet being tracked
 					print("turret %s spotted plane %s at loc (%d, %d)" % (self.name, plane.name, plane.pos[0], plane.pos[1]))
 
@@ -32,7 +33,7 @@ class Turret(Agent):
 							self.shoot(plane)
 
 	def shoot(self, plane):
-		if np.linalg.norm(self.pos - plane.pos) <= TURRET_RANGE: #plane is in range of the turret
+		if np.linalg.norm(self.pos - plane.pos) <= (TURRET_RANGE + 0.5): #plane is in range of the turret
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
