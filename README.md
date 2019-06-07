@@ -20,6 +20,7 @@ The latter is due to the fact that the sender can only derive that a plane is fr
 ### Methods
 In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We can change the experiment parameters in two different categories; the envoriment of the simulation itself or the message protocols between agents.
 <br />
+There are 2 types of agents in the simulated model. Planes and turrets. A plane can either be enemy or friendly w.r.t. the turrets. A turret is a ground based air defense unit that is supposed to shoot down enemy planes that are within its shooting range.
 
 <b>The envoriment: </b>
  1. The amount of turrets in the simulation.
