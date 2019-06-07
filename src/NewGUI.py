@@ -41,17 +41,25 @@ class GUI(Frame):
 		self.updatebutton = Button(self.button_canvas, text = "Update sim", command = self.update_demo_parameters)
 		self.updatebutton.pack(side=LEFT)
 
-		self.play_button =Button(self.button_canvas, command=self.demo.button_handler, image=self.load_button_art("../img/play.png"))
+
+		self.speed_control_canvas = Canvas()
+
+		self.play_img = image=self.load_button_art("../img/play.png")
+		self.play_button =Button(self.button_canvas, command=self.demo.button_handler, image=self.play_img)
 		self.play_button.pack()
-		self.pause_button=Button(self.button_canvas, command=self.demo.pause_handler, image=self.load_button_art("../img/pause.png"))
+
+		self.pause_img = self.load_button_art("../img/pause.png")
+		self.pause_button=Button(self.button_canvas, text='2', command=self.demo.pause_handler, image= self.pause_img)
 		self.pause_button.pack()
-		self.ff_button=Button(self.button_canvas, command=self.demo.step_handler, image=self.load_button_art("../img/ff.png"))
+
+		self.ff_img = self.load_button_art("../img/ff.png")
+		self.ff_button=Button(self.button_canvas, text='3', command=self.demo.step_handler, image=self.ff_img)
 		self.ff_button.pack()
 
 	def load_button_art(self, path):
 		button_img = Image.open(path)
 		button_img = button_img.resize((self.buttonwidth,self.buttonheight), Image.ANTIALIAS)
-		button_img =  ImageTk.PhotoImage(button_img)
+		button_img = ImageTk.PhotoImage(button_img)
 		return button_img
 
 
