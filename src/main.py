@@ -16,7 +16,6 @@ if __name__ == '__main__':
 	f = GUI(window, demo)
 
 	while True:
-		print("running")
 		if demo.running:
 			demo.drawState()
 		time.sleep(SPEED)

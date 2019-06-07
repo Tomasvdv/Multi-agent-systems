@@ -8,6 +8,7 @@ class Model:
 		self.turrets = []
 		self.planes = []
 		self.connections = []
+		self.text
 
 	def getKB():
 		kb = {}

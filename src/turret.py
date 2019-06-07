@@ -34,7 +34,7 @@ class Turret(Agent):
 						self.to_model()
 						if sender == plane and "not_friendly" in message:
 							#Agent.printKB(self)
-							#self.shoot(plane)
+							self.shoot(plane)
 							pass
 
 	def shoot(self, plane):
