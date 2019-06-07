@@ -36,25 +36,35 @@ class GUI(Frame):
 
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
-		self.numplanes_entry = Entry(self.button_canvas, text="numplanes")
+
+		self.numplanes_entry_canvas = Canvas(self.button_canvas)
+		self.numplanes_entry_canvas.pack(side=TOP)
+		self.numPlanes_text = StringVar()
+		self.numPlanes_text.set("Number of planes:")
+		self.numplanes_label = Label(self.numplanes_entry_canvas, textvariable=self.numPlanes_text)
+		self.numplanes_label.pack(side=LEFT)
+		self.numplanes_entry = Entry(self.numplanes_entry_canvas, text="numplanes")
 		self.numplanes_entry.pack(side=LEFT)
+
+
 		self.updatebutton = Button(self.button_canvas, text = "Update sim", command = self.update_demo_parameters)
-		self.updatebutton.pack(side=LEFT)
+		self.updatebutton.pack(side=TOP)
 
 
-		self.speed_control_canvas = Canvas()
+		self.speed_control_canvas = Canvas(self.button_canvas)
+		self.speed_control_canvas.pack(side=BOTTOM)
 
 		self.play_img = image=self.load_button_art("../img/play.png")
-		self.play_button =Button(self.button_canvas, command=self.demo.button_handler, image=self.play_img)
-		self.play_button.pack()
+		self.play_button =Button(self.speed_control_canvas, command=self.demo.button_handler, image=self.play_img)
+		self.play_button.pack(side=LEFT)
 
 		self.pause_img = self.load_button_art("../img/pause.png")
-		self.pause_button=Button(self.button_canvas, text='2', command=self.demo.pause_handler, image= self.pause_img)
-		self.pause_button.pack()
+		self.pause_button=Button(self.speed_control_canvas, command=self.demo.pause_handler, image= self.pause_img)
+		self.pause_button.pack(side=LEFT)
 
 		self.ff_img = self.load_button_art("../img/ff.png")
-		self.ff_button=Button(self.button_canvas, text='3', command=self.demo.step_handler, image=self.ff_img)
-		self.ff_button.pack()
+		self.ff_button=Button(self.speed_control_canvas, command=self.demo.step_handler, image=self.ff_img)
+		self.ff_button.pack(side=LEFT)
 
 	def load_button_art(self, path):
 		button_img = Image.open(path)
