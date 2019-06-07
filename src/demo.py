@@ -8,10 +8,11 @@ from plane import Plane
 from turret import Turret
 from sim_model import Model
 from model import Kripke_model
+from text import Text
 import time
 
 TURRET_RANGE = 3
-SPEED = 3 #0.5
+SPEED = 1 #0.5
 NUMBER_TURRETS = 3
 
 class Demo():
@@ -123,12 +124,12 @@ class Demo():
 			self.initializePlane()								
 		else:
 			self.drawStep()
-		self.construct_kripke()
+		# self.construct_kripke()
 
 
 	def drawStep(self):
 		flag = 0
-		self.model.run_epoch()
+		self.model.run_epoch(self.text)
 		self.canvas.delete("all")
 
 		if len(self.model.planes) == 0:
@@ -164,10 +165,10 @@ class Demo():
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
 		self.draw_shots(cellwidth)
-		for turret in self.model.turrets:
-			print("\n")
-			print(turret.kripke_knowledge)
-			print("\n")
+		# for turret in self.model.turrets:
+		# 	print("\n")
+		# 	print(turret.kripke_knowledge)
+		# 	print("\n")
 
 	def drawPlanes(self,flag):
 		cellwidth = self.canvas.cellwidth	
@@ -218,13 +219,16 @@ class Demo():
 
 demo = Demo()
 window=Tk()
+top = Toplevel()
 mm = mouseMover()
 demo.canvas = Canvas(window, width=500,height=500)
+demo.text = Text(top)
 demo.canvas.grid(row=0,column=0,columnspan=2)
 demo.canvas.draw=Button(window,text="Draw")
 demo.canvas.draw.grid(row=1,column=3)
 demo.canvas.bind("<Button-1>", mm.select)
 demo.canvas.draw.bind('<Button-1>',demo.buttonhandler)
+
 demo.canvas.update()
 demo.drawState()
 running = True
@@ -234,3 +238,5 @@ while running:
 	time.sleep(SPEED)
 	window.update_idletasks()
 	window.update()
+	demo.text.text_window.update_idletasks()
+	demo.text.text_window.update()
