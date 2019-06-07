@@ -31,6 +31,7 @@ class Demo():
 		self.turretCounter = 0
 		self.planeCounter = 0
 		self.numPlanes = 1
+		self.numTurrets = 3
 		# self.lines = []
 		self.model = Model()
 		self.kripke = Kripke_model()
@@ -133,7 +134,7 @@ class Demo():
 			
 
 			#init and draw turrets
-			for idx in range (NUMBER_TURRETS):
+			for idx in range(self.numTurrets):
 				row = random.randint(0,9)
 				col = random.randint(0,9)
 				name = "Turret_" + str(self.turretCounter)
@@ -152,11 +153,57 @@ class Demo():
 			self.drawStep()
 		# self.construct_kripke()
 
+	def update_turrets(self, add_amount):
+		w=self.canvas.winfo_width()
+		h=self.canvas.winfo_height()
+		cellwidth = w//10	
+		cellheight=h//10
+
+		# Add turrets
+		if add_amount > 0:
+			for idx in range(add_amount):
+				row = random.randint(0,9)
+				col = random.randint(0,9)
+				name = "Turret_" + str(self.turretCounter)
+				self.model.add_turret(name,col,row)
+				self.model.turrets[idx].turret_range = TURRET_RANGE
+				self.canvas.create_image(col*cellwidth,row*cellheight,image= self.canvas.flak,anchor=NW)
+				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
+				self.turretCounter += 1
+				turret = self.model.turrets[idx]
+				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
+
+				# Add and draw turret connections
+				for turret1, turret2 in self.model.connections:
+					(x1, y1) = turret1.pos
+					(x2, y2) = turret2.pos
+					x1 = (x1 + 0.5) * cellwidth
+					x2 = (x2 + 0.5) * cellwidth
+					y1 = (y1 + 0.5) * cellheight
+					y2 = (y2 + 0.5) * cellheight
+					self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
+		
+		# Delete turrets and connections
+		if add_amount < 0:
+			for idx in range(abs(add_amount), -1, -1): #In reverse order, since turrets are removed. Otherwise we get a list index overflow
+				new_connections = []
+				print("TURRET: ", len(self.model.turrets), idx)
+				turret = self.model.turrets[idx]
+				
+				for idx, (tur1, tur2) in enumerate(self.model.connections):
+					if not (tur1 == turret or tur2 == turret):
+						new_connections.append((tur1, tur2))
+				self.model.turrets.remove(turret)
+				self.model.connections = new_connections
+
 
 	def drawStep(self):
 		flag = 0
 		self.model.run_epoch()
 		self.canvas.delete("all")
+
+		print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))
+		self.update_turrets(self.numTurrets - len(self.model.turrets))
 
 		while len(self.model.planes) < self.numPlanes:
 			self.initializePlane()

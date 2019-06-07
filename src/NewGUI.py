@@ -44,16 +44,26 @@ class GUI(Frame):
 
 		self.numplanes_entry_canvas = Canvas(self.button_canvas)
 		self.numplanes_entry_canvas.pack(side=TOP)
+		self.numturrets_entry_canvas = Canvas(self.button_canvas)
+		self.numturrets_entry_canvas.pack(side=TOP)
 		self.numPlanes_text = StringVar()
 		self.numPlanes_text.set("Number of planes:")
+		self.numTurrets_text = StringVar()
+		self.numTurrets_text.set("Number of turrets:")
 		self.numplanes_label = Label(self.numplanes_entry_canvas, textvariable=self.numPlanes_text)
 		self.numplanes_label.pack(side=LEFT)
+		self.numturrets_label = Label(self.numturrets_entry_canvas, textvariable=self.numTurrets_text)
+		self.numturrets_label.pack(side=LEFT)
 		self.numplanes_entry = Entry(self.numplanes_entry_canvas, text="numplanes")
 		self.numplanes_entry.pack(side=LEFT)
+		self.numturrets_entry = Entry(self.numturrets_entry_canvas, text="numturrets")
+		self.numturrets_entry.pack(side=LEFT)
 
 
-		self.updatebutton = Button(self.button_canvas, text = "Update sim", command = self.update_demo_parameters)
-		self.updatebutton.pack(side=TOP)
+		self.update_planes = Button(self.button_canvas, text = "Update planes", command = self.update_demo_planes)
+		self.update_planes.pack(side=TOP)
+		self.update_turrets = Button(self.button_canvas, text = "Update turrets", command = self.update_demo_turrets)
+		self.update_turrets.pack(side=TOP)
 
 
 		self.speed_control_canvas = Canvas(self.button_canvas)
@@ -79,9 +89,23 @@ class GUI(Frame):
 		return button_img
 
 
-	def update_demo_parameters(self):
+	def update_demo_planes(self):
 		try:
-			self.demo.numPlanes = int(self.numplanes_entry.get())
+			new_num = int(self.numplanes_entry.get())
+			if new_num > 1:
+				self.demo.numPlanes = new_num
+			else:
+				print("Number of planes must be > 1")
+		except:
+			pass
+
+	def update_demo_turrets(self):
+		try:
+			new_num = int(self.numturrets_entry.get())
+			if new_num > 1:
+				self.demo.numTurrets = new_num
+			else:
+				print("Number of turrets must be > 1")
 		except:
 			pass
 			
