@@ -7,9 +7,10 @@ class GUI(Frame):
 	def __init__(self, master, demo):
 		Frame.__init__(self, master)
 
+		self.buttonwidth = 40
+		self.buttonheight = 40
+
 		self.demo = demo
-		self.running = True
-		self.speed = 1.0
 
 		self.build_canvas()
 		self.add_buttons()
@@ -38,7 +39,19 @@ class GUI(Frame):
 		self.updatebutton = Button(self.button_canvas, text = "Update sim", command = self.update_demo_parameters)
 		self.updatebutton.pack(side=LEFT)
 
+		self.play_button =Button(self.button_canvas, command=self.demo.button_handler, image=self.load_button_art("../img/play.png"))
+		self.play_button.pack()
+		self.pause_button=Button(self.button_canvas, command=self.demo.pause_handler, image=self.load_button_art("../img/pause.png"))
+		self.pause_button.pack()
+		self.ff_button=Button(self.button_canvas, command=self.demo.step_handler, image=self.load_button_art("../img/ff.png"))
+		self.ff_button.pack()
 
+	def load_button_art(self, path):
+		button_img = Image.open(path)
+		button_img = button_img.resize((width,height), Image.ANTIALIAS)
+		button_img =  ImageTk.PhotoImage(button_img)
+
+		return button_img
 
 
 	def update_demo_parameters(self):
@@ -48,23 +61,10 @@ class GUI(Frame):
 			pass
 
 
-
-	def mainloop(self):
-		while self.running:
-			self.demo.drawState()
-			time.sleep(self.speed)
-			self.master.update_idletasks()
-			self.master.update()
-
-
-
 if __name__ == "__main__":
 	demo = Demo()
 	window=Tk()
 	f = GUI(window, demo)
-
-	f.mainloop()
-
 
 
 
