@@ -21,7 +21,8 @@ class Demo():
 
 		self.init = 1
 		self.turretCounter = 0
-		self.planeCounter = 0;
+		self.planeCounter = 0
+		self.numPlanes = 1
 		# self.lines = []
 		self.model = Model()
 		self.kripke = Kripke_model()
@@ -121,18 +122,18 @@ class Demo():
 				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
 
 			#init and draw planes
-			self.initializePlane()								
+			for _ in range(self.numPlanes):
+				self.initializePlane()								
 		else:
 			self.drawStep()
 		# self.construct_kripke()
 
 
 	def drawStep(self):
-		flag = 0
 		self.model.run_epoch(self.text)
 		self.canvas.delete("all")
 
-		if len(self.model.planes) == 0:
+		while len(self.model.planes) < self.numPlanes:
 			self.initializePlane()
 			for turret in self.model.turrets: #Previous plane crashed / was shot down. Create new KB
 				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
@@ -157,7 +158,7 @@ class Demo():
 
 			self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
 
-		self.drawPlanes(flag)
+		self.drawPlanes()
 		
 		#draw turrets
 		for turret in self.model.turrets:
@@ -170,20 +171,18 @@ class Demo():
 		# 	print(turret.kripke_knowledge)
 		# 	print("\n")
 
-	def drawPlanes(self,flag):
-		cellwidth = self.canvas.cellwidth	
-		cellheight= self.canvas.cellheight
-		if flag == 1:
-			self.initializePlane()
-		else:
-			for plane in self.model.planes:
-				col = plane.pos[0]
-				row = plane.pos[1]
-				print("row,col",row,col)
-				if not plane.isfriendly:
-					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
-				else:
-					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)		
+	def drawPlanes(self):
+		cellwidth  = self.canvas.cellwidth	
+		cellheight = self.canvas.cellheight
+
+		for plane in self.model.planes:
+			col = plane.pos[0]
+			row = plane.pos[1]
+			print("row,col",row,col)
+			if not plane.isfriendly:
+				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+			else:
+				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)		
 
 	def draw_shots(self, cellwidth):
 		for turret in self.model.turrets:
