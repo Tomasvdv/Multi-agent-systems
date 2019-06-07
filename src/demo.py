@@ -9,7 +9,9 @@ from turret import Turret
 from sim_model import Model
 from model import Kripke_model
 from text import Text
-import time
+import time, sys
+from PIL import Image
+from PIL import ImageTk
 
 TURRET_RANGE = 3
 SPEED = 0.1 #0.5
@@ -31,7 +33,7 @@ class Demo():
 		self.step = False
 		self.running = True
 
-	def buttonhandler(self):
+	def button_handler(self):
 		print("RUN SIMULATION")
 		self.paused = False
 		self.step = False
@@ -239,12 +241,29 @@ top = Toplevel()
 mm = mouseMover()
 demo.canvas = Canvas(window, width=500,height=500)
 demo.text = Text(top)
+
+width = 40
+height = 40
+
+play_img = Image.open("../img/play.png")
+play_img = play_img.resize((width,height), Image.ANTIALIAS)
+play_img =  ImageTk.PhotoImage(play_img)
+
+pause_img = Image.open("../img/pause.png")
+pause_img = pause_img.resize((width,height), Image.ANTIALIAS)
+pause_img =  ImageTk.PhotoImage(pause_img)
+
+ff_img = Image.open("../img/ff.png")
+ff_img = ff_img.resize((width,height), Image.ANTIALIAS)
+ff_img =  ImageTk.PhotoImage(ff_img)
+
 demo.canvas.grid(row=0,column=0,columnspan=2)
-demo.canvas.draw1=Button(window,text="Run simulation", command=demo.buttonhandler)
+#demo.canvas.draw1=Button(window,text="Run simulation", command=demo.button_handler, image)
+demo.canvas.draw1=Button(window, command=demo.button_handler, image=play_img)
 demo.canvas.draw1.grid(row=1,column=2)
-demo.canvas.draw2=Button(window,text="Pause simulation", command=demo.pause_handler)
+demo.canvas.draw2=Button(window, command=demo.pause_handler, image=pause_img)
 demo.canvas.draw2.grid(row=1,column=3)
-demo.canvas.draw3=Button(window,text="Step", command=demo.step_handler)
+demo.canvas.draw3=Button(window, command=demo.step_handler, image=ff_img)
 demo.canvas.draw3.grid(row=1,column=4)
 
 demo.canvas.update()
