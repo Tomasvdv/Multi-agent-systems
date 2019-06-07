@@ -12,7 +12,7 @@ from text import Text
 import time
 
 TURRET_RANGE = 3
-SPEED = 1 #0.5
+SPEED = 0.1 #0.5
 NUMBER_TURRETS = 3
 
 class Demo():
@@ -25,8 +25,24 @@ class Demo():
 		# self.lines = []
 		self.model = Model()
 		self.kripke = Kripke_model()
+		self.demospeed = SPEED
+		self.paused = False
+		self.step = False
+		self.running = True
 
-	def buttonhandler(self,event):
+	def buttonhandler(self):
+		print("RUN SIMULATION")
+		self.paused = False
+		self.step = False
+		self.running = True
+
+	def pause_handler(self):
+		print("PAUSED HANDLER")
+		self.paused = True
+
+	def step_handler(self):
+		print("STEP HANDLER")
+		self.step = True
 		self.drawState()
 
 	def getClosestTile(n):
@@ -129,7 +145,7 @@ class Demo():
 
 	def drawStep(self):
 		flag = 0
-		self.model.run_epoch(self.text)
+		self.model.run_epoch()
 		self.canvas.delete("all")
 
 		if len(self.model.planes) == 0:
@@ -224,19 +240,25 @@ mm = mouseMover()
 demo.canvas = Canvas(window, width=500,height=500)
 demo.text = Text(top)
 demo.canvas.grid(row=0,column=0,columnspan=2)
-demo.canvas.draw=Button(window,text="Draw")
-demo.canvas.draw.grid(row=1,column=3)
-demo.canvas.bind("<Button-1>", mm.select)
-demo.canvas.draw.bind('<Button-1>',demo.buttonhandler)
+demo.canvas.draw1=Button(window,text="Run simulation", command=demo.buttonhandler)
+demo.canvas.draw1.grid(row=1,column=2)
+demo.canvas.draw2=Button(window,text="Pause simulation", command=demo.pause_handler)
+demo.canvas.draw2.grid(row=1,column=3)
+demo.canvas.draw3=Button(window,text="Step", command=demo.step_handler)
+demo.canvas.draw3.grid(row=1,column=4)
 
 demo.canvas.update()
 demo.drawState()
-running = True
 
-while running:
-	demo.drawState()
+while True:
+	if demo.running:
+		demo.drawState()
 	time.sleep(SPEED)
 	window.update_idletasks()
 	window.update()
 	demo.text.text_window.update_idletasks()
 	demo.text.text_window.update()
+	if demo.paused == True:
+		demo.running = False
+	if demo.step == True:
+		demo.running = False

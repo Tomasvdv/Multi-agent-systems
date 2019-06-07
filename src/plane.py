@@ -10,8 +10,8 @@ class Plane(Agent):
 		self.isdestroyed = False
 		self.isvisible = True
 
-	def run_epoch(self,text):
-		self.update(text)
+	def run_epoch(self):
+		self.update()
 		self.pos[0] += self.dx
 		self.pos[1] += self.dy
 		if self.pos[1] == 10 or self.pos[1]  < 0 or self.pos[0] == 10 or self.pos[0] < 0:
@@ -21,9 +21,9 @@ class Plane(Agent):
 		if "indentify" in self.knowledge:
 			for (message, identifier, sender) in self.received_messages:
 				if self.isfriendly and not "K_%s(friendly)" % sender.name in self.knowledge:
-					self.send_new_message(sender, "friendly",text)
+					self.send_new_message(sender, "friendly")
 				if not self.isfriendly and not "K_%s(not_friendly)" % sender.name in self.knowledge:
-					self.send_new_message(sender, "not_friendly",text)
+					self.send_new_message(sender, "not_friendly")
 
 	def destroy(self):
 		print('plane crashed')

@@ -4,7 +4,7 @@ from tkinter import *
 class Text():
 	def __init__(self,window):
 		self.text_window = window
-		self.text_canvas = Canvas(self.text_window, width=1000, height=1000, bg = 'white')
+		self.text_canvas = Canvas(self.text_window, width=700, height=700, bg = 'white')
 		self.text_canvas.grid(row=0,column=0,columnspan=2)
 		self.text_canvas.update()
 		self.text_position = 50
