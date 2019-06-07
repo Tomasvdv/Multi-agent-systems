@@ -32,7 +32,7 @@ class Demo():
 		self.step = False
 		self.running = True
 
-	def button_handler(self):
+	def play_handler(self):
 		print("RUN SIMULATION")
 		self.paused = False
 		self.step = False

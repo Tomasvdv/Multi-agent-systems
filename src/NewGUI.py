@@ -45,7 +45,7 @@ class GUI(Frame):
 		self.speed_control_canvas = Canvas()
 
 		self.play_img = image=self.load_button_art("../img/play.png")
-		self.play_button =Button(self.button_canvas, command=self.demo.button_handler, image=self.play_img)
+		self.play_button =Button(self.button_canvas, command=self.demo.play_handler, image=self.play_img)
 		self.play_button.pack()
 
 		self.pause_img = self.load_button_art("../img/pause.png")
