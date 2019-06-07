@@ -19,5 +19,7 @@ class TextCanvas(Text): #text is already a tkinter class.
 		# if self.text_position > 450:
 		# 	self.text_canvas.delete("all")
 		# 	self.text_position = 50
-
+		print("print jongen")
 		self.insert(END, str(message))
+		self.pack()
+		self.text_canvas.update()

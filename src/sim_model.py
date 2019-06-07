@@ -2,7 +2,7 @@ import random
 import numpy as np
 from plane import Plane
 from turret import Turret
-
+from statistics import Statistics
 class Model:
 	def __init__(self):
 		self.turrets = []
@@ -34,9 +34,9 @@ class Model:
 	def add_connection (self, turret1, turret2):
 		self.connections.append((turret1, turret2))
 
-	def run_epoch(self):
+	def run_epoch(self,statistics):
 		for t in self.turrets:
-			t.run_epoch()
+			t.run_epoch(statistics)
 
 		for p in self.planes:
 			p.run_epoch()

@@ -14,13 +14,14 @@ if __name__ == '__main__':
 	demo = Demo()
 	window = Tk()
 	f = GUI(window, demo)
-
 	while True:
 		if demo.running:
 			demo.drawState()
 		time.sleep(SPEED)
 		window.update_idletasks()
 		window.update()
+		demo.text_canvas.update_idletasks()
+		demo.text_canvas.update()
 		# demo.text.text_window.update_idletasks()
 		# demo.text.text_window.update()
 		if demo.paused == True:

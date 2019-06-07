@@ -10,7 +10,7 @@ class Turret(Agent):
 		self.tracked_planes = []
 		self.turret_range = 2
 
-	def run_epoch(self):
+	def run_epoch(self,statistics):
 		#resend possibly missed messages
 		self.update()
 
@@ -34,16 +34,17 @@ class Turret(Agent):
 						self.to_model()
 						if sender == plane and "not_friendly" in message:
 							#Agent.printKB(self)
-							self.shoot(plane)
+							self.shoot(plane,statistics)
 							pass
 
-	def shoot(self, plane):
+	def shoot(self, plane, statistics):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
 			print("\nPLANE DESTROYED!\n")
 
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
+				statistics.enemy_planes_shot += 1
 				self.broadcast("%s destroyed" % (plane.name))
 				self.tracked_planes.remove(plane)
 		else:

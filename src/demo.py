@@ -12,6 +12,7 @@ from text import TextCanvas
 import time
 from PIL import Image
 from PIL import ImageTk
+from statistics import Statistics
 
 TURRET_RANGE = 3
 NUMBER_TURRETS = 3
@@ -95,9 +96,11 @@ class Demo():
 		name = "Plane_" + str(self.planeCounter)
 		if friendly > 0.25:
 			self.model.add_plane(name, col, row, dx, dy, False)
+			self.statistics.enemy_planes_generated += 1
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 		else:
 			self.model.add_plane(name, col, row, dx, dy, True)
+			self.statistics.friendly_planes_generated += 1 
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 		self.planeCounter += 1
 		print(name + " added")
@@ -148,7 +151,7 @@ class Demo():
 
 	def drawStep(self):
 		flag = 0
-		self.model.run_epoch()
+		self.model.run_epoch(self.statistics)
 		self.canvas.delete("all")
 
 		while len(self.model.planes) < self.numPlanes:

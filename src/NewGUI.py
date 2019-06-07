@@ -4,7 +4,7 @@ import time
 from tkinter import *
 from PIL import Image
 from PIL import ImageTk
-
+from statistics import Statistics
 class GUI(Frame):
 	def __init__(self, master, demo):
 		Frame.__init__(self, master)
@@ -33,6 +33,7 @@ class GUI(Frame):
 		#give demo class pointers to the GUI
 		self.demo.canvas = self.app_canvas
 		self.demo.text = TextCanvas(self.text_canvas)
+		self.demo.statistics = Statistics(self.demo.text)
 
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
