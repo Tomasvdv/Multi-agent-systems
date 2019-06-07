@@ -1,7 +1,8 @@
 # Run instructions
 The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
-2. Then run the code with: ```python3 demo.py```
+2. move to the right directory: ```cd Multi-agent-systems/src```
+3. Then run the code with: ```python3 demo.py```
 <!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
 <p align="center">
@@ -17,7 +18,21 @@ Radar-based IFF systems generally consist of a sender that sends a (possibly enc
 The latter is due to the fact that the sender can only derive that a plane is friendly if it gets a response back from the plane, but if it doesn't get a response, the plane does not neccessarily have to be a foe. 
 
 ### Methods
+In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We can change the experiment parameters in two different categories; the envoriment of the simulation itself or the message protocols between agents.
+<br />
 
+<b>The envoriment: </b>
+ 1. The amount of turrets in the simulation.
+ 2. The range of the turrets.
+ 3. The amount of (friendly) planes in the simulation.
+ 4. New agents for detecting the planes, while turrets can only shoot the planes.
+<br /><br /><b>The message protocols: </b>
+ * The amount of messages correctly received can be changed.
+ * False information can be inserted to interfere with the simulation.
+ * If one category of agents is responsible for detecting the planes and others for shooting different kinds of messages can be tested.
+ 
+
+ 
 ### Results
 
 ### Discussion
