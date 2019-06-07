@@ -20,4 +20,8 @@ class TextCanvas(Text): #text is already a tkinter class.
 		# 	self.text_canvas.delete("all")
 		# 	self.text_position = 50
 
-		self.insert(END, str(message))
+		self.insert(END, str(message + "\n"))
+
+	def print_KB(self, KB):
+		for fact in KB:
+			self.print(str(fact), 0)

@@ -38,6 +38,18 @@ class Demo():
 		self.step = False
 		self.running = True
 
+	def get_KB_from_click(self, x_click, y_click):
+		cellwidth = self.canvas.cellwidth
+		cellheight = self.canvas.cellheight
+		for t in self.model.turrets:
+			(x, y) = t.pos
+			if x * cellwidth < x_click and (x+1) * cellwidth > x_click and \
+			   y * cellheight < y_click and (y+1) * cellheight > y_click:
+				return t.knowledge
+		return []
+
+
+
 	def pause_handler(self):
 		print("PAUSED HANDLER")
 		self.paused = True
