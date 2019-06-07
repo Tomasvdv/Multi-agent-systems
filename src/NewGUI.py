@@ -55,7 +55,7 @@ class GUI(Frame):
 		self.speed_control_canvas.pack(side=BOTTOM)
 
 		self.play_img = image=self.load_button_art("../img/play.png")
-		self.play_button =Button(self.speed_control_canvas, command=self.demo.button_handler, image=self.play_img)
+		self.play_button =Button(self.speed_control_canvas, command=self.demo.play_handler, image=self.play_img)
 		self.play_button.pack(side=LEFT)
 
 
@@ -79,7 +79,7 @@ class GUI(Frame):
 			self.demo.numPlanes = int(self.numplanes_entry.get())
 		except:
 			pass
-
+			
 
 if __name__ == "__main__":
 	demo = Demo()
