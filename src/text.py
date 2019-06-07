@@ -1,3 +1,7 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Handles showing text regarding the knowledge of turrets.  
+'''
 import numpy as np
 from tkinter import *
 

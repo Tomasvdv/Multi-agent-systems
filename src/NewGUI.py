@@ -1,3 +1,8 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		This class handles the GUI for interaction between the user and the program. 
+'''
+
 from demo import Demo
 from text import TextCanvas
 import time

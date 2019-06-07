@@ -1,3 +1,9 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		The main loop of the program. Handles play, pause and stop functionality 
+					of the demo.
+'''
+
 from tkinter import *
 import numpy as np
 from PIL import Image

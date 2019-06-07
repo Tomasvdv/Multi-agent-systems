@@ -1,3 +1,8 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Redundant code
+'''
+
 from tkinter import *
 from PIL import ImageTk, Image
 

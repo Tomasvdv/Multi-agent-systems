@@ -1,3 +1,7 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Constructs a model of the scene with turrets and planes. 
+'''
 import random
 import numpy as np
 from plane import Plane

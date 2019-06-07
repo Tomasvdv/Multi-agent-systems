@@ -1,3 +1,10 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Handles the movement, existence and message sending of turrets.
+					A turret is an air defense unit that is able to shoot down planes fly in its range.
+					Superclass of Agent. 
+'''
+
 import numpy as np
 from agent import Agent
 from model import Kripke_model
