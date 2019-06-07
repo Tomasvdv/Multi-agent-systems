@@ -1,3 +1,7 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Handles showing text regarding the knowledge of turrets.  
+'''
 import numpy as np
 from tkinter import *
 
@@ -13,14 +17,8 @@ class TextCanvas(Text): #text is already a tkinter class.
 		self.pack()
 
 	def print(self,message,color):
-		# self.text_canvas.create_text(400,self.text_position,fill=color, font="Times 12 italic bold",
-  #                       text= message)
-		# self.text_position += 50
-		# if self.text_position > 450:
-		# 	self.text_canvas.delete("all")
-		# 	self.text_position = 50
-
 		self.insert(END, str(message + "\n"))
+		self.pack()
 
 	def print_KB(self, KB):
 		for fact in KB:

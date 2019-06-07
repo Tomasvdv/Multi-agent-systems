@@ -1,3 +1,9 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Agent is a subclass of the turret and plane classes. It handles basic functionality 
+					of these agents like the communication between them and updating of knowledge.
+'''
+
 import random
 import numpy as np
 

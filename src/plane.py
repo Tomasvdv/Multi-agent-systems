@@ -1,3 +1,8 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Handles the movement, existence and message sending of planes. 
+					Superclass of Agent. 
+'''
 from agent import Agent
 
 class Plane(Agent):
