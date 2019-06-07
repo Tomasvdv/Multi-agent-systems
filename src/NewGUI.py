@@ -2,6 +2,8 @@ from demo import Demo
 from text import TextCanvas
 import time
 from tkinter import *
+from PIL import Image
+from PIL import ImageTk
 
 class GUI(Frame):
 	def __init__(self, master, demo):
@@ -48,9 +50,8 @@ class GUI(Frame):
 
 	def load_button_art(self, path):
 		button_img = Image.open(path)
-		button_img = button_img.resize((width,height), Image.ANTIALIAS)
+		button_img = button_img.resize((self.buttonwidth,self.buttonheight), Image.ANTIALIAS)
 		button_img =  ImageTk.PhotoImage(button_img)
-
 		return button_img
 
 
