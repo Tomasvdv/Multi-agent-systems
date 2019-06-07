@@ -58,6 +58,7 @@ class GUI(Frame):
 		self.play_button =Button(self.speed_control_canvas, command=self.demo.button_handler, image=self.play_img)
 		self.play_button.pack(side=LEFT)
 
+
 		self.pause_img = self.load_button_art("../img/pause.png")
 		self.pause_button=Button(self.speed_control_canvas, command=self.demo.pause_handler, image= self.pause_img)
 		self.pause_button.pack(side=LEFT)
@@ -84,42 +85,3 @@ if __name__ == "__main__":
 	demo = Demo()
 	window=Tk()
 	f = GUI(window, demo)
-
-
-
-
-
-
-
-
-# demo = Demo()
-# window=Tk()
-# top = Toplevel()
-# mm = mouseMover()
-# demo.canvas = Canvas(window, width=500,height=500)
-# demo.text = Text(top)
-# demo.canvas.grid(row=0,column=0,columnspan=2)
-# # demo.canvas.draw=Button(window,text="Draw")
-# # demo.canvas.draw.grid(row=1,column=3)
-# # demo.canvas.pack(side=TOP)
-# # demo.canvas.bind("<Button-1>", mm.select)
-# # demo.canvas.draw.bind('<Button-1>',demo.buttonhandler)
-
-# demo.canvas2 = Canvas(window, width=500,height=50)
-# numplanes_entry = Entry(demo.canvas2, text="numplanes")
-# numplanes_entry.configure(width = 30)
-# updatebutton = Button(demo.canvas2, text = "Update sim", command = update_parameters, anchor = W)
-# updatebutton.configure(width = 10, activebackground = "#33B5E5", relief = FLAT, anchor = W)
-# demo.canvas2.grid(row=0,column=0,columnspan=2)
-
-# demo.canvas.update()
-# demo.drawState()
-# running = True
-
-# while running:
-# 	demo.drawState()
-# 	time.sleep(SPEED)
-# 	window.update_idletasks()
-# 	window.update()
-# 	demo.text.text_window.update_idletasks()
-# 	demo.text.text_window.update()
