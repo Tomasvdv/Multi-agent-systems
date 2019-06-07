@@ -15,7 +15,7 @@ from plane import Plane
 from turret import Turret
 from sim_model import Model
 from model import Kripke_model
-from text import Text
+from text import TextCanvas
 import time
 from PIL import Image
 from PIL import ImageTk

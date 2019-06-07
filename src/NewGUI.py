@@ -41,25 +41,36 @@ class GUI(Frame):
 
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
-		self.numplanes_entry = Entry(self.button_canvas, text="numplanes")
+
+		self.numplanes_entry_canvas = Canvas(self.button_canvas)
+		self.numplanes_entry_canvas.pack(side=TOP)
+		self.numPlanes_text = StringVar()
+		self.numPlanes_text.set("Number of planes:")
+		self.numplanes_label = Label(self.numplanes_entry_canvas, textvariable=self.numPlanes_text)
+		self.numplanes_label.pack(side=LEFT)
+		self.numplanes_entry = Entry(self.numplanes_entry_canvas, text="numplanes")
 		self.numplanes_entry.pack(side=LEFT)
+
+
 		self.updatebutton = Button(self.button_canvas, text = "Update sim", command = self.update_demo_parameters)
-		self.updatebutton.pack(side=LEFT)
+		self.updatebutton.pack(side=TOP)
 
 
-		self.speed_control_canvas = Canvas()
+		self.speed_control_canvas = Canvas(self.button_canvas)
+		self.speed_control_canvas.pack(side=BOTTOM)
 
 		self.play_img = image=self.load_button_art("../img/play.png")
-		self.play_button =Button(self.button_canvas, command=self.demo.play_handler, image=self.play_img)
-		self.play_button.pack()
+		self.play_button =Button(self.speed_control_canvas, command=self.demo.play_handler, image=self.play_img)
+		self.play_button.pack(side=LEFT)
+
 
 		self.pause_img = self.load_button_art("../img/pause.png")
-		self.pause_button=Button(self.button_canvas, text='2', command=self.demo.pause_handler, image= self.pause_img)
-		self.pause_button.pack()
+		self.pause_button=Button(self.speed_control_canvas, command=self.demo.pause_handler, image= self.pause_img)
+		self.pause_button.pack(side=LEFT)
 
 		self.ff_img = self.load_button_art("../img/ff.png")
-		self.ff_button=Button(self.button_canvas, text='3', command=self.demo.step_handler, image=self.ff_img)
-		self.ff_button.pack()
+		self.ff_button=Button(self.speed_control_canvas, command=self.demo.step_handler, image=self.ff_img)
+		self.ff_button.pack(side=LEFT)
 
 	def load_button_art(self, path):
 		button_img = Image.open(path)
@@ -73,48 +84,9 @@ class GUI(Frame):
 			self.demo.numPlanes = int(self.numplanes_entry.get())
 		except:
 			pass
-
+			
 
 if __name__ == "__main__":
 	demo = Demo()
 	window=Tk()
 	f = GUI(window, demo)
-
-
-
-
-
-
-
-
-# demo = Demo()
-# window=Tk()
-# top = Toplevel()
-# mm = mouseMover()
-# demo.canvas = Canvas(window, width=500,height=500)
-# demo.text = Text(top)
-# demo.canvas.grid(row=0,column=0,columnspan=2)
-# # demo.canvas.draw=Button(window,text="Draw")
-# # demo.canvas.draw.grid(row=1,column=3)
-# # demo.canvas.pack(side=TOP)
-# # demo.canvas.bind("<Button-1>", mm.select)
-# # demo.canvas.draw.bind('<Button-1>',demo.buttonhandler)
-
-# demo.canvas2 = Canvas(window, width=500,height=50)
-# numplanes_entry = Entry(demo.canvas2, text="numplanes")
-# numplanes_entry.configure(width = 30)
-# updatebutton = Button(demo.canvas2, text = "Update sim", command = update_parameters, anchor = W)
-# updatebutton.configure(width = 10, activebackground = "#33B5E5", relief = FLAT, anchor = W)
-# demo.canvas2.grid(row=0,column=0,columnspan=2)
-
-# demo.canvas.update()
-# demo.drawState()
-# running = True
-
-# while running:
-# 	demo.drawState()
-# 	time.sleep(SPEED)
-# 	window.update_idletasks()
-# 	window.update()
-# 	demo.text.text_window.update_idletasks()
-# 	demo.text.text_window.update()
