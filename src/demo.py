@@ -1,3 +1,10 @@
+'''
+Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
+Description:		Constructs a demo. Handles the information that is shown in the GUI. 
+					This information includes: location of planes and turrets, shooting range
+					of the turrets and showing a kripke model of the knowledge of the agents. 
+'''
+
 from tkinter import *
 from PIL import ImageTk, Image
 import math
