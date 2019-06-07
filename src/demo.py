@@ -158,6 +158,7 @@ class Demo():
 
 	def drawStep(self):
 		flag = 0
+		self.statistics.showStatistics()
 		self.model.run_epoch(self.statistics)
 		self.canvas.delete("all")
 

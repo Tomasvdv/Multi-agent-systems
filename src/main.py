@@ -26,8 +26,6 @@ if __name__ == '__main__':
 		time.sleep(SPEED)
 		window.update_idletasks()
 		window.update()
-		demo.text_canvas.update_idletasks()
-		demo.text_canvas.update()
 		# demo.text.text_window.update_idletasks()
 		# demo.text.text_window.update()
 		if demo.paused == True:

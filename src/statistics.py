@@ -19,4 +19,3 @@ class Statistics():
 		self.text.print("Enemy planes generated: "+str(self.enemy_planes_generated),color)
 		self.text.print("Friendly planes shot: "+str(self.friendly_planes_shot),color)
 		self.text.print("Enemy planes shot: "+str(self.enemy_planes_shot),color)
-	
