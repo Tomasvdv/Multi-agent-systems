@@ -14,7 +14,6 @@ from PIL import Image
 from PIL import ImageTk
 
 TURRET_RANGE = 3
-SPEED = 0.1 #0.5
 NUMBER_TURRETS = 3
 
 class Demo():
@@ -28,7 +27,7 @@ class Demo():
 		# self.lines = []
 		self.model = Model()
 		self.kripke = Kripke_model()
-		self.demospeed = SPEED
+		# self.demospeed = SPEED
 		self.paused = False
 		self.step = False
 		self.running = True
@@ -235,49 +234,39 @@ class Demo():
 		self.kripke.put_data_in_model(knowledge= knowledge, agent_names= turret_names)
 		self.kripke.show_model()
 
-demo = Demo()
-window=Tk()
-top = Toplevel()
-mm = mouseMover()
-demo.canvas = Canvas(window, width=500,height=500)
-demo.text = Text(top)
 
-width = 40
-height = 40
+if __name__ == '__main__':
+	demo = Demo()
+	window=Tk()
+	top = Toplevel()
+	mm = mouseMover()
+	demo.canvas = Canvas(window, width=500,height=500)
+	demo.text = Text(top)
 
-play_img = Image.open("../img/play.png")
-play_img = play_img.resize((width,height), Image.ANTIALIAS)
-play_img =  ImageTk.PhotoImage(play_img)
+	width = 40
+	height = 40
 
-pause_img = Image.open("../img/pause.png")
-pause_img = pause_img.resize((width,height), Image.ANTIALIAS)
-pause_img =  ImageTk.PhotoImage(pause_img)
+	play_img = Image.open("../img/play.png")
+	play_img = play_img.resize((width,height), Image.ANTIALIAS)
+	play_img =  ImageTk.PhotoImage(play_img)
 
-ff_img = Image.open("../img/ff.png")
-ff_img = ff_img.resize((width,height), Image.ANTIALIAS)
-ff_img =  ImageTk.PhotoImage(ff_img)
+	pause_img = Image.open("../img/pause.png")
+	pause_img = pause_img.resize((width,height), Image.ANTIALIAS)
+	pause_img =  ImageTk.PhotoImage(pause_img)
 
-demo.canvas.grid(row=0,column=0,columnspan=2)
-#demo.canvas.draw1=Button(window,text="Run simulation", command=demo.button_handler, image)
-demo.canvas.draw1=Button(window, command=demo.button_handler, image=play_img)
-demo.canvas.draw1.grid(row=1,column=2)
-demo.canvas.draw2=Button(window, command=demo.pause_handler, image=pause_img)
-demo.canvas.draw2.grid(row=1,column=3)
-demo.canvas.draw3=Button(window, command=demo.step_handler, image=ff_img)
-demo.canvas.draw3.grid(row=1,column=4)
+	ff_img = Image.open("../img/ff.png")
+	ff_img = ff_img.resize((width,height), Image.ANTIALIAS)
+	ff_img =  ImageTk.PhotoImage(ff_img)
 
-demo.canvas.update()
-demo.drawState()
+	demo.canvas.grid(row=0,column=0,columnspan=2)
+	#demo.canvas.draw1=Button(window,text="Run simulation", command=demo.button_handler, image)
+	demo.canvas.draw1=Button(window, command=demo.button_handler, image=play_img)
+	demo.canvas.draw1.grid(row=1,column=2)
+	demo.canvas.draw2=Button(window, command=demo.pause_handler, image=pause_img)
+	demo.canvas.draw2.grid(row=1,column=3)
+	demo.canvas.draw3=Button(window, command=demo.step_handler, image=ff_img)
+	demo.canvas.draw3.grid(row=1,column=4)
 
-while True:
-	if demo.running:
-		demo.drawState()
-	time.sleep(SPEED)
-	window.update_idletasks()
-	window.update()
-	demo.text.text_window.update_idletasks()
-	demo.text.text_window.update()
-	if demo.paused == True:
-		demo.running = False
-	if demo.step == True:
-		demo.running = False
+	demo.canvas.update()
+	demo.drawState()
+
