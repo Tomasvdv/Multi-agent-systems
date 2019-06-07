@@ -19,6 +19,7 @@ from text import TextCanvas
 import time
 from PIL import Image
 from PIL import ImageTk
+from statistics import Statistics
 
 TURRET_RANGE = 3
 NUMBER_TURRETS = 3
@@ -45,6 +46,18 @@ class Demo():
 		self.paused = False
 		self.step = False
 		self.running = True
+
+	def get_KB_from_click(self, x_click, y_click):
+		cellwidth = self.canvas.cellwidth
+		cellheight = self.canvas.cellheight
+		for t in self.model.turrets:
+			(x, y) = t.pos
+			if x * cellwidth < x_click and (x+1) * cellwidth > x_click and \
+			   y * cellheight < y_click and (y+1) * cellheight > y_click:
+				return t.knowledge
+		return []
+
+
 
 	def pause_handler(self):
 		print("PAUSED HANDLER")
@@ -103,9 +116,11 @@ class Demo():
 		name = "Plane_" + str(self.planeCounter)
 		if friendly > 0.25:
 			self.model.add_plane(name, col, row, dx, dy, False)
+			self.statistics.enemy_planes_generated += 1
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 		else:
 			self.model.add_plane(name, col, row, dx, dy, True)
+			self.statistics.friendly_planes_generated += 1 
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 		self.planeCounter += 1
 		print(name + " added")
@@ -199,7 +214,8 @@ class Demo():
 
 	def drawStep(self):
 		flag = 0
-		self.model.run_epoch()
+		self.statistics.showStatistics()
+		self.model.run_epoch(self.statistics)
 		self.canvas.delete("all")
 
 		print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))

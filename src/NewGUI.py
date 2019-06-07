@@ -9,7 +9,7 @@ import time
 from tkinter import *
 from PIL import Image
 from PIL import ImageTk
-
+from statistics import Statistics
 class GUI(Frame):
 	def __init__(self, master, demo):
 		Frame.__init__(self, master)
@@ -22,11 +22,22 @@ class GUI(Frame):
 		self.build_canvas()
 		self.add_buttons()
 
+		self.add_mouse_listener()
+
 		self.button_canvas.pack(side=LEFT, expand=True)
 		self.app_canvas.pack(side=LEFT)
 		self.text_canvas.pack(side=LEFT)
 		self.pack(expand=True)
 		self.update()
+
+	def mouse_callback(self, event):
+		self.demo.text.print("clicked at %d %d" % ( int(event.x), int(event.y)), 1)
+		KB = self.demo.get_KB_from_click(int(event.x), int(event.y))
+		self.demo.text.print_KB(KB)
+
+	def add_mouse_listener(self):
+		self.app_canvas.bind("<Button-1>", self.mouse_callback)
+
 
 
 	def build_canvas(self):
@@ -38,6 +49,7 @@ class GUI(Frame):
 		#give demo class pointers to the GUI
 		self.demo.canvas = self.app_canvas
 		self.demo.text = TextCanvas(self.text_canvas)
+		self.demo.statistics = Statistics(self.demo.text)
 
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
@@ -108,7 +120,7 @@ class GUI(Frame):
 				print("Number of turrets must be > 1")
 		except:
 			pass
-			
+
 
 if __name__ == "__main__":
 	demo = Demo()

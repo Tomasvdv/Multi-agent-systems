@@ -20,7 +20,6 @@ if __name__ == '__main__':
 	demo = Demo()
 	window = Tk()
 	f = GUI(window, demo)
-
 	while True:
 		if demo.running:
 			demo.drawState()
