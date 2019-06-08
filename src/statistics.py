@@ -7,15 +7,11 @@ class Statistics():
 		self.friendly_planes_shot = 0
 		self.enemy_planes_shot = 0
 		self.text = text
+		self.init = 1
 
 	def showStatistics(self):
-		self.text.refresh = 0
-		self.text.text_canvas.delete("all")
-		self.text.text_position = 50
-		color = 'black'
-		self.text.print("Statistics",color)
-		self.text.print("Total of planes generated: "+str(self.friendly_planes_generated + self.enemy_planes_generated),color)
-		self.text.print("Friendly planes generated: "+str(self.friendly_planes_generated),color)
-		self.text.print("Enemy planes generated: "+str(self.enemy_planes_generated),color)
-		self.text.print("Friendly planes shot: "+str(self.friendly_planes_shot),color)
-		self.text.print("Enemy planes shot: "+str(self.enemy_planes_shot),color)
+		if self.init != 1:
+			self.text.remove()
+		self.sentence = "Statistics \nTotal of planes generated: "+str(self.friendly_planes_generated + self.enemy_planes_generated)+"\nFriendly planes generated: "+str(self.friendly_planes_generated)+"\nEnemy planes generated: "+str(self.enemy_planes_generated)+ "\nFriendly planes shot: "+str(self.friendly_planes_shot)+"\nEnemy planes shot: "+str(self.enemy_planes_shot)
+		self. init = 0
+		self.text.print(self.sentence,"")
