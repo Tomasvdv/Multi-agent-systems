@@ -26,6 +26,7 @@ class GUI(Frame):
 
 		self.button_canvas.pack(side=LEFT, expand=True)
 		self.app_canvas.pack(side=LEFT)
+		self.text_button_canvas.pack(side=BOTTOM)
 		self.text_canvas.pack(side=LEFT)
 		self.pack(expand=True)
 		self.update()
@@ -45,7 +46,7 @@ class GUI(Frame):
 		self.app_canvas = Canvas(self, width=500,height=500)
 		self.text_canvas = Canvas(self, width=500,height=500)
 		self.button_canvas = Canvas(self, width=50,height=500)
-
+		self.text_button_canvas = Canvas(self, width=50,height=40)
 		#give demo class pointers to the GUI
 		self.demo.canvas = self.app_canvas
 		self.demo.text = TextCanvas(self.text_canvas)
@@ -93,6 +94,13 @@ class GUI(Frame):
 		self.ff_img = self.load_button_art("../img/ff.png")
 		self.ff_button=Button(self.speed_control_canvas, command=self.demo.step_handler, image=self.ff_img)
 		self.ff_button.pack(side=LEFT)
+
+		self.statistics_button = Button(self.text_button_canvas, command=self.demo.statisics_handler, text = "Show statistics")
+		self.statistics_button.pack(side = LEFT)
+
+		self.turret_kb_button = Button(self.text_button_canvas, command=self.demo.turret_kb_handler, text = "Show knowledge base")
+		self.turret_kb_button.pack(side = LEFT)
+
 
 	def load_button_art(self, path):
 		button_img = Image.open(path)

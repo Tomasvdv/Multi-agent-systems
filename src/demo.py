@@ -40,34 +40,48 @@ class Demo():
 		self.paused = False
 		self.step = False
 		self.running = True
+		self.show_statistics = False
+		self.get_kb = False
 
+	# Function to make the play buttion function 
 	def play_handler(self):
 		print("RUN SIMULATION")
 		self.paused = False
 		self.step = False
 		self.running = True
 
+	#Function to retrieve the knowledge base of a specific turret selected on screen
 	def get_KB_from_click(self, x_click, y_click):
-		cellwidth = self.canvas.cellwidth
-		cellheight = self.canvas.cellheight
-		for t in self.model.turrets:
-			(x, y) = t.pos
-			if x * cellwidth < x_click and (x+1) * cellwidth > x_click and \
-			   y * cellheight < y_click and (y+1) * cellheight > y_click:
-				return t.knowledge
+		if self.get_kb:
+			cellwidth = self.canvas.cellwidth
+			cellheight = self.canvas.cellheight
+			for t in self.model.turrets:
+				(x, y) = t.pos
+				if x * cellwidth < x_click and (x+1) * cellwidth > x_click and \
+				   y * cellheight < y_click and (y+1) * cellheight > y_click:
+					return t.knowledge
 		return []
 
+	def turret_kb_handler(self):
+		self.show_statistics = False
+		self.statistics.text.remove()
+		self.get_kb = True
 
-
+	#Function to pause the simulation with the pause button
 	def pause_handler(self):
 		print("PAUSED HANDLER")
 		self.paused = True
-
+	
+	#Function to run the simulation step by step
 	def step_handler(self):
 		print("STEP HANDLER")
 		self.step = True
 		self.drawState()
+	def statisics_handler(self):
+		self.show_statistics = True
+		self.get_kb = False
 
+    #Function to round fload n to the closest integer number
 	def getClosestTile(n):
 		n = math.floor(n)
 		return n
@@ -78,7 +92,7 @@ class Demo():
 	    x1 = x + r
 	    y1 = y + r
 	    return canvas.create_oval(x0, y0, x1, y1)
-
+	#Function to load all the images needed for the simulation
 	def loadTextures(self,cellwidth,cellheight):
 		self.canvas.flak = Image.open("flak.jpg")
 		self.canvas.flak = ImageTk.PhotoImage(self.canvas.flak.resize((cellwidth, cellheight), Image.ANTIALIAS))
@@ -89,6 +103,7 @@ class Demo():
 		self.canvas.friendly = Image.open("friendly.jpg")
 		self.canvas.friendly = ImageTk.PhotoImage(self.canvas.friendly.resize((cellwidth,cellheight), Image.ANTIALIAS))
 	
+	#Function to initialize a plane with a random starting direction. It can be either a friendly or an enemy plane
 	def initializePlane(self):
 		friendly = random.random()
 		dx = 0
@@ -114,6 +129,7 @@ class Demo():
 		cellwidth = self.canvas.cellwidth
 		cellheight = self.canvas.cellheight
 		name = "Plane_" + str(self.planeCounter)
+		# 75% change of being an enemy plane
 		if friendly > 0.25:
 			self.model.add_plane(name, col, row, dx, dy, False)
 			self.statistics.enemy_planes_generated += 1
@@ -124,7 +140,8 @@ class Demo():
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 		self.planeCounter += 1
 		print(name + " added")
-		
+	
+	#Function to initialize the simulation	
 	def drawState(self):
 		w=self.canvas.winfo_width()
 		h=self.canvas.winfo_height()
@@ -168,6 +185,7 @@ class Demo():
 			self.drawStep()
 		# self.construct_kripke()
 
+	#Function to update the number of turrets according to the ammount defined at the user interface. It either adds or deletes turrets and their connextions based on the ammount specified by the user.
 	def update_turrets(self, add_amount):
 		w=self.canvas.winfo_width()
 		h=self.canvas.winfo_height()
@@ -211,10 +229,12 @@ class Demo():
 				self.model.turrets.remove(turret)
 				self.model.connections = new_connections
 
-
+   #Function to draw each step of the simulation.
 	def drawStep(self):
 		flag = 0
-		self.statistics.showStatistics()
+
+		if self.show_statistics:
+			self.statistics.showStatistics()
 		self.model.run_epoch(self.statistics)
 		self.canvas.delete("all")
 
@@ -259,6 +279,7 @@ class Demo():
 		# 	print(turret.kripke_knowledge)
 		# 	print("\n")
 
+	#Function to draw each plane on the canvas after each step.
 	def drawPlanes(self):
 		cellwidth  = self.canvas.cellwidth	
 		cellheight = self.canvas.cellheight
@@ -270,8 +291,9 @@ class Demo():
 			if not plane.isfriendly:
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 			else:
-				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)		
+				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 
+	#Function which draws the blue dotted lines to indicate a turret is shooting at the connected plane.
 	def draw_shots(self, cellwidth):
 		for turret in self.model.turrets:
 			for plane in self.model.planes:
@@ -283,7 +305,8 @@ class Demo():
 					y2 = (plane.pos[1] + 0.5)*cellwidth
 					print(x1, x2, y1, y2)
 					self.canvas.create_line(x1,y1,x2,y2,fill='blue',width = 5, dash=(4,4))
-	
+
+	#Function to construct a kripke model of the whole world defined in the simulation.
 	def construct_kripke(self):
 		all_knowlegde = []
 		turret_names = []
@@ -304,7 +327,7 @@ class Demo():
 		self.kripke.put_data_in_model(knowledge= knowledge, agent_names= turret_names)
 		self.kripke.show_model()
 
-
+#This is used for testing the demo.py file
 if __name__ == '__main__':
 	demo = Demo()
 	window=Tk()
