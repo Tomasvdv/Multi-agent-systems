@@ -77,6 +77,7 @@ class Demo():
 		print("STEP HANDLER")
 		self.step = True
 		self.drawState()
+	
 	def statisics_handler(self):
 		self.show_statistics = True
 		self.get_kb = False
@@ -232,13 +233,15 @@ class Demo():
    #Function to draw each step of the simulation.
 	def drawStep(self):
 		flag = 0
-
+		counter = self.statistics.friendly_planes_shot
 		if self.show_statistics:
 			self.statistics.showStatistics()
 		self.model.run_epoch(self.statistics)
+		if self.statistics.friendly_planes_shot > counter:
+			self.showmistake = True
 		self.canvas.delete("all")
 
-		print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))
+		# print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))
 		self.update_turrets(self.numTurrets - len(self.model.turrets))
 
 		while len(self.model.planes) < self.numPlanes:
@@ -287,7 +290,7 @@ class Demo():
 		for plane in self.model.planes:
 			col = plane.pos[0]
 			row = plane.pos[1]
-			print("row,col",row,col)
+			
 			if not plane.isfriendly:
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
 			else:

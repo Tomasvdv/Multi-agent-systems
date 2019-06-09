@@ -27,7 +27,7 @@ class Turret(Agent):
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
 
 				if plane not in self.tracked_planes: #plane is not yet being tracked
-					print("turret %s spotted plane %s at loc (%d, %d)" % (self.name, plane.name, plane.pos[0], plane.pos[1]))
+					# print("turret %s spotted plane %s at loc (%d, %d)" % (self.name, plane.name, plane.pos[0], plane.pos[1]))
 
 					#tell other turrets that there is a plane
 					self.broadcast("plane at %d %d" % (plane.pos[0], plane.pos[1]))
@@ -39,10 +39,10 @@ class Turret(Agent):
 					#check if there was a message from the plane
 					for (message, identifier, sender) in self.received_messages:
 						self.to_model()
-						if sender == plane and "not_friendly" in message:
-							#Agent.printKB(self)
+						if sender == plane and not "friendly" in message:
+							print(plane.isfriendly)
 							self.shoot(plane,statistics)
-							pass
+								
 
 	def shoot(self, plane, statistics):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
@@ -51,8 +51,10 @@ class Turret(Agent):
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
-				statistics.enemy_planes_shot += 1
+				if plane.isfriendly == False:
+					statistics.enemy_planes_shot += 1
+				else:
+					statistics.friendly_planes_shot += 1
 				self.broadcast("%s destroyed" % (plane.name))
 				self.tracked_planes.remove(plane)
-		else:
-			print("plane %s out of range of %s" % (plane.name, self.name))
+		
