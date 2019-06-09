@@ -37,12 +37,12 @@ class Demo():
 		self.model = Model()
 		self.kripke = Kripke_model()
 		# self.demospeed = SPEED
-		self.paused = False
+		self.paused = True
 		self.step = False
 		self.running = True
 		self.show_statistics = False
 		self.get_kb = False
-
+		self.show_messages = False
 	# Function to make the play buttion function 
 	def play_handler(self):
 		print("RUN SIMULATION")
@@ -67,6 +67,13 @@ class Demo():
 		self.statistics.text.remove()
 		self.get_kb = True
 
+	def messages_handler(self):
+		print("MESSAGE ")
+		self.get_kb = False
+		self.show_statistics = False
+		self.statistics.text.remove()
+		self.show_messages= True
+
 	#Function to pause the simulation with the pause button
 	def pause_handler(self):
 		print("PAUSED HANDLER")
@@ -81,6 +88,7 @@ class Demo():
 	def statisics_handler(self):
 		self.show_statistics = True
 		self.get_kb = False
+		self.show_messages = False
 
     #Function to round fload n to the closest integer number
 	def getClosestTile(n):
@@ -141,7 +149,8 @@ class Demo():
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
 		self.planeCounter += 1
 		print(name + " added")
-	
+		self.message_manager.set_tracked(name)
+
 	#Function to initialize the simulation	
 	def drawState(self):
 		w=self.canvas.winfo_width()
@@ -221,7 +230,7 @@ class Demo():
 		if add_amount < 0:
 			for idx in range(abs(add_amount), -1, -1): #In reverse order, since turrets are removed. Otherwise we get a list index overflow
 				new_connections = []
-				print("TURRET: ", len(self.model.turrets), idx)
+				# print("TURRET: ", len(self.model.turrets), idx)
 				turret = self.model.turrets[idx]
 				
 				for idx, (tur1, tur2) in enumerate(self.model.connections):
@@ -233,12 +242,13 @@ class Demo():
    #Function to draw each step of the simulation.
 	def drawStep(self):
 		flag = 0
-		counter = self.statistics.friendly_planes_shot
+		
 		if self.show_statistics:
 			self.statistics.showStatistics()
-		self.model.run_epoch(self.statistics)
-		if self.statistics.friendly_planes_shot > counter:
-			self.showmistake = True
+		self.model.run_epoch(self.message_manager,self.statistics)
+		
+		if self.show_messages == True:
+			self.message_manager.print()
 		self.canvas.delete("all")
 
 		# print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))
@@ -301,7 +311,6 @@ class Demo():
 		for turret in self.model.turrets:
 			for plane in self.model.planes:
 				if np.linalg.norm(turret.pos - plane.pos) <= turret.turret_range and not plane.isfriendly:
-					print("SHOOT!")
 					x1 = (turret.pos[0] + 0.5)*cellwidth
 					y1 = (turret.pos[1] + 0.5)*cellwidth
 					x2 = (plane.pos[0] + 0.5)*cellwidth

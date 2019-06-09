@@ -26,17 +26,17 @@ class Agent:
 
 		self.model = model
 
-	def broadcast(self, message):
+	def broadcast(self, message,message_manager):
 		#send message to all connected agents
 		for a in self.agents:
-			self.send_new_message(a, message)
+			self.send_new_message(a, message,message_manager)
 
-	def update(self):
+	def update(self, message_manager):
 		#resend possibly failed messages
 		resent_this_epoch = False
 		for (message, identifier, other) in self.sent_messages:
 			if self.name in identifier and self.confirmed[identifier] != 1: #not yet confirmed
-				self.resend_last_message(identifier)
+				self.resend_last_message(identifier,message_manager)
 				resent_this_epoch = True
 
 		return resent_this_epoch
@@ -53,35 +53,39 @@ class Agent:
 		for k in self.knowledge:
 			print("\t", k)
 
-	def send_new_message(self, other, message):
+	def send_new_message(self, other, message,message_manager):
 		identifier = str(self.messageidx) + self.name
-		print("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
+		#print("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
 		self.sent_messages.append((message, identifier, other))
-		other.receive_message(self, message, identifier)
+		other.receive_message(self, message, identifier,message_manager)
 		self.confirmed[identifier] = 0
 		self.messageidx += 1
 
-	def resend_last_message(self, identifier):
+	def resend_last_message(self, identifier,message_manager):
 		for idx in range(len(self.sent_messages)-1, -1, -1): #loop from last message to first
 			(message, midentifier, other) = self.sent_messages[idx]
 			if midentifier == identifier:
-				print("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
-				other.receive_message(self, message, identifier)
+				if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
+					message_manager.add_message(str("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier)))
+				#print("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
+				other.receive_message(self, message, identifier,message_manager)
 				return
 		# print("could not find message", idx)
 		# print(self.sent_messages)
 
-	def receive_message(self, other, message, identifier):
+	def receive_message(self, other, message, identifier,message_manager):
 		successfully_received = random.random() > self.FAIL_PROB
 		if successfully_received:
 			self.knowledge.add(message)
 			self.received_messages.append((message, identifier, other))
-			print("%s successfully received a message! \"%s\"" % (self.name, message))
-			self.send_reply(other, message, identifier)
+			if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
+				message_manager.add_message(str("%s successfully received a message! \"%s\"" % (self.name, message)))
+			# print("%s successfully received a message! \"%s\"" % (self.name, message))
+			self.send_reply(other, message, identifier,message_manager)
 
 			
 
-	def send_reply(self, other, message, identifier):
+	def send_reply(self, other, message, identifier,message_manager):
 		reply = "K_%s(%s)"  % (self.name, message)
 
 		self.knowledge.add(reply) #add the reply to knowledge base
@@ -90,8 +94,10 @@ class Agent:
 			self.confirmed[identifier] = 1
 		else:
 			self.sent_messages.append((reply, identifier, other))
-			print("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))
-			other.receive_message(self, reply, identifier)
+			if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
+				message_manager.add_message(str("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))) 
+			#print("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))
+			other.receive_message(self, reply, identifier,message_manager)
 
 
 if __name__ == '__main__':

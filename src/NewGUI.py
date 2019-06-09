@@ -10,6 +10,7 @@ from tkinter import *
 from PIL import Image
 from PIL import ImageTk
 from statistics import Statistics
+from message_manager import Message_manager
 class GUI(Frame):
 	def __init__(self, master, demo):
 		Frame.__init__(self, master)
@@ -51,6 +52,7 @@ class GUI(Frame):
 		self.demo.canvas = self.app_canvas
 		self.demo.text = TextCanvas(self.text_canvas)
 		self.demo.statistics = Statistics(self.demo.text)
+		self.demo.message_manager = Message_manager(self.demo.text)
 
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
@@ -101,6 +103,8 @@ class GUI(Frame):
 		self.turret_kb_button = Button(self.text_button_canvas, command=self.demo.turret_kb_handler, text = "Show knowledge base")
 		self.turret_kb_button.pack(side = LEFT)
 
+		self.messages_button = Button(self.text_button_canvas, command=self.demo.messages_handler, text = "Show messages")
+		self.messages_button.pack(side = LEFT)
 
 	def load_button_art(self, path):
 		button_img = Image.open(path)
