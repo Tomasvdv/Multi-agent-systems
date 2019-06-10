@@ -14,13 +14,14 @@ class Plane(Agent):
 		self.isdestroyed = False
 		self.isvisible = True
 		self.correct_identification = False
-		self.reply = self.generate_reply()
+		self.counter = 0
+		self.reply = self.generate_identification()
 
 
-	def generate_reply(self):
-		if self.isfriendly and random.random() > 0.1:
+	def generate_identification(self):
+		if self.isfriendly:
 			self.correct_identification = True
-			return "friendly"
+			return "key"+str(self.name)
 		else: 
 			return "unknown"
 
@@ -34,10 +35,19 @@ class Plane(Agent):
 
 		if "indentify" in self.knowledge:
 			for (message, identifier, sender) in self.received_messages:
-				if self.correct_identification and not "K_%s(friendly)" % sender.name in self.knowledge:
-						self.send_new_message(sender,"friendly",message_manager)
+				temp = "K_"+str(sender.name)+"("+str(self.reply)+")"  
+				if self.correct_identification and not temp in self.knowledge:
+						
+						self.send_new_message(sender,self.reply,message_manager)
+		
 				if not self.correct_identification and not "K_%s(unknown)" % sender.name in self.knowledge:
-					self.send_new_message(sender, "unknown",message_manager)
+					self.send_new_message(sender, self.reply,message_manager)
+
+		if "indentified as friendly" in self.knowledge:
+			for (message, identifier, sender) in self.received_messages:
+				if self.correct_identification and not "K_%s(friendly)" % sender.name in self.knowledge:
+					
+					self.send_new_message(sender,"friendly",message_manager)
 
 	def destroy(self):
 		print('plane crashed')

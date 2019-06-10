@@ -35,14 +35,24 @@ class Turret(Agent):
 
 					#send message to plane
 					self.send_new_message(plane, "indentify",message_manager)
+				
 				else:
+				
 					#check if there was a message from the plane
 					for (message, identifier, sender) in self.received_messages:
 						self.to_model()
-						if sender == plane and not "friendly" in message:
-							print(plane.isfriendly)
-							self.shoot(plane,statistics,message_manager)
-								
+						
+						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
+							self.send_new_message(plane, "indentified as friendly",message_manager)
+
+						if sender == plane:
+						
+							if not "K_%s(friendly)" % self.name in self.knowledge:
+								plane.counter += 1
+
+							if "unknown" in message or plane.counter == 20:
+								self.shoot(plane,statistics,message_manager)
+									
 
 	def shoot(self, plane, statistics,message_manager):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
