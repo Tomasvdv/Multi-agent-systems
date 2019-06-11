@@ -14,7 +14,6 @@ class Plane(Agent):
 		self.isdestroyed = False
 		self.isvisible = True
 		self.correct_identification = False
-		self.counter = 0
 		self.reply = self.generate_identification()
 
 
@@ -27,6 +26,7 @@ class Plane(Agent):
 
 	def run_epoch(self,message_manager):
 		self.update(message_manager)
+		print("counter : ",self.counter)
 		self.pos[0] += self.dx
 		self.pos[1] += self.dy
 		if self.pos[1] == 10 or self.pos[1]  < 0 or self.pos[0] == 10 or self.pos[0] < 0:
@@ -39,14 +39,11 @@ class Plane(Agent):
 				if self.correct_identification and not temp in self.knowledge:
 						
 						self.send_new_message(sender,self.reply,message_manager)
-		
 				if not self.correct_identification and not "K_%s(unknown)" % sender.name in self.knowledge:
 					self.send_new_message(sender, self.reply,message_manager)
-
 		if "indentified as friendly" in self.knowledge:
 			for (message, identifier, sender) in self.received_messages:
 				if self.correct_identification and not "K_%s(friendly)" % sender.name in self.knowledge:
-					
 					self.send_new_message(sender,"friendly",message_manager)
 
 	def destroy(self):

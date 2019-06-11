@@ -18,7 +18,7 @@ class Agent:
 		self.messageidx = 0
 		self.confirmed = {} #dict of identifiers of all messages sent
 		self.kripke_knowledge = {} #dict of knowledge that is used to construct Kripke model
-
+		self.counter = 0
 		self.x = x
 		self.y = y
 
@@ -57,6 +57,7 @@ class Agent:
 		identifier = str(self.messageidx) + self.name
 		#print("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
 		self.sent_messages.append((message, identifier, other))
+		self.counter += 1
 		other.receive_message(self, message, identifier,message_manager)
 		self.confirmed[identifier] = 0
 		self.messageidx += 1
@@ -66,6 +67,7 @@ class Agent:
 			(message, midentifier, other) = self.sent_messages[idx]
 			if midentifier == identifier:
 				if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
+					self.counter += 1
 					message_manager.add_message(str("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier)))
 				#print("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
 				other.receive_message(self, message, identifier,message_manager)
@@ -95,6 +97,7 @@ class Agent:
 		else:
 			self.sent_messages.append((reply, identifier, other))
 			if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
+				self.counter += 1
 				message_manager.add_message(str("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))) 
 			#print("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))
 			other.receive_message(self, reply, identifier,message_manager)

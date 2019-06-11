@@ -23,7 +23,7 @@ class Turret(Agent):
 
 		#check for any new planes
 		for plane in self.model.planes:
-			print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
+			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
 
 				if plane not in self.tracked_planes: #plane is not yet being tracked
@@ -42,17 +42,17 @@ class Turret(Agent):
 					for (message, identifier, sender) in self.received_messages:
 						self.to_model()
 						
+						if sender == plane:
+						
+							if not "K_%s(friendly)" % plane.name in self.knowledge:
+
+								if "unknown" in message or plane.counter == 20:
+									print("destroyed :", plane.counter)
+									self.shoot(plane,statistics,message_manager)
+									
 						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
 							self.send_new_message(plane, "indentified as friendly",message_manager)
 
-						if sender == plane:
-						
-							if not "K_%s(friendly)" % self.name in self.knowledge:
-								plane.counter += 1
-
-							if "unknown" in message or plane.counter == 20:
-								self.shoot(plane,statistics,message_manager)
-									
 
 	def shoot(self, plane, statistics,message_manager):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
