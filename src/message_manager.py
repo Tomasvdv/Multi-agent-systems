@@ -10,6 +10,7 @@ class Message_manager:
 		self.tracked = name
 		self.counter = 0
 		self.remove()
+	
 	def print(self):
 		for message in self.messages:
 			self.text.print(message,"")

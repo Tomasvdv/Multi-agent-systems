@@ -48,6 +48,7 @@ class GUI(Frame):
 		self.text_canvas = Canvas(self, width=500,height=500)
 		self.button_canvas = Canvas(self, width=50,height=500)
 		self.text_button_canvas = Canvas(self, width=50,height=40)
+		
 		#give demo class pointers to the GUI
 		self.demo.canvas = self.app_canvas
 		self.demo.text = TextCanvas(self.text_canvas)

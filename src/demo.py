@@ -73,6 +73,7 @@ class Demo():
 		self.show_statistics = False
 		self.statistics.text.remove()
 		self.show_messages= True
+		self.message_manager.print()
 
 	#Function to pause the simulation with the pause button
 	def pause_handler(self):
@@ -87,9 +88,11 @@ class Demo():
 	
 	def statisics_handler(self):
 		self.show_statistics = True
+		self.statistics.text.remove()
 		self.get_kb = False
 		self.show_messages = False
-
+		self.statistics.showStatistics()
+		
     #Function to round fload n to the closest integer number
 	def getClosestTile(n):
 		n = math.floor(n)
@@ -246,10 +249,12 @@ class Demo():
 		if self.show_statistics:
 			self.statistics.showStatistics()
 		self.model.run_epoch(self.message_manager,self.statistics)
-		
-		if self.show_messages == True:
-			self.message_manager.print()
 		self.canvas.delete("all")
+
+		if self.show_messages == True:
+			self.statistics.text.remove()
+			self.message_manager.print()
+
 
 		# print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))
 		self.update_turrets(self.numTurrets - len(self.model.turrets))
