@@ -26,14 +26,14 @@ class Plane(Agent):
 
 	def run_epoch(self,message_manager):
 		self.update(message_manager)
-		print("counter : ",self.counter)
+		# print("counter : ",self.counter)
 		self.pos[0] += self.dx
 		self.pos[1] += self.dy
 		if self.pos[1] == 10 or self.pos[1]  < 0 or self.pos[0] == 10 or self.pos[0] < 0:
 			self.destroy()
 		# print('xpos: %d, ypos: %d' % (self.pos[0], self.pos[1]))
 
-		if "indentify" in self.knowledge:
+		if "indentify" in self.knowledge and self.counter < 10:
 			for (message, identifier, sender) in self.received_messages:
 				temp = "K_"+str(sender.name)+"("+str(self.reply)+")"  
 				if self.correct_identification and not temp in self.knowledge:

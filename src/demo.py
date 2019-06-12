@@ -92,7 +92,7 @@ class Demo():
 		self.get_kb = False
 		self.show_messages = False
 		self.statistics.showStatistics()
-		
+
     #Function to round fload n to the closest integer number
 	def getClosestTile(n):
 		n = math.floor(n)
@@ -245,14 +245,16 @@ class Demo():
    #Function to draw each step of the simulation.
 	def drawStep(self):
 		flag = 0
+		self.statistics.text.remove()
+		self.message_manager.remove()
+		
+		self.model.run_epoch(self.message_manager,self.statistics)
+		self.canvas.delete("all")
 		
 		if self.show_statistics:
 			self.statistics.showStatistics()
-		self.model.run_epoch(self.message_manager,self.statistics)
-		self.canvas.delete("all")
 
 		if self.show_messages == True:
-			self.statistics.text.remove()
 			self.message_manager.print()
 
 

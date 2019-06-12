@@ -16,11 +16,29 @@ class Turret(Agent):
 		self.agents = [t for t in model.turrets if t.name != self.name]
 		self.tracked_planes = []
 		self.turret_range = 2
+		self.init = 1 
+		self.closest = False
+
+	def determine_closest_turret(self,plane,message_manager):
+		if plane.isfriendly == 0:
+			for (message, identifier, sender) in self.received_messages:
+				if 'x' and 'y' in message:
+					for idx in range(0,len(message)):
+						if message[idx] == 'x':
+							x = int(message [idx+1])
+							y = int(message [idx+3])
+							pos = np.array((x, y))
+							if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
+								self.broadcast(str(sender.name)+ "is closest to "+plane.name,message_manager)
+								# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
+		
 
 	def run_epoch(self,message_manager,statistics):
+		if self.init == 1:
+			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y),message_manager)
+			self.init = 0
 		#resend possibly missed messages
 		self.update(message_manager)
-
 		#check for any new planes
 		for plane in self.model.planes:
 			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
@@ -40,18 +58,22 @@ class Turret(Agent):
 				
 					#check if there was a message from the plane
 					for (message, identifier, sender) in self.received_messages:
+						# print(message)
 						self.to_model()
+						
+						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
+							self.send_new_message(plane, "indentified as friendly",message_manager)
 						
 						if sender == plane:
 						
 							if not "K_%s(friendly)" % plane.name in self.knowledge:
+								self.determine_closest_turret(plane,message_manager)
 
 								if "unknown" in message or plane.counter == 20:
-									print("destroyed :", plane.counter)
-									self.shoot(plane,statistics,message_manager)
-									
-						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
-							self.send_new_message(plane, "indentified as friendly",message_manager)
+									if "K_"+str(self.name) + "("+str(self.name)+"is closest to "+plane.name+")" in self.knowledge:
+											print("destroyed :", plane.counter)
+											self.shoot(plane,statistics,message_manager)
+											
 
 
 	def shoot(self, plane, statistics,message_manager):

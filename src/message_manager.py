@@ -23,4 +23,5 @@ class Message_manager:
 	def remove(self):
 		for idx in range(0,self.counter):
 			self.text.remove()
+		self.messages = []
 		self.counter = 0
