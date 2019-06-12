@@ -29,7 +29,8 @@ class Turret(Agent):
 							y = int(message [idx+3])
 							pos = np.array((x, y))
 							if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
-								self.broadcast(str(sender.name)+ "is closest to "+plane.name,message_manager)
+								self.send_new_message(sender,"shoot"+plane.name,message_manager)
+								return
 								# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 
@@ -60,6 +61,10 @@ class Turret(Agent):
 					for (message, identifier, sender) in self.received_messages:
 						# print(message)
 						self.to_model()
+						if "shoot"+plane.name in message:
+							print("destroyed :", plane.counter)
+							self.shoot(plane,statistics,message_manager)
+											
 						
 						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
 							self.send_new_message(plane, "indentified as friendly",message_manager)
@@ -67,13 +72,9 @@ class Turret(Agent):
 						if sender == plane:
 						
 							if not "K_%s(friendly)" % plane.name in self.knowledge:
-								self.determine_closest_turret(plane,message_manager)
 
 								if "unknown" in message or plane.counter == 20:
-									if "K_"+str(self.name) + "("+str(self.name)+"is closest to "+plane.name+")" in self.knowledge:
-											print("destroyed :", plane.counter)
-											self.shoot(plane,statistics,message_manager)
-											
+									self.determine_closest_turret(plane,message_manager)
 
 
 	def shoot(self, plane, statistics,message_manager):
