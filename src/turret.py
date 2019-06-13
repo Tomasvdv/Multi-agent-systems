@@ -20,18 +20,17 @@ class Turret(Agent):
 		self.closest = False
 
 	def determine_closest_turret(self,plane,message_manager):
-		if plane.isfriendly == 0:
-			for (message, identifier, sender) in self.received_messages:
-				if 'x' and 'y' in message:
-					for idx in range(0,len(message)):
-						if message[idx] == 'x':
-							x = int(message [idx+1])
-							y = int(message [idx+3])
-							pos = np.array((x, y))
-							if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
-								self.send_new_message(sender,"shoot"+plane.name,message_manager)
-								return
-								# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
+		for (message, identifier, sender) in self.received_messages:
+			if 'x' and 'y' in message:
+				for idx in range(0,len(message)):
+					if message[idx] == 'x':
+						x = int(message [idx+1])
+						y = int(message [idx+3])
+						pos = np.array((x, y))
+						if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
+							self.send_new_message(sender,"shoot"+plane.name,message_manager)
+							return
+							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 
 	def run_epoch(self,message_manager,statistics):
@@ -88,6 +87,8 @@ class Turret(Agent):
 					statistics.enemy_planes_shot += 1
 				else:
 					statistics.friendly_planes_shot += 1
+					self.broadcast("Identification of %s took too long" % (plane.name),message_manager)
+				
 				self.broadcast("%s destroyed" % (plane.name),message_manager)
 				self.tracked_planes.remove(plane)
 		
