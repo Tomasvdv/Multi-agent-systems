@@ -18,6 +18,7 @@ class Turret(Agent):
 		self.turret_range = 2
 		self.init = 1 
 		self.closest = False
+		self.max_message_count = 20
 
 	def determine_closest_turret(self,plane,message_manager):
 		for (message, identifier, sender) in self.received_messages:
@@ -33,10 +34,13 @@ class Turret(Agent):
 							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 
-	def run_epoch(self,message_manager,statistics):
+	def run_epoch(self,nummessages,message_manager,statistics):
 		if self.init == 1:
 			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y),message_manager)
 			self.init = 0
+		if self.max_message_count != nummessages:
+			self.max_message_count = nummessages
+
 		#resend possibly missed messages
 		self.update(message_manager)
 		#check for any new planes
@@ -72,7 +76,7 @@ class Turret(Agent):
 						
 							if not "K_%s(friendly)" % plane.name in self.knowledge:
 
-								if "unknown" in message or plane.counter == 20:
+								if "unknown" in message or plane.counter >= self.max_message_count:
 									self.determine_closest_turret(plane,message_manager)
 
 

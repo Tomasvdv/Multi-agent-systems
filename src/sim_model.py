@@ -38,9 +38,9 @@ class Model:
 	def add_connection (self, turret1, turret2):
 		self.connections.append((turret1, turret2))
 
-	def run_epoch(self,message_manager,statistics):
+	def run_epoch(self,nummessages,message_manager,statistics):
 		for t in self.turrets:
-			t.run_epoch(message_manager,statistics)
+			t.run_epoch(nummessages,message_manager,statistics)
 
 		for p in self.planes:
 			p.run_epoch(message_manager)

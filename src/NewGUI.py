@@ -62,24 +62,37 @@ class GUI(Frame):
 		self.numplanes_entry_canvas.pack(side=TOP)
 		self.numturrets_entry_canvas = Canvas(self.button_canvas)
 		self.numturrets_entry_canvas.pack(side=TOP)
+		self.nummessages_entry_canvas = Canvas(self.button_canvas)
+		self.nummessages_entry_canvas.pack(side=TOP)
+
 		self.numPlanes_text = StringVar()
 		self.numPlanes_text.set("Number of planes:")
 		self.numTurrets_text = StringVar()
 		self.numTurrets_text.set("Number of turrets:")
+		self.numMessages_text = StringVar()
+		self.numMessages_text.set("Number of messages:")
+
 		self.numplanes_label = Label(self.numplanes_entry_canvas, textvariable=self.numPlanes_text)
 		self.numplanes_label.pack(side=LEFT)
 		self.numturrets_label = Label(self.numturrets_entry_canvas, textvariable=self.numTurrets_text)
 		self.numturrets_label.pack(side=LEFT)
+		self.nummessages_label = Label(self.nummessages_entry_canvas, textvariable=self.numMessages_text)
+		self.nummessages_label.pack(side=LEFT)
+
 		self.numplanes_entry = Entry(self.numplanes_entry_canvas, text="numplanes")
 		self.numplanes_entry.pack(side=LEFT)
 		self.numturrets_entry = Entry(self.numturrets_entry_canvas, text="numturrets")
 		self.numturrets_entry.pack(side=LEFT)
-
+		self.nummessages_entry = Entry(self.nummessages_entry_canvas, text="nummessages")
+		self.nummessages_entry.pack(side=LEFT)
+		
 
 		self.update_planes = Button(self.button_canvas, text = "Update planes", command = self.update_demo_planes)
 		self.update_planes.pack(side=TOP)
 		self.update_turrets = Button(self.button_canvas, text = "Update turrets", command = self.update_demo_turrets)
 		self.update_turrets.pack(side=TOP)
+		self.update_messages = Button(self.button_canvas, text = "Update number of messages", command = self.update_demo_messages_counter)
+		self.update_messages.pack(side=TOP)
 
 
 		self.speed_control_canvas = Canvas(self.button_canvas)
@@ -123,6 +136,16 @@ class GUI(Frame):
 				print("Number of planes must be > 1")
 		except:
 			pass
+
+	def update_demo_messages_counter(self):
+			try:
+				new_num = int(self.nummessages_entry.get())
+				if new_num > 1:
+					self.demo.nummessages = new_num
+				else:
+					print("Maximum number of messages must be > 1")
+			except:
+				pass
 
 	def update_demo_turrets(self):
 		try:
