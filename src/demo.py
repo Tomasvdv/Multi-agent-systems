@@ -35,6 +35,7 @@ class Demo():
 		self.nummessages = 20
 		# self.lines = []
 		self.model = Model()
+		self.statistics = Statistics()
 		# self.demospeed = SPEED
 		self.paused = True
 		self.step = False
