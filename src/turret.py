@@ -35,7 +35,7 @@ class Turret(Agent):
 							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 	def update_plane_knowledge(self,plane):
-		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(plane.counter)+"epochs)")
+		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(plane.epoch_counter)+"epochs)")
 
 	def run_epoch(self,nummessages,message_manager,statistics):
 		if self.init == 1:
@@ -74,7 +74,7 @@ class Turret(Agent):
 						
 						if sender == plane:
 						
-							if not "K_%s(friendly)" % plane.name in self.knowledge or "unknown" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
+							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
 									self.determine_closest_turret(plane,message_manager)
 
 
