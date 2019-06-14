@@ -64,6 +64,8 @@ class GUI(Frame):
 		self.numturrets_entry_canvas.pack(side=TOP)
 		self.nummessages_entry_canvas = Canvas(self.button_canvas)
 		self.nummessages_entry_canvas.pack(side=TOP)
+		self.sim_speed_entry_canvas = Canvas(self.button_canvas)
+		self.sim_speed_entry_canvas.pack(side=TOP)
 
 		self.numPlanes_text = StringVar()
 		self.numPlanes_text.set("Number of planes:")
@@ -71,6 +73,8 @@ class GUI(Frame):
 		self.numTurrets_text.set("Number of turrets:")
 		self.numMessages_text = StringVar()
 		self.numMessages_text.set("Number of messages:")
+		self.speed_text = StringVar()
+		self.speed_text.set("Simulation speed (iter/second)")
 
 		self.numplanes_label = Label(self.numplanes_entry_canvas, textvariable=self.numPlanes_text)
 		self.numplanes_label.pack(side=LEFT)
@@ -78,6 +82,8 @@ class GUI(Frame):
 		self.numturrets_label.pack(side=LEFT)
 		self.nummessages_label = Label(self.nummessages_entry_canvas, textvariable=self.numMessages_text)
 		self.nummessages_label.pack(side=LEFT)
+		self.speed_label = Label(self.sim_speed_entry_canvas, textvariable=self.speed_text)
+		self.speed_label.pack(side=LEFT)
 
 		self.numplanes_entry = Entry(self.numplanes_entry_canvas, text="numplanes")
 		self.numplanes_entry.pack(side=LEFT)
@@ -85,6 +91,8 @@ class GUI(Frame):
 		self.numturrets_entry.pack(side=LEFT)
 		self.nummessages_entry = Entry(self.nummessages_entry_canvas, text="nummessages")
 		self.nummessages_entry.pack(side=LEFT)
+		self.sim_speed_entry = Entry(self.sim_speed_entry_canvas, text="simspeed")
+		self.sim_speed_entry.pack(side=LEFT)
 		
 
 		self.update_planes = Button(self.button_canvas, text = "Update planes", command = self.update_demo_planes)
@@ -93,6 +101,8 @@ class GUI(Frame):
 		self.update_turrets.pack(side=TOP)
 		self.update_messages = Button(self.button_canvas, text = "Update number of messages", command = self.update_demo_messages_counter)
 		self.update_messages.pack(side=TOP)
+		self.update_speed = Button(self.button_canvas, text = "Update simulation speed (iter/second)", command = self.update_simulation_speed)
+		self.update_speed.pack(side=TOP)
 
 
 		self.speed_control_canvas = Canvas(self.button_canvas)
@@ -154,6 +164,17 @@ class GUI(Frame):
 				self.demo.numTurrets = new_num
 			else:
 				print("Number of turrets must be > 1")
+		except:
+			pass
+
+	def update_simulation_speed(self):
+		try:
+			new_num = int(self.sim_speed_entry.get())
+			new_num = 1.0/new_num
+			if new_num > 0:
+				self.demo.sim_speed = new_num
+			else:
+				print("Speed must be larger than 0")
 		except:
 			pass
 
