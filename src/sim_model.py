@@ -12,6 +12,7 @@ class Model:
 		self.turrets = []
 		self.planes = []
 		self.connections = []
+		self.failprob = 0.1
 		# self.text
 
 	def getKB():

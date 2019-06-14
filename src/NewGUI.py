@@ -58,50 +58,82 @@ class GUI(Frame):
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
 
+		## create canvasses for each of the entry fields
 		self.numplanes_entry_canvas = Canvas(self.button_canvas)
 		self.numplanes_entry_canvas.pack(side=TOP)
 		self.numturrets_entry_canvas = Canvas(self.button_canvas)
 		self.numturrets_entry_canvas.pack(side=TOP)
 		self.nummessages_entry_canvas = Canvas(self.button_canvas)
 		self.nummessages_entry_canvas.pack(side=TOP)
+		self.failprob_entry_canvas = Canvas(self.button_canvas)
+		self.failprob_entry_canvas.pack(side=TOP)
+		self.sim_speed_entry_canvas = Canvas(self.button_canvas)
+		self.sim_speed_entry_canvas.pack(side=TOP)
 
+		## create text for in the labels
 		self.numPlanes_text = StringVar()
-		self.numPlanes_text.set("Number of planes:")
+		self.numPlanes_text.set(  "Number of planes:\t\t")
 		self.numTurrets_text = StringVar()
-		self.numTurrets_text.set("Number of turrets:")
+		self.numTurrets_text.set( "Number of turrets:\t\t")
 		self.numMessages_text = StringVar()
-		self.numMessages_text.set("Number of messages:")
+		self.numMessages_text.set("Number of messages:\t\t")
+		self.failprob_text = StringVar()
+		self.failprob_text.set(   "Failure probability:\t\t")
+		self.speed_text = StringVar()
+		self.speed_text.set("Simulation speed (iter/second)\t")
 
+
+		## create labels
 		self.numplanes_label = Label(self.numplanes_entry_canvas, textvariable=self.numPlanes_text)
 		self.numplanes_label.pack(side=LEFT)
 		self.numturrets_label = Label(self.numturrets_entry_canvas, textvariable=self.numTurrets_text)
 		self.numturrets_label.pack(side=LEFT)
 		self.nummessages_label = Label(self.nummessages_entry_canvas, textvariable=self.numMessages_text)
 		self.nummessages_label.pack(side=LEFT)
+		self.failprob_label = Label(self.failprob_entry_canvas, textvariable=self.failprob_text)
+		self.failprob_label.pack(side=LEFT)
+		self.speed_label = Label(self.sim_speed_entry_canvas, textvariable=self.speed_text)
+		self.speed_label.pack(side=LEFT)
 
-		self.numplanes_entry = Entry(self.numplanes_entry_canvas, text="numplanes")
+		## create entry fields
+		self.numplanes_entry = Entry(self.numplanes_entry_canvas)
 		self.numplanes_entry.pack(side=LEFT)
-		self.numturrets_entry = Entry(self.numturrets_entry_canvas, text="numturrets")
+		self.numturrets_entry = Entry(self.numturrets_entry_canvas)
 		self.numturrets_entry.pack(side=LEFT)
-		self.nummessages_entry = Entry(self.nummessages_entry_canvas, text="nummessages")
+		self.nummessages_entry = Entry(self.nummessages_entry_canvas)
 		self.nummessages_entry.pack(side=LEFT)
+		self.failprob_entry = Entry(self.failprob_entry_canvas)
+		self.failprob_entry.pack(side=LEFT)
+		self.sim_speed_entry = Entry(self.sim_speed_entry_canvas)
+		self.sim_speed_entry.pack(side=LEFT)
+
+		## set default values in the fields
+		self.numplanes_entry.insert(0, 1)
+		self.numturrets_entry.insert(0, 3)
+		self.nummessages_entry.insert(0, 20)
+		self.failprob_entry.insert(0, 0.1)
+		self.sim_speed_entry.insert(0, 10)
 		
+		## create buttons for updating with callback function
+		self.update_planes = Button(self.numplanes_entry_canvas, text = "Update", command = self.update_demo_planes)
+		self.update_planes.pack(side=LEFT)
+		self.update_turrets = Button(self.numturrets_entry_canvas, text = "Update", command = self.update_demo_turrets)
+		self.update_turrets.pack(side=LEFT)
+		self.update_messages = Button(self.nummessages_entry_canvas, text = "Update", command = self.update_demo_messages_counter)
+		self.update_messages.pack(side=LEFT)
+		self.update_failprob = Button(self.failprob_entry_canvas, text = "Update", command = self.update_demo_failprob)
+		self.update_failprob.pack(side=LEFT)
+		self.update_speed = Button(self.sim_speed_entry_canvas, text = "Update", command = self.update_simulation_speed)
+		self.update_speed.pack(side=LEFT)
 
-		self.update_planes = Button(self.button_canvas, text = "Update planes", command = self.update_demo_planes)
-		self.update_planes.pack(side=TOP)
-		self.update_turrets = Button(self.button_canvas, text = "Update turrets", command = self.update_demo_turrets)
-		self.update_turrets.pack(side=TOP)
-		self.update_messages = Button(self.button_canvas, text = "Update number of messages", command = self.update_demo_messages_counter)
-		self.update_messages.pack(side=TOP)
 
-
+		## create speed control canvas + buttons
 		self.speed_control_canvas = Canvas(self.button_canvas)
 		self.speed_control_canvas.pack(side=BOTTOM)
 
 		self.play_img = image=self.load_button_art("../img/play.png")
 		self.play_button =Button(self.speed_control_canvas, command=self.demo.play_handler, image=self.play_img)
 		self.play_button.pack(side=LEFT)
-
 
 		self.pause_img = self.load_button_art("../img/pause.png")
 		self.pause_button=Button(self.speed_control_canvas, command=self.demo.pause_handler, image= self.pause_img)
@@ -111,6 +143,7 @@ class GUI(Frame):
 		self.ff_button=Button(self.speed_control_canvas, command=self.demo.step_handler, image=self.ff_img)
 		self.ff_button.pack(side=LEFT)
 
+		##  create text panel buttons
 		self.statistics_button = Button(self.text_button_canvas, command=self.demo.statisics_handler, text = "Show statistics")
 		self.statistics_button.pack(side = LEFT)
 
@@ -138,14 +171,14 @@ class GUI(Frame):
 			pass
 
 	def update_demo_messages_counter(self):
-			try:
-				new_num = int(self.nummessages_entry.get())
-				if new_num > 1:
-					self.demo.nummessages = new_num
-				else:
-					print("Maximum number of messages must be > 1")
-			except:
-				pass
+		try:
+			new_num = int(self.nummessages_entry.get())
+			if new_num > 1:
+				self.demo.nummessages = new_num
+			else:
+				print("Maximum number of messages must be > 1")
+		except:
+			pass
 
 	def update_demo_turrets(self):
 		try:
@@ -154,6 +187,27 @@ class GUI(Frame):
 				self.demo.numTurrets = new_num
 			else:
 				print("Number of turrets must be > 1")
+		except:
+			pass
+
+	def update_demo_failprob(self):
+		try:
+			new_num = float(self.failprob_entry.get())
+			if new_num > 0.0 and new_num <= 1.0:
+				self.demo.model.failprob = new_num
+			else:
+				print("Failprob has to be within [0.0, 1.0]")
+		except:
+			pass
+
+	def update_simulation_speed(self):
+		try:
+			new_num = float(self.sim_speed_entry.get())
+			new_num = 1.0/new_num
+			if new_num > 0:
+				self.demo.sim_speed = new_num
+			else:
+				print("Speed must be larger than 0")
 		except:
 			pass
 

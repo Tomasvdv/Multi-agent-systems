@@ -9,7 +9,6 @@ import numpy as np
 
 class Agent:
 	def __init__(self, name, x, y, model):
-		self.FAIL_PROB = 0.1	
 		self.knowledge = set([]) #sets can't contain duplicates.
 		self.sent_messages = []
 		self.received_messages = []
@@ -76,7 +75,7 @@ class Agent:
 		# print(self.sent_messages)
 
 	def receive_message(self, other, message, identifier,message_manager):
-		successfully_received = random.random() > self.FAIL_PROB
+		successfully_received = random.random() > self.model.failprob
 		if successfully_received:
 			self.knowledge.add(message)
 			self.received_messages.append((message, identifier, other))

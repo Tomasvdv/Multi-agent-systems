@@ -1,7 +1,7 @@
 from text import Text
 class Statistics():
 
-	def __init__(self,text):
+	def __init__(self,text = ""):
 		self.friendly_planes_generated = 0
 		self.enemy_planes_generated = 0
 		self.friendly_planes_shot = 0

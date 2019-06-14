@@ -27,7 +27,7 @@ NUMBER_TURRETS = 3
 class Demo():
 
 	def __init__(self):
-
+		self.sim_speed = 0
 		self.init = 1
 		self.turretCounter = 0
 		self.planeCounter = 0
@@ -37,6 +37,7 @@ class Demo():
 		# self.lines = []
 		self.model = Model()
 		self.kripke = Kripke_model()
+		self.statistics = Statistics()
 		# self.demospeed = SPEED
 		self.paused = True
 		self.step = False
