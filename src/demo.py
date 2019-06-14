@@ -20,18 +20,18 @@ from PIL import Image
 from PIL import ImageTk
 from statistics import Statistics
 
-TURRET_RANGE = 3
-NUMBER_TURRETS = 3
+TURRET_RANGE = 2
 
 class Demo():
 
 	def __init__(self):
+		self.friendly_prob = 0.25
 		self.sim_speed = 0
 		self.init = 1
 		self.turretCounter = 0
 		self.planeCounter = 0
 		self.numPlanes = 1
-		self.numTurrets = 3
+		self.numTurrets = 5
 		self.nummessages = 20
 		# self.lines = []
 		self.model = Model()
@@ -142,7 +142,7 @@ class Demo():
 		cellheight = self.canvas.cellheight
 		name = "Plane_" + str(self.planeCounter)
 		# 75% change of being an enemy plane
-		if friendly > 0.25:
+		if friendly > self.friendly_prob:
 			self.model.add_plane(name, col, row, dx, dy, False)
 			self.statistics.enemy_planes_generated += 1
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
@@ -189,6 +189,17 @@ class Demo():
 				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
 				self.turretCounter += 1
 				turret = self.model.turrets[idx]
+				self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="blue",font="Arial 20", text=turret.name)
+
+			# Add and draw turret connections
+			for turret1, turret2 in self.model.connections:
+				(x1, y1) = turret1.pos
+				(x2, y2) = turret2.pos
+				x1 = (x1 + 0.5) * cellwidth
+				x2 = (x2 + 0.5) * cellwidth
+				y1 = (y1 + 0.5) * cellheight
+				y2 = (y2 + 0.5) * cellheight
+				self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
 
 			#init and draw planes
 			for _ in range(self.numPlanes):
@@ -202,9 +213,10 @@ class Demo():
 		h=self.canvas.winfo_height()
 		cellwidth = w//10	
 		cellheight=h//10
-
+		
 		# Add turrets
 		if add_amount > 0:
+			print("Adding: ", add_amount)
 			for idx in range(add_amount):
 				row = random.randint(0,9)
 				col = random.randint(0,9)
@@ -228,7 +240,9 @@ class Demo():
 		
 		# Delete turrets and connections
 		if add_amount < 0:
-			for idx in range(abs(add_amount), -1, -1): #In reverse order, since turrets are removed. Otherwise we get a list index overflow
+			print("Deleting: ", add_amount)
+			for idx in range(abs(add_amount), 0, -1): #In reverse order, since turrets are removed. Otherwise we get a list index overflow
+				print("deleting")
 				new_connections = []
 				# print("TURRET: ", len(self.model.turrets), idx)
 				turret = self.model.turrets[idx]
@@ -295,7 +309,9 @@ class Demo():
 		#draw turrets
 		for turret in self.model.turrets:
 			(col, row) = turret.pos
+			turret.turret_range = TURRET_RANGE
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
+			self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="blue",font="Arial 20", text=turret.name)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
 		self.draw_shots(cellwidth)
 

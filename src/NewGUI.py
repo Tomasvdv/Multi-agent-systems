@@ -14,7 +14,7 @@ from message_manager import Message_manager
 class GUI(Frame):
 	def __init__(self, master, demo):
 		Frame.__init__(self, master)
-
+		self.field_height = self.field_width = 500
 		self.buttonwidth = 40
 		self.buttonheight = 40
 
@@ -43,7 +43,7 @@ class GUI(Frame):
 
 	def build_canvas(self):
 		#instantiate 
-		self.app_canvas = Canvas(self, width=500,height=500)
+		self.app_canvas = Canvas(self, width=self.field_width,height=self.field_height)
 		self.text_canvas = Canvas(self, width=500,height=500)
 		self.button_canvas = Canvas(self, width=50,height=500)
 		self.text_button_canvas = Canvas(self, width=50,height=40)
