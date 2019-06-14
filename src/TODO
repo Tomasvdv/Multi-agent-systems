@@ -9,9 +9,9 @@ x- Move knowledge of plane lifetime to turrets.
 x- Empty text field turret knowledge when klicking on a new turret
 
 
-- An enemy plane does not respond with 'unknown' when it receives a message, but sends no message at all.
+x- An enemy plane does not respond with 'unknown' when it receives a message, but sends no message at all.
 - Notes about the protocol type on github
-- Count how many planes have been shot down and the reasons (e.g. slow communications)
+x- Count how many planes have been shot down and the reasons (e.g. slow communications)
 	- Statistics
 
 - Main research question:

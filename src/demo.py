@@ -244,10 +244,10 @@ class Demo():
 		flag = 0
 		self.statistics.text.remove()
 		self.message_manager.remove()
-		counter = self.statistics.friendly_planes_shot
+		counter = self.statistics.friendly_planes_shot_epoch_counter
 		self.model.run_epoch(self.numepochs,self.message_manager,self.statistics)
 		
-		if self.statistics.friendly_planes_shot > counter:
+		if self.statistics.friendly_planes_shot_epoch_counter > counter:
 			print("friendly plane shot ")
 			self.messages_handler()
 			self.pause_handler()

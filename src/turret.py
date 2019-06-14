@@ -73,7 +73,6 @@ class Turret(Agent):
 							self.send_new_message(plane, "indentified as friendly",message_manager)
 						
 						if sender == plane:
-						
 							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
 									self.determine_closest_turret(plane,message_manager)
 
@@ -89,10 +88,10 @@ class Turret(Agent):
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
-				if plane.isfriendly == False:
-					statistics.enemy_planes_shot += 1
+				if plane.isfriendly == True:
+					statistics.enemy_planes_shot_epoch_counter += 1
 				else:
-					statistics.friendly_planes_shot += 1
+					statistics.friendly_planes_shot_epoch_counter += 1
 					self.broadcast("Identification of %s took too long" % (plane.name),message_manager)
 				
 				self.broadcast("%s destroyed" % (plane.name),message_manager)
