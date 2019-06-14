@@ -9,6 +9,5 @@ x- Description of components on github (turret, planes, etc)
 x- Fix connections when removing planes
 
 - Delete turret messages when a new plane is spawned (i.e. the previous has been destroyed /crashed)
-- Fix simulation stop when friendly plane has been shot. 
 - An enemy plane does not respond with 'unknown' when it receives a message, but sends no message at all.  
 - Move knowledge of plane lifetime to turrets. 
