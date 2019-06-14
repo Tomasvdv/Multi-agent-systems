@@ -67,16 +67,20 @@ class GUI(Frame):
 		self.nummessages_entry_canvas.pack(side=TOP)
 		self.failprob_entry_canvas = Canvas(self.button_canvas)
 		self.failprob_entry_canvas.pack(side=TOP)
+		self.sim_speed_entry_canvas = Canvas(self.button_canvas)
+		self.sim_speed_entry_canvas.pack(side=TOP)
 
 		## create text for in the labels
 		self.numPlanes_text = StringVar()
-		self.numPlanes_text.set(  "Number of planes:\t")
+		self.numPlanes_text.set(  "Number of planes:\t\t")
 		self.numTurrets_text = StringVar()
-		self.numTurrets_text.set( "Number of turrets:\t")
+		self.numTurrets_text.set( "Number of turrets:\t\t")
 		self.numMessages_text = StringVar()
-		self.numMessages_text.set("Number of messages:\t")
+		self.numMessages_text.set("Number of messages:\t\t")
 		self.failprob_text = StringVar()
-		self.failprob_text.set(   "Failure probability:\t")
+		self.failprob_text.set(   "Failure probability:\t\t")
+		self.speed_text = StringVar()
+		self.speed_text.set("Simulation speed (iter/second)\t")
 
 
 		## create labels
@@ -88,6 +92,8 @@ class GUI(Frame):
 		self.nummessages_label.pack(side=LEFT)
 		self.failprob_label = Label(self.failprob_entry_canvas, textvariable=self.failprob_text)
 		self.failprob_label.pack(side=LEFT)
+		self.speed_label = Label(self.sim_speed_entry_canvas, textvariable=self.speed_text)
+		self.speed_label.pack(side=LEFT)
 
 		## create entry fields
 		self.numplanes_entry = Entry(self.numplanes_entry_canvas)
@@ -98,12 +104,15 @@ class GUI(Frame):
 		self.nummessages_entry.pack(side=LEFT)
 		self.failprob_entry = Entry(self.failprob_entry_canvas)
 		self.failprob_entry.pack(side=LEFT)
+		self.sim_speed_entry = Entry(self.sim_speed_entry_canvas)
+		self.sim_speed_entry.pack(side=LEFT)
 
 		## set default values in the fields
 		self.numplanes_entry.insert(0, 1)
 		self.numturrets_entry.insert(0, 3)
 		self.nummessages_entry.insert(0, 20)
 		self.failprob_entry.insert(0, 0.1)
+		self.sim_speed_entry.insert(0, 10)
 		
 		## create buttons for updating with callback function
 		self.update_planes = Button(self.numplanes_entry_canvas, text = "Update", command = self.update_demo_planes)
@@ -114,6 +123,8 @@ class GUI(Frame):
 		self.update_messages.pack(side=LEFT)
 		self.update_failprob = Button(self.failprob_entry_canvas, text = "Update", command = self.update_demo_failprob)
 		self.update_failprob.pack(side=LEFT)
+		self.update_speed = Button(self.sim_speed_entry_canvas, text = "Update", command = self.update_simulation_speed)
+		self.update_speed.pack(side=LEFT)
 
 
 		## create speed control canvas + buttons
@@ -186,6 +197,17 @@ class GUI(Frame):
 				self.demo.model.failprob = new_num
 			else:
 				print("Failprob has to be within [0.0, 1.0]")
+		except:
+			pass
+
+	def update_simulation_speed(self):
+		try:
+			new_num = float(self.sim_speed_entry.get())
+			new_num = 1.0/new_num
+			if new_num > 0:
+				self.demo.sim_speed = new_num
+			else:
+				print("Speed must be larger than 0")
 		except:
 			pass
 

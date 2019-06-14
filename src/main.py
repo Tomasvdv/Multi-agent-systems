@@ -20,10 +20,11 @@ if __name__ == '__main__':
 	demo = Demo()
 	window = Tk()
 	f = GUI(window, demo)
+	demo.sim_speed = SPEED
 	while True:
 		if demo.running:
 			demo.drawState()
-		time.sleep(SPEED)
+		time.sleep(demo.sim_speed)
 		window.update_idletasks()
 		window.update()
 		# demo.text.text_window.update_idletasks()
