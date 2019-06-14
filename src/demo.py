@@ -37,6 +37,7 @@ class Demo():
 		# self.lines = []
 		self.model = Model()
 		self.kripke = Kripke_model()
+		self.statistics = Statistics()
 		# self.demospeed = SPEED
 		self.paused = True
 		self.step = False
