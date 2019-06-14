@@ -62,8 +62,8 @@ class GUI(Frame):
 		self.numplanes_entry_canvas.pack(side=TOP)
 		self.numturrets_entry_canvas = Canvas(self.button_canvas)
 		self.numturrets_entry_canvas.pack(side=TOP)
-		self.nummessages_entry_canvas = Canvas(self.button_canvas)
-		self.nummessages_entry_canvas.pack(side=TOP)
+		self.numepochs_entry_canvas = Canvas(self.button_canvas)
+		self.numepochs_entry_canvas.pack(side=TOP)
 		self.failprob_entry_canvas = Canvas(self.button_canvas)
 		self.failprob_entry_canvas.pack(side=TOP)
 		self.sim_speed_entry_canvas = Canvas(self.button_canvas)
@@ -74,8 +74,8 @@ class GUI(Frame):
 		self.numPlanes_text.set(  "Number of planes:\t\t")
 		self.numTurrets_text = StringVar()
 		self.numTurrets_text.set( "Number of turrets:\t\t")
-		self.numMessages_text = StringVar()
-		self.numMessages_text.set("Number of messages:\t\t")
+		self.numEpochs_text = StringVar()
+		self.numEpochs_text.set("Number of epochs:\t\t")
 		self.failprob_text = StringVar()
 		self.failprob_text.set(   "Failure probability:\t\t")
 		self.speed_text = StringVar()
@@ -87,8 +87,8 @@ class GUI(Frame):
 		self.numplanes_label.pack(side=LEFT)
 		self.numturrets_label = Label(self.numturrets_entry_canvas, textvariable=self.numTurrets_text)
 		self.numturrets_label.pack(side=LEFT)
-		self.nummessages_label = Label(self.nummessages_entry_canvas, textvariable=self.numMessages_text)
-		self.nummessages_label.pack(side=LEFT)
+		self.numepochs_label = Label(self.numepochs_entry_canvas, textvariable=self.numEpochs_text)
+		self.numepochs_label.pack(side=LEFT)
 		self.failprob_label = Label(self.failprob_entry_canvas, textvariable=self.failprob_text)
 		self.failprob_label.pack(side=LEFT)
 		self.speed_label = Label(self.sim_speed_entry_canvas, textvariable=self.speed_text)
@@ -99,8 +99,8 @@ class GUI(Frame):
 		self.numplanes_entry.pack(side=LEFT)
 		self.numturrets_entry = Entry(self.numturrets_entry_canvas)
 		self.numturrets_entry.pack(side=LEFT)
-		self.nummessages_entry = Entry(self.nummessages_entry_canvas)
-		self.nummessages_entry.pack(side=LEFT)
+		self.numepochs_entry = Entry(self.numepochs_entry_canvas)
+		self.numepochs_entry.pack(side=LEFT)
 		self.failprob_entry = Entry(self.failprob_entry_canvas)
 		self.failprob_entry.pack(side=LEFT)
 		self.sim_speed_entry = Entry(self.sim_speed_entry_canvas)
@@ -109,7 +109,7 @@ class GUI(Frame):
 		## set default values in the fields
 		self.numplanes_entry.insert(0, 1)
 		self.numturrets_entry.insert(0, 3)
-		self.nummessages_entry.insert(0, 20)
+		self.numepochs_entry.insert(0, 20)
 		self.failprob_entry.insert(0, 0.1)
 		self.sim_speed_entry.insert(0, 10)
 		
@@ -118,8 +118,8 @@ class GUI(Frame):
 		self.update_planes.pack(side=LEFT)
 		self.update_turrets = Button(self.numturrets_entry_canvas, text = "Update", command = self.update_demo_turrets)
 		self.update_turrets.pack(side=LEFT)
-		self.update_messages = Button(self.nummessages_entry_canvas, text = "Update", command = self.update_demo_messages_counter)
-		self.update_messages.pack(side=LEFT)
+		self.update_epochs = Button(self.numepochs_entry_canvas, text = "Update", command = self.update_demo_max_epoch_counter)
+		self.update_epochs.pack(side=LEFT)
 		self.update_failprob = Button(self.failprob_entry_canvas, text = "Update", command = self.update_demo_failprob)
 		self.update_failprob.pack(side=LEFT)
 		self.update_speed = Button(self.sim_speed_entry_canvas, text = "Update", command = self.update_simulation_speed)
@@ -169,11 +169,11 @@ class GUI(Frame):
 		except:
 			pass
 
-	def update_demo_messages_counter(self):
+	def update_demo_max_epoch_counter(self):
 		try:
-			new_num = int(self.nummessages_entry.get())
+			new_num = int(self.numepochs_entry.get())
 			if new_num > 1:
-				self.demo.nummessages = new_num
+				self.demo.numepochs = new_num
 			else:
 				print("Maximum number of messages must be > 1")
 		except:
