@@ -37,12 +37,12 @@ class Turret(Agent):
 	def update_plane_knowledge(self,plane):
 		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(plane.epoch_counter)+"epochs)")
 
-	def run_epoch(self,nummessages,message_manager,statistics):
+	def run_epoch(self,numepochs,message_manager,statistics):
 		if self.init == 1:
 			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y),message_manager)
 			self.init = 0
-		if self.max_message_count != nummessages:
-			self.max_message_count = nummessages
+		if self.max_message_count != numepochs:
+			self.max_message_count = numepochs
 
 		#resend possibly missed messages
 		self.update(message_manager)
@@ -76,7 +76,6 @@ class Turret(Agent):
 						
 							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
 									self.determine_closest_turret(plane,message_manager)
-
 
 				if  "shoot"+str(plane.name) in self.knowledge: 
 					print("destroyed :", plane.counter)
