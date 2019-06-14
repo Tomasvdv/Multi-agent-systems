@@ -32,7 +32,8 @@ There are 2 types of agents in the simulated model. Planes and turrets. A plane 
  * False information can be inserted to interfere with the simulation.
  * If one category of agents is responsible for detecting the planes and others for shooting different kinds of messages can be tested.
  
-
+#### TCP protocol
+TCP labels its packets (bits of information) with numbers. It also uses a deadline before which a packet needs to reach its destination (time-out). For each received packet, the sender is notified by means of an acknowledgment. If a time-out occurs, no acknoledgment is recheived, on which the source sends another copy of the missing/delayed packet. In this way, packets are always assembled in order, without missing packets and in this way the protocol is robust against delays. 
  
 ### Results
 
