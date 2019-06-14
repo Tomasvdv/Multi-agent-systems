@@ -2,7 +2,7 @@
 Code written by: 	Steff Groefsema, Tomas van der Velde and Ruben Cöp
 Description:		Constructs a demo. Handles the information that is shown in the GUI. 
 					This information includes: location of planes and turrets, shooting range
-					of the turrets and showing a kripke model of the knowledge of the agents. 
+					of the turrets.
 '''
 
 from tkinter import *
@@ -14,7 +14,6 @@ from mouse_mover import mouseMover
 from plane import Plane
 from turret import Turret
 from sim_model import Model
-from model import Kripke_model
 from text import TextCanvas
 import time
 from PIL import Image
@@ -36,7 +35,6 @@ class Demo():
 		self.nummessages = 20
 		# self.lines = []
 		self.model = Model()
-		self.kripke = Kripke_model()
 		# self.demospeed = SPEED
 		self.paused = True
 		self.step = False
@@ -190,14 +188,12 @@ class Demo():
 				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
 				self.turretCounter += 1
 				turret = self.model.turrets[idx]
-				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
 
 			#init and draw planes
 			for _ in range(self.numPlanes):
 				self.initializePlane()								
 		else:
 			self.drawStep()
-		# self.construct_kripke()
 
 	#Function to update the number of turrets according to the ammount defined at the user interface. It either adds or deletes turrets and their connextions based on the ammount specified by the user.
 	def update_turrets(self, add_amount):
@@ -218,7 +214,6 @@ class Demo():
 				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
 				self.turretCounter += 1
 				turret = self.model.turrets[idx]
-				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
 
 				# Add and draw turret connections
 				for turret1, turret2 in self.model.connections:
@@ -270,8 +265,9 @@ class Demo():
 
 		while len(self.model.planes) < self.numPlanes:
 			self.initializePlane()
-			for turret in self.model.turrets: #Previous plane crashed / was shot down. Create new KB
-				turret.kripke_knowledge[turret.name] = ['friendly', 'not_friendly']
+			# Empty the knowledge base of the turrets, new plane is added
+			for turret in self.model.turrets:
+				turret.knowledge = set([])
 
 		cellheight = self.canvas.cellheight
 		cellwidth = self.canvas.cellwidth
@@ -301,10 +297,6 @@ class Demo():
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
 		self.draw_shots(cellwidth)
-		# for turret in self.model.turrets:
-		# 	print("\n")
-		# 	print(turret.kripke_knowledge)
-		# 	print("\n")
 
 	#Function to draw each plane on the canvas after each step.
 	def drawPlanes(self):
@@ -331,27 +323,6 @@ class Demo():
 					y2 = (plane.pos[1] + 0.5)*cellwidth
 					print(x1, x2, y1, y2)
 					self.canvas.create_line(x1,y1,x2,y2,fill='blue',width = 5, dash=(4,4))
-
-	#Function to construct a kripke model of the whole world defined in the simulation.
-	def construct_kripke(self):
-		all_knowlegde = []
-		turret_names = []
-		knowledge = []
-		for turret in self.model.turrets:
-			print(turret.kripke_knowledge)
-			for key, val in turret.kripke_knowledge.items():
-				if not val in all_knowlegde:
-					all_knowlegde.append(val)
-				if len(val) < 2:
-					tup = (val[0], val[0])
-				else:
-					tup = tuple(val)
-				knowledge.append(tup)
-			turret_names.append(turret.name)
-		print('knowledge: ', knowledge)
-		print('turret names: ', turret_names)
-		self.kripke.put_data_in_model(knowledge= knowledge, agent_names= turret_names)
-		self.kripke.show_model()
 
 #This is used for testing the demo.py file
 if __name__ == '__main__':

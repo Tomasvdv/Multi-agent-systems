@@ -11,6 +11,7 @@ x- Fix connections when removing planes
 - Delete turret messages when a new plane is spawned (i.e. the previous has been destroyed /crashed)
 - An enemy plane does not respond with 'unknown' when it receives a message, but sends no message at all.  
 - Move knowledge of plane lifetime to turrets. 
+- Empty text field turret knowledge when klicking on a new turret
 
 - Main research question:
 	- Which protocol works best in avoiding shooting down friendly planes?
