@@ -6,6 +6,8 @@ class Statistics():
 		self.enemy_planes_generated = 0
 		self.friendly_planes_shot_epoch_counter = 0
 		self.enemy_planes_shot_no_reponse = 0
+		self.enemy_planes_shot_epoch_counter = 0
+		self.friendly_planes_shot_epoch_counter = 0
 		self.text = text
 		self.init = 1
 

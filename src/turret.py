@@ -12,7 +12,7 @@ from model import Kripke_model
 class Turret(Agent):
 	def __init__(self, name, x, y, model):
 		Agent.__init__(self, name, x, y, model)
-		Kripke_model.__init__(self)
+		#Kripke_model.__init__(self)
 		self.agents = [t for t in model.turrets if t.name != self.name]
 		self.tracked_planes = []
 		self.turret_range = 2
@@ -20,6 +20,7 @@ class Turret(Agent):
 		self.closest = False
 		self.max_message_count = 20
 		self.max_epochs = 5
+		self.shoot_plane = False
 
 	def determine_closest_turret(self,plane,message_manager):
 		for (message, identifier, sender) in self.received_messages:
@@ -36,6 +37,15 @@ class Turret(Agent):
 		
 	def update_plane_knowledge(self,plane):
 		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(plane.epoch_counter)+"epochs)")
+
+	#Verifies how many turrets have decided that a particular plane should be shot
+	def verify_turret_identifications(self, shoot_command):
+		count = 0
+		for turret in self.model.turrets:
+			if shoot_command in turret.knowledge:
+				count += 1
+		print("COUNT: ", count)
+		return count
 
 	def run_epoch(self,numepochs,message_manager,statistics):
 		if self.init == 1:
@@ -75,10 +85,13 @@ class Turret(Agent):
 						if sender == plane:
 							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
 									self.determine_closest_turret(plane,message_manager)
-
-				if  "shoot"+str(plane.name) in self.knowledge: 
-					print("destroyed :", plane.counter)
+				shoot_command = "shoot"+str(plane.name)
+				#Shoot will be done in next round, first draw shots
+				if self.shoot_plane and (shoot_command in self.knowledge): #Last check is in case a plane crashed into the side of the window
 					self.shoot(plane,statistics,message_manager)
+				self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
+				if self.shoot_plane:
+					self.model.draw_shots = True
 			
 
 	def shoot(self, plane, statistics,message_manager):
@@ -88,6 +101,7 @@ class Turret(Agent):
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
+				self.model.draw_shots = False
 				if plane.isfriendly == True:
 					statistics.enemy_planes_shot_epoch_counter += 1
 				else:

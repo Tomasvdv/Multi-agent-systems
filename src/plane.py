@@ -54,3 +54,4 @@ class Plane(Agent):
 			self.model.planes.remove(self)
 		self.isdestroyed = True
 		self.isvisible = False
+		self.model.draw_shots = False

@@ -35,6 +35,7 @@ class Demo():
 		self.numepochs = 10
 		# self.lines = []
 		self.model = Model()
+		self.model.turret_enemy_threshold = 2 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
 		self.statistics = Statistics()
 		# self.demospeed = SPEED
 		self.paused = True
@@ -199,7 +200,7 @@ class Demo():
 				x2 = (x2 + 0.5) * cellwidth
 				y1 = (y1 + 0.5) * cellheight
 				y2 = (y2 + 0.5) * cellheight
-				self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
+				self.canvas.create_line(x1,y1,x2,y2,fill='black',width = 5)
 
 			#init and draw planes
 			for _ in range(self.numPlanes):
@@ -236,7 +237,7 @@ class Demo():
 					x2 = (x2 + 0.5) * cellwidth
 					y1 = (y1 + 0.5) * cellheight
 					y2 = (y2 + 0.5) * cellheight
-					self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
+					self.canvas.create_line(x1,y1,x2,y2,fill='black',width = 5)
 		
 		# Delete turrets and connections
 		if add_amount < 0:
@@ -279,6 +280,7 @@ class Demo():
 		self.update_turrets(self.numTurrets - len(self.model.turrets))
 
 		while len(self.model.planes) < self.numPlanes:
+			self.model.draw_shots = False
 			self.initializePlane()
 			# Empty the knowledge base of the turrets, new plane is added
 			for turret in self.model.turrets:
@@ -301,8 +303,7 @@ class Demo():
 			x2 = (x2 + 0.5) * cellwidth
 			y1 = (y1 + 0.5) * cellheight
 			y2 = (y2 + 0.5) * cellheight
-
-			self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5)
+			self.canvas.create_line(x1,y1,x2,y2,fill='black',width = 5)
 
 		self.drawPlanes()
 		
@@ -333,13 +334,14 @@ class Demo():
 	def draw_shots(self, cellwidth):
 		for turret in self.model.turrets:
 			for plane in self.model.planes:
-				if np.linalg.norm(turret.pos - plane.pos) <= turret.turret_range and not plane.isfriendly:
+				if np.linalg.norm(turret.pos - plane.pos) <= turret.turret_range and self.model.draw_shots:
 					x1 = (turret.pos[0] + 0.5)*cellwidth
 					y1 = (turret.pos[1] + 0.5)*cellwidth
 					x2 = (plane.pos[0] + 0.5)*cellwidth
 					y2 = (plane.pos[1] + 0.5)*cellwidth
-					print(x1, x2, y1, y2)
-					self.canvas.create_line(x1,y1,x2,y2,fill='blue',width = 5, dash=(4,4))
+					self.canvas.create_line(x1,y1,x2,y2,fill='red',width = 5, dash=(4,4))
+
+
 
 #This is used for testing the demo.py file
 if __name__ == '__main__':

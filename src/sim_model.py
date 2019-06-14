@@ -9,10 +9,12 @@ from turret import Turret
 from statistics import Statistics
 class Model:
 	def __init__(self):
+		self.turret_enemy_threshold = 2 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
 		self.turrets = []
 		self.planes = []
 		self.connections = []
 		self.failprob = 0.1
+		self.draw_shots = False
 		# self.text
 
 	def getKB():
