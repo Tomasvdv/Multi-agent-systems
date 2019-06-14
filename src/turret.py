@@ -19,6 +19,7 @@ class Turret(Agent):
 		self.init = 1 
 		self.closest = False
 		self.max_message_count = 20
+		self.max_epochs = 5
 
 	def determine_closest_turret(self,plane,message_manager):
 		for (message, identifier, sender) in self.received_messages:
@@ -33,6 +34,8 @@ class Turret(Agent):
 							return
 							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
+	def update_plane_knowledge(self,plane):
+		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(plane.counter)+"epochs)")
 
 	def run_epoch(self,nummessages,message_manager,statistics):
 		if self.init == 1:
@@ -45,6 +48,7 @@ class Turret(Agent):
 		self.update(message_manager)
 		#check for any new planes
 		for plane in self.model.planes:
+			self.update_plane_knowledge(plane)
 			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
 
@@ -59,14 +63,10 @@ class Turret(Agent):
 					self.send_new_message(plane, "indentify",message_manager)
 				
 				else:
-				
 					#check if there was a message from the plane
 					for (message, identifier, sender) in self.received_messages:
 						# print(message)
 						self.to_model()
-						if "shoot"+plane.name in message:
-							print("destroyed :", plane.counter)
-							self.shoot(plane,statistics,message_manager)
 											
 						
 						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
@@ -74,11 +74,14 @@ class Turret(Agent):
 						
 						if sender == plane:
 						
-							if not "K_%s(friendly)" % plane.name in self.knowledge:
-
-								if "unknown" in message or plane.counter >= self.max_message_count:
+							if not "K_%s(friendly)" % plane.name in self.knowledge or "unknown" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
 									self.determine_closest_turret(plane,message_manager)
 
+
+				if  "shoot"+str(plane.name) in self.knowledge: 
+					print("destroyed :", plane.counter)
+					self.shoot(plane,statistics,message_manager)
+			
 
 	def shoot(self, plane, statistics,message_manager):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
