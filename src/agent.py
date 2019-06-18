@@ -32,8 +32,13 @@ class Agent:
 			self.send_new_message(a, message)
 
 	def update(self):
-		#resend possibly failed messages
 		self.model.message_sender.check_inbox(self)
+
+		#resend possibly failed messages
+		for (key, val) in self.confirmed.items():
+			if val == 0: ## message not received
+				self.resend_last_message(key)
+ 
 
 	def to_model(self):
 		main_knowledge = min(self.knowledge, key=len) #Take shortest knowledge element for now, for simplicity

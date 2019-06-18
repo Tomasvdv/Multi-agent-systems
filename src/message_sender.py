@@ -13,9 +13,9 @@ class Message_sender:
 
 	def resend_message(self, agent1, identifier):
 		if self.model.messageprotocol == 'A1':
-			self.resend_message_A1(agent1, message, identifier)
+			self.resend_message_A1(agent1, identifier)
 		else: ## use TCP
-			self.resend_message_TCP(agent1, message, identifier)
+			self.resend_message_TCP(agent1, identifier)
 
 	def reply(self, agent1, agent2, message, identifier = 0):
 		if self.model.messageprotocol == 'A1':
@@ -33,7 +33,7 @@ class Message_sender:
 		if random.random() > self.model.failprob:
 			agent2.inbox.append((agent1, message))
 		agent1.sent_messages.append((message, 0, agent2)) ## 0 is to give it the same length as A1 protocol
-		agent1.ack[agent1.messageidx] = 0 ## ack is not yet received
+		agent1.confirmed[agent1.messageidx] = 0 ## ack is not yet received (remodel confirmed for use for ack)
 		agent1.messageidx += 1
 
 	def resend_message_TCP(self, agent1, messageidx):
@@ -58,7 +58,7 @@ class Message_sender:
 
 	def resend_message_A1(self, agent1, identifier):
 		for idx in range(len(agent1.sent_messages)-1, -1, -1): #loop from last message to first
-			(message, midentifier, other) = self.sent_messages[idx]
+			(message, midentifier, other) = agent1.sent_messages[idx]
 			if midentifier == identifier:
 				agent1.update_message_manager(other, message, identifier, 'resend')
 				if random.random() > self.model.failprob:
@@ -88,4 +88,15 @@ class Message_sender:
 			agent1.send_reply(other, message, identifier)
 
 	def check_inbox_TCP(self, agent1):
-		pass
+		for (other, message) in agent1.inbox:
+			agent1.knowledge.add(message)
+			agent1.received_messages.append((message, 0, other))
+			agent1.update_message_manager(other, message, 0, 'receive')
+
+			if message.startswith('ack'):
+				## find index of message
+				original_message = (message.split("(")[1]).split(")")[0]
+				idx = agent1.sent_messages.index((original_message, 0, other))
+				agent1.confirmed[idx] = 1
+			else:
+				agent1.send_reply(other, message, 0)

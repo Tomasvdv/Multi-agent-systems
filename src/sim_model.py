@@ -8,7 +8,7 @@ from plane import Plane
 from turret import Turret
 from statistics import Statistics
 from message_manager import Message_manager
-from messageprotocol import Message_sender
+from message_sender import Message_sender
 class Model:
 	def __init__(self):
 		self.turret_enemy_threshold = 2 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
@@ -17,7 +17,7 @@ class Model:
 		self.connections = []
 		self.failprob = 0.1
 		self.draw_shots = False
-		self.messageprotocol = 'A1'
+		self.messageprotocol = 'TCP'
 		self.message_manager = Message_manager(self)
 		self.message_sender = Message_sender(self)
 		# self.text
