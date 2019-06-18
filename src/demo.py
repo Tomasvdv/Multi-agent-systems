@@ -20,7 +20,7 @@ from PIL import Image
 from PIL import ImageTk
 from statistics import Statistics
 
-TURRET_RANGE = 2
+TURRET_RANGE = 4
 
 class Demo():
 
@@ -35,7 +35,7 @@ class Demo():
 		self.numepochs = 10
 		# self.lines = []
 		self.model = Model()
-		self.model.turret_enemy_threshold = 2 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
+		self.model.turret_enemy_threshold = 1 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
 		self.statistics = Statistics()
 		# self.demospeed = SPEED
 		self.paused = True
@@ -143,14 +143,16 @@ class Demo():
 		cellheight = self.canvas.cellheight
 		name = "Plane_" + str(self.planeCounter)
 		# 75% change of being an enemy plane
-		if friendly > self.friendly_prob:
+		if friendly > self.friendly_prob: # Spawn enemy plane
 			self.model.add_plane(name, col, row, dx, dy, False)
 			self.statistics.enemy_planes_generated += 1
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
-		else:
+			self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="red",font="Arial 10", text=name)
+		else: # Spawn friendly plane
 			self.model.add_plane(name, col, row, dx, dy, True)
 			self.statistics.friendly_planes_generated += 1 
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
+			self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="green",font="Arial 10", text=name)
 		self.planeCounter += 1
 		print(name + " added")
 		self.message_manager.set_tracked(name)
@@ -327,8 +329,10 @@ class Demo():
 			
 			if not plane.isfriendly:
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.airplane,anchor=NW)
+				self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="red",font="Arial 10", text=plane.name)
 			else:
 				self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.friendly,anchor=NW)
+				self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="lime",font="Arial 10", text=plane.name)
 
 	#Function which draws the blue dotted lines to indicate a turret is shooting at the connected plane.
 	def draw_shots(self, cellwidth):
