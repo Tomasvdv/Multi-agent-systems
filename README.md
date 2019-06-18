@@ -13,7 +13,7 @@ The code for this project has been written in Python3.
 
 
 <p align="center">
-  <img width="460" height="300" src="/img/app.png">
+  <img width="600" height="300" src="/img/app.png">
 </p>
 
 # Multi-agent-systems Project Report
