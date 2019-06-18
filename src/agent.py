@@ -17,7 +17,7 @@ class Agent:
 		self.messageidx = 0
 		self.confirmed = {} #dict of identifiers of all messages sent
 		self.kripke_knowledge = {} #dict of knowledge that is used to construct Kripke model
-		self.counter = 0
+		self.counter = 0 ## used for counting the number of messages sent to plane?
 		self.x = x
 		self.y = y
 
@@ -56,7 +56,6 @@ class Agent:
 		identifier = str(self.messageidx) + self.name
 		#print("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
 		self.sent_messages.append((message, identifier, other))
-		self.counter += 1
 		other.receive_message(self, message, identifier)
 		self.update_message_manager(other, message, identifier, 'send')
 		self.confirmed[identifier] = 0
