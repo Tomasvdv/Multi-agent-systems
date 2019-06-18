@@ -2,7 +2,7 @@
 The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
 2. move to the right directory: ```cd Multi-agent-systems/src```
-3. Then run the code with: ```python3 demo.py```
+3. Then run the code with: ```python3 main.py```
 <!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
 <p align="center">
@@ -10,10 +10,10 @@ The code for this project has been written in Python3.
 </p>
 
 ## About the application
-
+When running instructions above, you will be shown the main interface of the application as shown in the image below. The left panel is used for user interaction with the application model in the background. The middle panel shows the planes and the turrets (see Project Report below for a description of both), the shooting and message sending range of the turrets, and connections between the turrets. The panel on the right is used to get information from the model, like statistics, the knowledge base of a specific turret, or the history of messages sent between a turret and a plane. 
 
 <p align="center">
-  <img width="600" height="300" src="/img/app.png">
+  <img width="800" height="300" src="/img/app.png">
 </p>
 
 # Multi-agent-systems Project Report
