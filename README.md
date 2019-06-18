@@ -24,7 +24,7 @@ This panel is used for interaction between the user and the model. Most importan
 There are a few entry fields.
 1. *Number of planes*: adjusts the number of planes in the simulation. However, for simplicity it is advised to use only 1 plane.
 2. *Number of turrets*: adjusts the number of turrets in the simulation. 
-3. *Number of epochs*: 
+3. *Number of epochs*: the amount of steps that a plane can live.
 4. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
 5. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
 
