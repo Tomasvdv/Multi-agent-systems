@@ -5,16 +5,37 @@ The code for this project has been written in Python3.
 3. Then run the code with: ```python3 main.py```
 <!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
+<!--
 <p align="center">
   <img width="460" height="300" src="/img/aircraft.jpg">
 </p>
+-->
 
 ## About the application
-When running instructions above, you will be shown the main interface of the application as shown in the image below. The left panel is used for user interaction with the application model in the background. The middle panel shows the planes and the turrets (see Project Report below for a description of both), the shooting and message sending range of the turrets, and connections between the turrets. The panel on the right is used to get information from the model, like statistics, the knowledge base of a specific turret, or the history of messages sent between a turret and a plane. 
+When running instructions above, you will be shown the main interface of the application as shown in the image below. The left panel is used for user interaction with the application model in the background. The middle panel shows the planes and the turrets (see Project Report below for a description of both), the shooting and message sending range of the turrets, and connections between the turrets. The panel on the right is used to get information from the model, like statistics, the knowledge base of a specific turret, or the history of messages sent between a turret and a plane. The application panels will be discussed in more detail below. 
 
 <p align="center">
   <img width="800" height="300" src="/img/app.png">
 </p>
+
+### Right panel
+This panel is used for interaction between the user and the model. Most important are the *play, pause and step button* on the bottom of the panel. The *play* button lets the simulation run with the speed defined above in the *simulation speed* box. The *pause* button does what it says. And the *step* button lets the simulation run for one step at a time. 
+<br />
+There are a few entry fields.
+1. *Number of planes*: adjusts the number of planes in the simulation. However, for simplicity it is advised to use only 1 plane.
+2. *Number of turrets*: adjusts the number of turrets in the simulation. 
+3. *Number of epochs*: 
+4. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
+5. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
+
+### Middle panel
+In the middle panel the turrets and planes are shown. The turrets have connections between them (black lines). The message sending and shooting range of the turrets is shown as a black circle (these distances are equal for simplicity). The turret names are printed in blue. The planes can either be friendly or enemy. The change of spawning a friendly plane is 25%. The name of a plane is printed in red for enemy planes, and in lime-green for friendly planes.
+
+### Left panel
+In the left planel information about the model can be requested. There are 3 buttons at the bottom of the panel. 
+1. *Show statistics*: shows the overall statistics of the model over all epochs until so far. 
+2. *Show knowledge base*: shows the knowledge base of a particular turret. First select this button, then click on a turret to view its knowledge base at that moment. The knowledge base is cleared after a run (i.e. the plane has crashed or the plane has been destroyed). 
+3. *Show messages*: Shows the messages for all turrets sent for a particular run. 
 
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
