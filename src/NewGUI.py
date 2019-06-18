@@ -63,6 +63,8 @@ class GUI(Frame):
 		self.numturrets_entry_canvas.pack(side=TOP)
 		self.turret_range_canvas = Canvas(self.button_canvas)
 		self.turret_range_canvas.pack(side=TOP)
+		self.turret_confidence_canvas = Canvas(self.button_canvas)
+		self.turret_confidence_canvas.pack(side=TOP)
 		self.numepochs_entry_canvas = Canvas(self.button_canvas)
 		self.numepochs_entry_canvas.pack(side=TOP)
 		self.failprob_entry_canvas = Canvas(self.button_canvas)
@@ -77,6 +79,8 @@ class GUI(Frame):
 		self.numTurrets_text.set( "Number of turrets:\t\t")
 		self.turret_range_text = StringVar()
 		self.turret_range_text.set( "Turret range:\t\t")
+		self.turret_conf_text = StringVar()
+		self.turret_conf_text.set( "Turret confidence threshold:\t\t")
 		self.numEpochs_text = StringVar()
 		self.numEpochs_text.set("Number of epochs:\t\t")
 		self.failprob_text = StringVar()
@@ -92,6 +96,8 @@ class GUI(Frame):
 		self.numturrets_label.pack(side=LEFT)
 		self.turret_range_label = Label(self.turret_range_canvas, textvariable=self.turret_range_text)
 		self.turret_range_label.pack(side=LEFT)
+		self.turret_confidence_label = Label(self.turret_confidence_canvas, textvariable=self.turret_conf_text)
+		self.turret_confidence_label.pack(side=LEFT)
 		self.numepochs_label = Label(self.numepochs_entry_canvas, textvariable=self.numEpochs_text)
 		self.numepochs_label.pack(side=LEFT)
 		self.failprob_label = Label(self.failprob_entry_canvas, textvariable=self.failprob_text)
@@ -106,6 +112,8 @@ class GUI(Frame):
 		self.numturrets_entry.pack(side=LEFT)
 		self.turret_range_entry = Entry(self.turret_range_canvas)
 		self.turret_range_entry.pack(side=LEFT)
+		self.turret_conf_entry = Entry(self.turret_confidence_canvas)
+		self.turret_conf_entry.pack(side=LEFT)
 		self.numepochs_entry = Entry(self.numepochs_entry_canvas)
 		self.numepochs_entry.pack(side=LEFT)
 		self.failprob_entry = Entry(self.failprob_entry_canvas)
@@ -117,6 +125,7 @@ class GUI(Frame):
 		self.numplanes_entry.insert(0, 1)
 		self.numturrets_entry.insert(0, 3)
 		self.turret_range_entry.insert(0, self.demo.turret_range)
+		self.turret_conf_entry.insert(0, self.demo.model.turret_enemy_threshold)
 		self.numepochs_entry.insert(0, 20)
 		self.failprob_entry.insert(0, 0.1)
 		self.sim_speed_entry.insert(0, 10)
@@ -128,6 +137,8 @@ class GUI(Frame):
 		self.update_turrets.pack(side=LEFT)
 		self.update_turret_range = Button(self.turret_range_canvas, text = "Update", command = self.update_turret_range)
 		self.update_turret_range.pack(side=LEFT)
+		self.update_turret_confidence = Button(self.turret_confidence_canvas, text = "Update", command = self.update_turret_confidence)
+		self.update_turret_confidence.pack(side=LEFT)
 		self.update_epochs = Button(self.numepochs_entry_canvas, text = "Update", command = self.update_demo_max_epoch_counter)
 		self.update_epochs.pack(side=LEFT)
 		self.update_failprob = Button(self.failprob_entry_canvas, text = "Update", command = self.update_demo_failprob)
@@ -206,6 +217,16 @@ class GUI(Frame):
 				self.demo.turret_range = new_num
 			else:
 				print("Turret range must be > 0")
+		except:
+			pass
+
+	def update_turret_confidence(self):
+		try: 
+			new_num = int(self.turret_conf_entry.get())
+			if new_num > 0:
+				self.demo.model.turret_enemy_threshold = new_num
+			else:
+				print("Turret confidence must be > 0")
 		except:
 			pass
 
