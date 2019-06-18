@@ -20,8 +20,6 @@ from PIL import Image
 from PIL import ImageTk
 from statistics import Statistics
 
-TURRET_RANGE = 4
-
 class Demo():
 
 	def __init__(self):
@@ -33,6 +31,7 @@ class Demo():
 		self.numPlanes = 1
 		self.numTurrets = 3
 		self.numepochs = 10
+		self.turret_range = 4
 		
 		self.model = Model()
 		self.model.turret_enemy_threshold = 1 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
@@ -190,7 +189,7 @@ class Demo():
 				col = random.randint(0,9)
 				name = "Turret_" + str(self.turretCounter)
 				self.model.add_turret(name,col,row)
-				self.model.turrets[idx].turret_range = TURRET_RANGE
+				self.model.turrets[idx].turret_range = self.turret_range
 				self.canvas.create_image(col*cellwidth,row*cellheight,image= self.canvas.flak,anchor=NW)
 				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
 				self.turretCounter += 1
@@ -228,7 +227,7 @@ class Demo():
 				col = random.randint(0,9)
 				name = "Turret_" + str(self.turretCounter)
 				self.model.add_turret(name,col,row)
-				self.model.turrets[idx].turret_range = TURRET_RANGE
+				self.model.turrets[idx].turret_range = self.turret_range
 				self.canvas.create_image(col*cellwidth,row*cellheight,image= self.canvas.flak,anchor=NW)
 				self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, self.model.turrets[idx].turret_range*cellheight, self.canvas)
 				self.turretCounter += 1
@@ -315,7 +314,7 @@ class Demo():
 		#draw turrets
 		for turret in self.model.turrets:
 			(col, row) = turret.pos
-			turret.turret_range = TURRET_RANGE
+			turret.turret_range = self.turret_range
 			self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.flak,anchor=NW)
 			self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="blue",font="Arial 20", text=turret.name)
 			self.create_circle((col+0.5)*cellwidth,(row+0.5)*cellheight, turret.turret_range*cellheight, self.canvas)
