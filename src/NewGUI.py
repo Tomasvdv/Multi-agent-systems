@@ -33,10 +33,10 @@ class GUI(Frame):
 		self.update()
 
 	def mouse_callback(self, event):
-		self.demo.text.delete('1.0', END)
-		self.demo.text.print("clicked at %d %d \n" % ( int(event.x), int(event.y)), 1)
+		self.demo.model.text.delete('1.0', END)
+		self.demo.model.text.print("clicked at %d %d \n" % ( int(event.x), int(event.y)), 1)
 		KB = self.demo.get_KB_from_click(int(event.x), int(event.y))
-		self.demo.text.print_KB(KB)
+		self.demo.model.text.print_KB(KB)
 
 	def add_mouse_listener(self):
 		self.app_canvas.bind("<Button-1>", self.mouse_callback)
