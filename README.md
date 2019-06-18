@@ -24,10 +24,11 @@ This panel is used for interaction between the user and the model. Most importan
 There are a few entry fields.
 1. *Number of planes*: adjusts the number of planes in the simulation. However, for simplicity it is advised to use only 1 plane.
 2. *Number of turrets*: adjusts the number of turrets in the simulation. 
-3. *Turret range*: adjustst the range of the turrets. 
-4. *Number of epochs*: the amount of steps that a plane can live.
-5. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
-6. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
+3. *Turret range*: adjustst the range of the turrets.
+4. *Turret confidence threshold*: the number of turrets that must agree on shooting down a plane before shooting. 
+5. *Number of epochs*: the amount of steps that a plane can live.
+6. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
+7. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
 
 ### Middle panel
 In the middle panel the turrets and planes are shown. The turrets have connections between them (black lines). The message sending and shooting range of the turrets is shown as a black circle (these distances are equal for simplicity). The turret names are printed in blue. The planes can either be friendly or enemy. The change of spawning a friendly plane is 25%. The name of a plane is printed in red for enemy planes, and in lime-green for friendly planes.
