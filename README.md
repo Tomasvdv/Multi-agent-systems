@@ -55,7 +55,7 @@ There are 2 types of agents in the simulated model. Planes and turrets. A plane 
  1. The amount of turrets in the simulation.
  2. The range of the turrets.
  3. The amount of (friendly) planes in the simulation.
- 4. New agents for detecting the planes, while turrets can only shoot the planes.
+ 4. <!-- New agents for detecting the planes, while turrets can only shoot the planes. -->
 <br /><br /><b>The message protocols: </b>
  * The amount of messages correctly received can be changed.
  * False information can be inserted to interfere with the simulation.
