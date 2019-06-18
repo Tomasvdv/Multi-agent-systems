@@ -21,6 +21,7 @@ class Agent:
 		self.x = x
 		self.y = y
 
+		self.inbox = [] ## used for saving messages
 		self.pos = np.array((x, y))
 
 		self.model = model
@@ -32,13 +33,7 @@ class Agent:
 
 	def update(self):
 		#resend possibly failed messages
-		resent_this_epoch = False
-		for (message, identifier, other) in self.sent_messages:
-			if self.name in identifier and self.confirmed[identifier] != 1: #not yet confirmed
-				self.resend_last_message(identifier)
-				resent_this_epoch = True
-
-		return resent_this_epoch
+		self.model.message_sender.check_inbox(self)
 
 	def to_model(self):
 		main_knowledge = min(self.knowledge, key=len) #Take shortest knowledge element for now, for simplicity
@@ -53,46 +48,14 @@ class Agent:
 			print("\t", k)
 
 	def send_new_message(self, other, message):
-		identifier = str(self.messageidx) + self.name
-		#print("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
-		self.sent_messages.append((message, identifier, other))
-		other.receive_message(self, message, identifier)
-		self.update_message_manager(other, message, identifier, 'send')
-		self.confirmed[identifier] = 0
-		self.messageidx += 1
+		self.model.message_sender.send_message(self, other, message)
 
 	def resend_last_message(self, identifier):
-		for idx in range(len(self.sent_messages)-1, -1, -1): #loop from last message to first
-			(message, midentifier, other) = self.sent_messages[idx]
-			if midentifier == identifier:
-				self.update_message_manager(other, message, identifier, 'resend')
-				#print("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
-				other.receive_message(self, message, identifier)
-				return
-		# print("could not find message", idx)
-		# print(self.sent_messages)
+		self.model.message_sender.resend_message(self, identifier)
 
-	def receive_message(self, other, message, identifier):
-		successfully_received = random.random() > self.model.failprob
-		if successfully_received:
-			self.knowledge.add(message)
-			self.received_messages.append((message, identifier, other))
-			self.update_message_manager(other, message, identifier, 'receive')
-			self.send_reply(other, message, identifier)
-
-			
-
+	
 	def send_reply(self, other, message, identifier):
-		reply = "K_%s(%s)"  % (self.name, message)
-
-		self.knowledge.add(reply) #add the reply to knowledge base
-
-		if reply.count("K_%s" % self.name) >= 2 and reply.count("K_") == 4: #e.g. K_a(K_b(K_a(K_b(1))))
-			self.confirmed[identifier] = 1
-		else:
-			self.sent_messages.append((reply, identifier, other))
-			self.update_message_manager(other, reply, identifier, 'reply')
-			other.receive_message(self, reply, identifier)
+		self.model.message_sender.reply(self, other, message, identifier)
 
 	def update_message_manager(self, other, message, identifier, messagetype):
 		if (other.name is self.model.message_manager.tracked) or (self.name is self.model.message_manager.tracked):
