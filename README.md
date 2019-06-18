@@ -9,6 +9,13 @@ The code for this project has been written in Python3.
   <img width="460" height="300" src="/img/aircraft.jpg">
 </p>
 
+## About the application
+
+
+<p align="center">
+  <img width="460" height="300" src="/img/app.png">
+</p>
+
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
 ### Introduction
@@ -44,3 +51,4 @@ It might be interesting to split the current turret agent up into two seperate a
 We could also make the simulation more dynamic, by including entry fields for maximal number of planes, maximal number of turrets, turret range and size of the world. This way the simulation doesn't have to be restarted every time the user wants to change some values. 
 
 Another interesting extension would be to expand on or change the communication protocols it uses and the amount of certainty that a turret needs to have before shooting down a plane. 
+
