@@ -33,10 +33,10 @@ class Demo():
 		self.numPlanes = 1
 		self.numTurrets = 3
 		self.numepochs = 10
-		# self.lines = []
+		
 		self.model = Model()
 		self.model.turret_enemy_threshold = 1 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
-		self.statistics = Statistics()
+		self.statistics = Statistics(self.model)
 		# self.demospeed = SPEED
 		self.paused = True
 		self.step = False
@@ -44,6 +44,9 @@ class Demo():
 		self.show_statistics = False
 		self.get_kb = False
 		self.show_messages = False
+		
+
+
 	# Function to make the play buttion function 
 	def play_handler(self):
 		print("RUN SIMULATION")
@@ -65,16 +68,16 @@ class Demo():
 
 	def turret_kb_handler(self):
 		self.show_statistics = False
-		self.statistics.text.remove()
+		self.model.text.remove()
 		self.get_kb = True
 
 	def messages_handler(self):
 		print("MESSAGE ")
 		self.get_kb = False
 		self.show_statistics = False
-		self.statistics.text.remove()
+		self.model.text.remove()
 		self.show_messages= True
-		self.message_manager.print()
+		self.model.message_manager.print()
 
 	#Function to pause the simulation with the pause button
 	def pause_handler(self):
@@ -89,7 +92,7 @@ class Demo():
 	
 	def statisics_handler(self):
 		self.show_statistics = True
-		self.statistics.text.remove()
+		self.model.text.remove()
 		self.get_kb = False
 		self.show_messages = False
 		self.statistics.showStatistics()
@@ -155,7 +158,7 @@ class Demo():
 			self.canvas.create_text(col*cellwidth+(cellwidth/2),row*cellheight+(cellheight),fill="green",font="Arial 10", text=name)
 		self.planeCounter += 1
 		print(name + " added")
-		self.message_manager.set_tracked(name)
+		self.model.message_manager.set_tracked(name)
 
 	#Function to initialize the simulation	
 	def drawState(self):
@@ -259,10 +262,10 @@ class Demo():
    #Function to draw each step of the simulation.
 	def drawStep(self):
 		flag = 0
-		self.statistics.text.remove()
-		self.message_manager.remove()
+		self.model.text.remove()
+		self.model.message_manager.remove()
 		counter = self.statistics.friendly_planes_shot_epoch_counter
-		self.model.run_epoch(self.numepochs,self.message_manager,self.statistics)
+		self.model.run_epoch(self.numepochs, self.statistics)
 		
 		if self.statistics.friendly_planes_shot_epoch_counter > counter:
 			print("friendly plane shot ")
@@ -275,7 +278,7 @@ class Demo():
 			self.statistics.showStatistics()
 
 		if self.show_messages == True:
-			self.message_manager.print()
+			self.model.message_manager.print()
 
 
 		# print("HERE: ", self.numTurrets, len(self.model.turrets), self.numTurrets - len(self.model.turrets))

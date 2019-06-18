@@ -25,17 +25,17 @@ class Agent:
 
 		self.model = model
 
-	def broadcast(self, message,message_manager):
+	def broadcast(self, message):
 		#send message to all connected agents
 		for a in self.agents:
-			self.send_new_message(a, message,message_manager)
+			self.send_new_message(a, message)
 
-	def update(self, message_manager):
+	def update(self):
 		#resend possibly failed messages
 		resent_this_epoch = False
 		for (message, identifier, other) in self.sent_messages:
 			if self.name in identifier and self.confirmed[identifier] != 1: #not yet confirmed
-				self.resend_last_message(identifier,message_manager)
+				self.resend_last_message(identifier)
 				resent_this_epoch = True
 
 		return resent_this_epoch
@@ -52,41 +52,38 @@ class Agent:
 		for k in self.knowledge:
 			print("\t", k)
 
-	def send_new_message(self, other, message,message_manager):
+	def send_new_message(self, other, message):
 		identifier = str(self.messageidx) + self.name
 		#print("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
 		self.sent_messages.append((message, identifier, other))
 		self.counter += 1
-		other.receive_message(self, message, identifier,message_manager)
+		other.receive_message(self, message, identifier)
+		self.update_message_manager(other, message, identifier, 'send')
 		self.confirmed[identifier] = 0
 		self.messageidx += 1
 
-	def resend_last_message(self, identifier,message_manager):
+	def resend_last_message(self, identifier):
 		for idx in range(len(self.sent_messages)-1, -1, -1): #loop from last message to first
 			(message, midentifier, other) = self.sent_messages[idx]
 			if midentifier == identifier:
-				if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
-					self.counter += 1
-					message_manager.add_message(str("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier)))
+				self.update_message_manager(other, message, identifier, 'resend')
 				#print("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))
-				other.receive_message(self, message, identifier,message_manager)
+				other.receive_message(self, message, identifier)
 				return
 		# print("could not find message", idx)
 		# print(self.sent_messages)
 
-	def receive_message(self, other, message, identifier,message_manager):
+	def receive_message(self, other, message, identifier):
 		successfully_received = random.random() > self.model.failprob
 		if successfully_received:
 			self.knowledge.add(message)
 			self.received_messages.append((message, identifier, other))
-			if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
-				message_manager.add_message(str("%s successfully received a message! \"%s\"" % (self.name, message)))
-			# print("%s successfully received a message! \"%s\"" % (self.name, message))
-			self.send_reply(other, message, identifier,message_manager)
+			self.update_message_manager(other, message, identifier, 'receive')
+			self.send_reply(other, message, identifier)
 
 			
 
-	def send_reply(self, other, message, identifier,message_manager):
+	def send_reply(self, other, message, identifier):
 		reply = "K_%s(%s)"  % (self.name, message)
 
 		self.knowledge.add(reply) #add the reply to knowledge base
@@ -95,13 +92,20 @@ class Agent:
 			self.confirmed[identifier] = 1
 		else:
 			self.sent_messages.append((reply, identifier, other))
-			if (other.name is message_manager.tracked) or (self.name is message_manager.tracked):
-				self.counter += 1
-				message_manager.add_message(str("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))) 
-			#print("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, reply, identifier))
-			other.receive_message(self, reply, identifier,message_manager)
+			self.update_message_manager(other, reply, identifier, 'reply')
+			other.receive_message(self, reply, identifier)
 
-
+	def update_message_manager(self, other, message, identifier, messagetype):
+		if (other.name is self.model.message_manager.tracked) or (self.name is self.model.message_manager.tracked):
+			self.counter += 1 ## why?
+			if messagetype == 'reply':
+				self.model.message_manager.add_message(str("%s sent a reply to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier))) 
+			elif messagetype == 'send':
+				self.model.message_manager.add_message(str("%s sent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier)))
+			elif messagetype == 'resend':
+				self.model.message_manager.add_message(str("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier)))
+			elif messagetype == 'receive':
+				self.model.message_manager.add_message(str("%s successfully received a message! \"%s\"" % (self.name, message)))
 if __name__ == '__main__':
 	A = Agent("A", 0, 1, None)
 	B = Agent("B", 0, 0, None)

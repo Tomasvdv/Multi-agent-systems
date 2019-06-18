@@ -1,7 +1,7 @@
 class Message_manager:
 
-	def __init__(self,text):
-		self.text = text
+	def __init__(self, model):
+		self.model = model
 		self.tracked_plane = ""
 		self.counter = 0
 		self.messages =[]
@@ -13,15 +13,15 @@ class Message_manager:
 	
 	def print(self):
 		for message in self.messages:
-			self.text.print(message,"")
+			self.model.text.print(message,"")
 		self.messages = []
 
-	def add_message(self,text):
-		self.messages.append(text)
+	def add_message(self,message):
+		self.messages.append(message)
 		self.counter += 1
 
 	def remove(self):
 		for idx in range(0,self.counter):
-			self.text.remove()
+			self.model.text.remove()
 		self.messages = []
 		self.counter = 0

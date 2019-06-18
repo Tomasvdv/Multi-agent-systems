@@ -22,7 +22,7 @@ class Turret(Agent):
 		self.max_epochs = 5
 		self.shoot_plane = False
 
-	def determine_closest_turret(self,plane,message_manager):
+	def determine_closest_turret(self,plane):
 		for (message, identifier, sender) in self.received_messages:
 			if 'x' and 'y' in message:
 				for idx in range(0,len(message)):
@@ -31,7 +31,7 @@ class Turret(Agent):
 						y = int(message [idx+3])
 						pos = np.array((x, y))
 						if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
-							self.send_new_message(sender,"shoot"+plane.name,message_manager)
+							self.send_new_message(sender,"shoot"+plane.name)
 							return
 							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
@@ -47,15 +47,15 @@ class Turret(Agent):
 		print("COUNT: ", count)
 		return count
 
-	def run_epoch(self,numepochs,message_manager,statistics):
+	def run_epoch(self,numepochs,statistics):
 		if self.init == 1:
-			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y),message_manager)
+			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y))
 			self.init = 0
 		if self.max_message_count != numepochs:
 			self.max_message_count = numepochs
 
 		#resend possibly missed messages
-		self.update(message_manager)
+		self.update()
 		#check for any new planes
 		for plane in self.model.planes:
 			self.update_plane_knowledge(plane)
@@ -66,11 +66,11 @@ class Turret(Agent):
 					# print("turret %s spotted plane %s at loc (%d, %d)" % (self.name, plane.name, plane.pos[0], plane.pos[1]))
 
 					#tell other turrets that there is a plane
-					self.broadcast("plane at %d %d" % (plane.pos[0], plane.pos[1]),message_manager)
+					self.broadcast("plane at %d %d" % (plane.pos[0], plane.pos[1]))
 					self.tracked_planes.append(plane)
 
 					#send message to plane
-					self.send_new_message(plane, "indentify",message_manager)
+					self.send_new_message(plane, "indentify")
 				
 				else:
 					#check if there was a message from the plane
@@ -80,21 +80,21 @@ class Turret(Agent):
 											
 						
 						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
-							self.send_new_message(plane, "indentified as friendly",message_manager)
+							self.send_new_message(plane, "indentified as friendly")
 						
 						if sender == plane:
 							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
-									self.determine_closest_turret(plane,message_manager)
+									self.determine_closest_turret(plane)
 				shoot_command = "shoot"+str(plane.name)
 				#Shoot will be done in next round, first draw shots
 				if self.shoot_plane and (shoot_command in self.knowledge): #Last check is in case a plane crashed into the side of the window
-					self.shoot(plane,statistics,message_manager)
+					self.shoot(plane,statistics)
 				self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
 				if self.shoot_plane:
 					self.model.draw_shots = True
 			
 
-	def shoot(self, plane, statistics,message_manager):
+	def shoot(self, plane, statistics):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
 			print("\nPLANE DESTROYED!\n")
 
@@ -106,8 +106,8 @@ class Turret(Agent):
 					statistics.enemy_planes_shot_epoch_counter += 1
 				else:
 					statistics.friendly_planes_shot_epoch_counter += 1
-					self.broadcast("Identification of %s took too long" % (plane.name),message_manager)
+					self.broadcast("Identification of %s took too long" % (plane.name))
 				
-				self.broadcast("%s destroyed" % (plane.name),message_manager)
+				self.broadcast("%s destroyed" % (plane.name))
 				self.tracked_planes.remove(plane)
 		

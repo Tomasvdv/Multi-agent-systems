@@ -7,6 +7,7 @@ import numpy as np
 from plane import Plane
 from turret import Turret
 from statistics import Statistics
+from message_manager import Message_manager
 class Model:
 	def __init__(self):
 		self.turret_enemy_threshold = 2 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
@@ -15,7 +16,12 @@ class Model:
 		self.connections = []
 		self.failprob = 0.1
 		self.draw_shots = False
+		self.message_manager = Message_manager(self)
 		# self.text
+
+	## allows for some late binding to the gui
+	def setText(self, text):
+		self.text = text
 
 	def getKB():
 		kb = {}
@@ -41,12 +47,12 @@ class Model:
 	def add_connection (self, turret1, turret2):
 		self.connections.append((turret1, turret2))
 
-	def run_epoch(self,numepochs,message_manager,statistics):
+	def run_epoch(self,numepochs,statistics):
 		for t in self.turrets:
-			t.run_epoch(numepochs,message_manager,statistics)
+			t.run_epoch(numepochs, statistics)
 
 		for p in self.planes:
-			p.run_epoch(message_manager)
+			p.run_epoch()
 
 
 

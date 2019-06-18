@@ -25,9 +25,9 @@ class Plane(Agent):
 		else: 
 			return ""
 
-	def run_epoch(self,message_manager):
+	def run_epoch(self):
 		self.epoch_counter += 1
-		self.update(message_manager)
+		self.update()
 		# print("counter : ",self.counter)
 		self.pos[0] += self.dx
 		self.pos[1] += self.dy
@@ -40,13 +40,13 @@ class Plane(Agent):
 				temp = "K_"+str(sender.name)+"("+str(self.reply)+")"  
 				if self.correct_identification and not temp in self.knowledge:
 						
-						self.send_new_message(sender,self.reply,message_manager)
+						self.send_new_message(sender,self.reply)
 				if not self.correct_identification and not "K_%s()" % sender.name in self.knowledge:
-					self.send_new_message(sender, self.reply,message_manager)
+					self.send_new_message(sender, self.reply)
 		if "indentified as friendly" in self.knowledge:
 			for (message, identifier, sender) in self.received_messages:
 				if self.correct_identification and not "K_%s(friendly)" % sender.name in self.knowledge:
-					self.send_new_message(sender,"friendly",message_manager)
+					self.send_new_message(sender,"friendly")
 
 	def destroy(self):
 		print('plane crashed')

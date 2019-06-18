@@ -50,9 +50,8 @@ class GUI(Frame):
 		
 		#give demo class pointers to the GUI
 		self.demo.canvas = self.app_canvas
-		self.demo.text = TextCanvas(self.text_canvas)
-		self.demo.statistics = Statistics(self.demo.text)
-		self.demo.message_manager = Message_manager(self.demo.text)
+		self.demo.model.setText(TextCanvas(self.text_canvas))
+		
 
 	def add_buttons(self):
 		## TODO, make labels and entryfields in seperate canvases
