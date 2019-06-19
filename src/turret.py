@@ -22,6 +22,11 @@ class Turret(Agent):
 		self.max_epochs = 5
 		self.shoot_plane = False
 
+	def clean_up_messages(self,agent1):
+		for (message, identifier, sender) in self.received_messages:
+			if sender is agent1.name:
+				self.received_messages.remove((message, identifier, sender))
+
 	def determine_closest_turret(self,plane):
 		for (message, identifier, sender) in self.received_messages:
 			if 'x' and 'y' in message:
@@ -101,6 +106,8 @@ class Turret(Agent):
 			if not plane.isdestroyed:
 				print("plane %s shot down by %s" % (plane.name, self.name))
 				plane.destroy()
+				for turret in self.model.turrets:
+					turret.clean_up_messages(plane)
 				self.model.draw_shots = False
 				if plane.isfriendly == True:
 					statistics.enemy_planes_shot_epoch_counter += 1

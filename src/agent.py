@@ -17,7 +17,7 @@ class Agent:
 		self.messageidx = 0
 		self.confirmed = {} #dict of identifiers of all messages sent
 		self.kripke_knowledge = {} #dict of knowledge that is used to construct Kripke model
-		self.counter = 0 ## used for counting the number of messages sent to plane?
+		self.counter = 0 ## used for counting the number of messages sent to plane
 		self.x = x
 		self.y = y
 
@@ -73,6 +73,8 @@ class Agent:
 				self.model.message_manager.add_message(str("%s resent a message to %s. \"%s\" (%s)" % (self.name, other.name, message, identifier)))
 			elif messagetype == 'receive':
 				self.model.message_manager.add_message(str("%s successfully received a message! \"%s\"" % (self.name, message)))
+
+	
 if __name__ == '__main__':
 	A = Agent("A", 0, 1, None)
 	B = Agent("B", 0, 0, None)

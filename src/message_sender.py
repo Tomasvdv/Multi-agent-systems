@@ -86,6 +86,7 @@ class Message_sender:
 			agent1.received_messages.append((message, identifier, other))
 			agent1.update_message_manager(other, message, identifier, 'receive')
 			agent1.send_reply(other, message, identifier)
+		agent1.inbox = []
 
 	def check_inbox_TCP(self, agent1):
 		for (other, message) in agent1.inbox:
@@ -100,3 +101,4 @@ class Message_sender:
 				agent1.confirmed[idx] = 1
 			else:
 				agent1.send_reply(other, message, 0)
+		agent1.inbox = []
