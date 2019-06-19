@@ -63,6 +63,7 @@ class Turret(Agent):
 		self.update()
 		#check for any new planes
 		for plane in self.model.planes:
+			reason = ""
 			self.update_plane_knowledge(plane)
 			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
@@ -88,18 +89,23 @@ class Turret(Agent):
 							self.send_new_message(plane, "indentified as friendly")
 						
 						if sender == plane:
+							if "" in message:
+								reason = "no response"
+							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
+								reason = "max epochs"
+
 							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
 									self.determine_closest_turret(plane)
 				shoot_command = "shoot"+str(plane.name)
 				#Shoot will be done in next round, first draw shots
 				if self.shoot_plane and (shoot_command in self.knowledge): #Last check is in case a plane crashed into the side of the window
-					self.shoot(plane,statistics)
+					self.shoot(plane,statistics,reason)
 				self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
 				if self.shoot_plane:
 					self.model.draw_shots = True
 			
 
-	def shoot(self, plane, statistics):
+	def shoot(self, plane, statistics,reason):
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
 			print("\nPLANE DESTROYED!\n")
 
@@ -109,10 +115,12 @@ class Turret(Agent):
 				for turret in self.model.turrets:
 					turret.clean_up_messages(plane)
 				self.model.draw_shots = False
-				if plane.isfriendly == True:
+				if plane.isfriendly == False and reason is "max epochs":
 					statistics.enemy_planes_shot_epoch_counter += 1
 				else:
-					statistics.friendly_planes_shot_epoch_counter += 1
+					statistics.enemy_planes_shot_epoch_counter += 1
+				if plane.isfriendly == True:
+					statistics.friendly_planes_shot_epoch_counter +=1
 					self.broadcast("Identification of %s took too long" % (plane.name))
 				
 				self.broadcast("%s destroyed" % (plane.name))
