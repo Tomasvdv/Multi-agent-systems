@@ -17,7 +17,7 @@ class Model:
 		self.connections = []
 		self.failprob = 0.1
 		self.draw_shots = False
-		self.messageprotocol = 'A1'
+		self.messageprotocol = ''
 		self.message_manager = Message_manager(self)
 		self.message_sender = Message_sender(self)
 		# self.text

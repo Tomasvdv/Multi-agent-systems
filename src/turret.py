@@ -118,7 +118,7 @@ class Turret(Agent):
 				if plane.isfriendly == False and reason is "max epochs":
 					statistics.enemy_planes_shot_epoch_counter += 1
 				else:
-					statistics.enemy_planes_shot_epoch_counter += 1
+					statistics.enemy_planes_shot_no_reponse += 1
 				if plane.isfriendly == True:
 					statistics.friendly_planes_shot_epoch_counter +=1
 					self.broadcast("Identification of %s took too long" % (plane.name))
