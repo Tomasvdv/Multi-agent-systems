@@ -15,7 +15,7 @@ class Turret(Agent):
 		#Kripke_model.__init__(self)
 		self.agents = [t for t in model.turrets if t.name != self.name]
 		self.tracked_planes = []
-		self.turret_range = 2
+		self.turret_range = 4
 		self.broadcasted_pos = False
 		self.closest = False
 		self.planecounters = {} ## dict of planes with a counter for each plane
@@ -24,20 +24,19 @@ class Turret(Agent):
 		self.shoot_plane = False
 
 	def determine_closest_turret(self,plane):
-		print("Im here")
 		for turret in self.model.turrets:
 			for knowledge in self.knowledge:
 				if "K_"+str(self.name) + "("+str(turret.name)+"at" in knowledge:
-					print(knowledge)
+					
 					idx = knowledge.find('at')
 					x = int(knowledge[idx+2])
 					y = int(knowledge[idx+3])
 					pos = np.array((x, y))
-					print(turret.name,pos)
+					self.knowledge.add("K_"+str(self.name)+"("+str(turret.name)+ 'at'+str(x)+str(y)+")")
 					if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
 						self.send_new_message(turret,"shoot"+plane.name)
-						return
-						# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
+						
+					# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 	def update_plane_knowledge(self,plane):
 		self.planecounters[plane] += 1 ## set nr of messages sent to 1
@@ -55,7 +54,7 @@ class Turret(Agent):
 	def run_epoch(self, statistics):
 		if not self.broadcasted_pos:
 			self.broadcast(str(self.name) + "at"+ str(self.x) +str(self.y))
-			self.broadcasted_pos = True
+			self.broadcast_pos = True
 
 		#resend possibly missed messages
 		self.update()
@@ -95,6 +94,7 @@ class Turret(Agent):
 								reason = "max epochs"
 
 							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
+									# print("activated in the right place")
 									self.determine_closest_turret(plane)
 				shoot_command = "shoot"+str(plane.name)
 				#Shoot will be done in next round, first draw shots
