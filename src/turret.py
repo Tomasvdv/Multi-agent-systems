@@ -26,16 +26,16 @@ class Turret(Agent):
 	def determine_closest_turret(self,plane):
 		for turret in self.model.turrets:
 			for knowledge in self.knowledge:
-				if "K_"+str(self.name) + "("+str(turret.name)+"at" in knowledge:
+				if "K_"+str(self.name) + "("+str(turret.name)+"at" in knowledge or "("+str(turret.name)+"at" in knowledge :
 					
 					idx = knowledge.find('at')
 					x = int(knowledge[idx+2])
 					y = int(knowledge[idx+3])
 					pos = np.array((x, y))
-					self.knowledge.add("K_"+str(self.name)+"("+str(turret.name)+ 'at'+str(x)+str(y)+")")
+					# self.knowledge.add("K_"+str(self.name)+"("+str(turret.name)+ 'at'+str(x)+str(y)+")")
 					if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
 						self.send_new_message(turret,"shoot"+plane.name)
-						
+						print("Shoot")
 					# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 	def update_plane_knowledge(self,plane):
@@ -74,6 +74,7 @@ class Turret(Agent):
 
 					#send message to plane
 					self.send_new_message(plane, "indentify")
+					print()
 					self.planecounters[plane] = 1 ## set nr of messages sent to 1
 				
 				else:
@@ -88,13 +89,15 @@ class Turret(Agent):
 							self.send_new_message(plane, "indentified as friendly")
 						
 						if sender == plane:
+							print(self.knowledge)
 							if "" in message:
 								reason = "no response"
 							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
+								print(reason)
 								reason = "max epochs"
 
-							if not "K_%s(friendly)" % plane.name in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
-									# print("activated in the right place")
+							if not "K_%s(friendly)" % plane.name in self.knowledge or not "ack(friendly)" in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
+									print("activated in the right place")
 									self.determine_closest_turret(plane)
 				shoot_command = "shoot"+str(plane.name)
 				#Shoot will be done in next round, first draw shots
