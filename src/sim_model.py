@@ -17,7 +17,7 @@ class Model:
 		self.connections = []
 		self.failprob = 0.1
 		self.draw_shots = False
-		self.messageprotocol = ''
+		self.messageprotocol = 'A1'
 		self.message_manager = Message_manager(self)
 		self.message_sender = Message_sender(self)
 		# self.text
@@ -25,6 +25,25 @@ class Model:
 	## allows for some late binding to the gui
 	def setText(self, text):
 		self.text = text
+
+	def set_protocol(self, protocol):
+		if protocol == self.messageprotocol: ## do nothing
+			return
+		elif protocol == 'A1' or protocol == 'TCP': ## set protocol
+			# for agent in self.turrets:
+			# 	agent.inbox = []
+			# 	agent.confirmed = {}
+			# for agent in self.planes:
+			# 	agent.inbox = []
+			# 	agent.confirmed = {}
+			[agent.empty_messages() for agent in self.turrets]
+			[agent.empty_messages() for agent in self.planes]
+			self.messageprotocol = protocol
+
+
+			
+
+
 
 	def getKB():
 		kb = {}

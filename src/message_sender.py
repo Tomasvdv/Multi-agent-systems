@@ -32,17 +32,23 @@ class Message_sender:
 	def send_message_TCP(self, agent1, agent2, message):
 		if random.random() > self.model.failprob:
 			agent2.inbox.append((agent1, message))
+		agent1.update_message_manager(agent2, message, agent1.messageidx, 'send')
 		agent1.sent_messages.append((message, 0, agent2)) ## 0 is to give it the same length as A1 protocol
-		agent1.confirmed[agent1.messageidx] = 0 ## ack is not yet received (remodel confirmed for use for ack)
+		agent1.confirmed[int(agent1.messageidx)] = int(0) ## ack is not yet received (remodel confirmed for use for ack)
 		agent1.messageidx += 1
 
 	def resend_message_TCP(self, agent1, messageidx):
 		message, _,  agent2 = agent1.sent_messages[messageidx]
-		if random.random() > self.model.failprob:
-			agent2.inbox.append((agent1, message))
+		if not agent2.isdestroyed:
+			agent1.update_message_manager(agent2, message, messageidx, 'resend')
+			if random.random() > self.model.failprob:
+				agent2.inbox.append((agent1, message))
+		else:
+			agent1.confirmed[int(messageidx)] = -1
 
 	def reply_TCP(self, agent1, agent2, message):
 		message = "ack(%s)" % message
+		agent1.update_message_manager(agent2, message, 0, 'reply')
 		if random.random() > self.model.failprob:
 			agent2.inbox.append((agent1, message))
 
@@ -60,10 +66,13 @@ class Message_sender:
 		for idx in range(len(agent1.sent_messages)-1, -1, -1): #loop from last message to first
 			(message, midentifier, other) = agent1.sent_messages[idx]
 			if midentifier == identifier:
-				agent1.update_message_manager(other, message, identifier, 'resend')
-				if random.random() > self.model.failprob:
-					other.inbox.append((agent1, identifier, message))
-				return
+				if not other.isdestroyed:
+					agent1.update_message_manager(other, message, identifier, 'resend')
+					if random.random() > self.model.failprob:
+						other.inbox.append((agent1, identifier, message))
+					return
+				else:
+					agent1.confirmed[identifier] = -1
 
 
 	def reply_A1(self, agent1, agent2, message, identifier):
@@ -98,7 +107,7 @@ class Message_sender:
 				## find index of message
 				original_message = (message.split("(")[1]).split(")")[0]
 				idx = agent1.sent_messages.index((original_message, 0, other))
-				agent1.confirmed[idx] = 1
+				agent1.confirmed[int(idx)] = 1
 			else:
 				agent1.send_reply(other, message, 0)
 		agent1.inbox = []

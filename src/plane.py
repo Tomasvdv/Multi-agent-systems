@@ -11,8 +11,6 @@ class Plane(Agent):
 		self.dx = dx #momentum in x direction
 		self.dy = dy #momentum in y direction
 		self.isfriendly = isfriendly
-		self.isdestroyed = False
-		self.isvisible = True
 		self.correct_identification = False
 		self.epoch_counter = 0
 		self.reply = self.generate_identification()
@@ -38,14 +36,13 @@ class Plane(Agent):
 		if "indentify" in self.knowledge and self.counter < 10:
 			for (message, identifier, sender) in self.received_messages:
 				temp = "K_"+str(sender.name)+"("+str(self.reply)+")"  
-				if self.correct_identification and not temp in self.knowledge:
-						
-						self.send_new_message(sender,self.reply)
-				if not self.correct_identification and not "K_%s()" % sender.name in self.knowledge:
+				if self.correct_identification and not temp in self.knowledge:	
+					self.send_new_message(sender,self.reply)
+				if not self.correct_identification and not "K_%s()" % sender.name in self.knowledge and not "ack()" in self.knowledge:
 					self.send_new_message(sender, self.reply)
 		if "indentified as friendly" in self.knowledge:
 			for (message, identifier, sender) in self.received_messages:
-				if self.correct_identification and not "K_%s(friendly)" % sender.name in self.knowledge:
+				if self.correct_identification and not "K_%s(friendly)" % sender.name in self.knowledge and not "ack(friendly)" in self.knowledge:
 					self.send_new_message(sender,"friendly")
 
 	def destroy(self):

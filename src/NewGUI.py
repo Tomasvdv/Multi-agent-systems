@@ -71,6 +71,8 @@ class GUI(Frame):
 		self.failprob_entry_canvas.pack(side=TOP)
 		self.sim_speed_entry_canvas = Canvas(self.button_canvas)
 		self.sim_speed_entry_canvas.pack(side=TOP)
+		self.protocol_entry_canvas = Canvas(self.button_canvas)
+		self.protocol_entry_canvas.pack(side=TOP)
 
 		## create text for in the labels
 		self.numPlanes_text = StringVar()
@@ -78,15 +80,17 @@ class GUI(Frame):
 		self.numTurrets_text = StringVar()
 		self.numTurrets_text.set( "Number of turrets:\t\t")
 		self.turret_range_text = StringVar()
-		self.turret_range_text.set( "Turret range:\t\t")
+		self.turret_range_text.set( "Turret range:\t\t\t")
 		self.turret_conf_text = StringVar()
-		self.turret_conf_text.set( "Turret confidence threshold:\t\t")
+		self.turret_conf_text.set( "Turret confidence threshold:\t")
 		self.numEpochs_text = StringVar()
 		self.numEpochs_text.set("Number of epochs:\t\t")
 		self.failprob_text = StringVar()
 		self.failprob_text.set(   "Failure probability:\t\t")
 		self.speed_text = StringVar()
 		self.speed_text.set("Simulation speed (iter/second)\t")
+		self.protocol_text = StringVar()
+		self.protocol_text.set("Communication protocol:\t\t\t\t")
 
 
 		## create labels
@@ -104,6 +108,8 @@ class GUI(Frame):
 		self.failprob_label.pack(side=LEFT)
 		self.speed_label = Label(self.sim_speed_entry_canvas, textvariable=self.speed_text)
 		self.speed_label.pack(side=LEFT)
+		self.protocol_label = Label(self.protocol_entry_canvas, textvariable=self.protocol_text)
+		self.protocol_label.pack(side=LEFT)
 
 		## create entry fields
 		self.numplanes_entry = Entry(self.numplanes_entry_canvas)
@@ -146,6 +152,11 @@ class GUI(Frame):
 		self.update_speed = Button(self.sim_speed_entry_canvas, text = "Update", command = self.update_simulation_speed)
 		self.update_speed.pack(side=LEFT)
 
+		## create radio button for switching between modes
+		self.mode_val = StringVar()
+		self.mode1 = Radiobutton(self.protocol_entry_canvas, text="A1", variable=self.mode_val, value="A1", indicatoron=0, command = self.update_protocol).pack(side=LEFT)
+		self.mode2 = Radiobutton(self.protocol_entry_canvas, text="TCP", variable=self.mode_val, value="TCP", indicatoron=0, command = self.update_protocol).pack(side=LEFT)
+		self.mode_val.set("A1")
 
 		## create speed control canvas + buttons
 		self.speed_control_canvas = Canvas(self.button_canvas)
@@ -189,6 +200,9 @@ class GUI(Frame):
 				print("Number of planes must be > 1")
 		except:
 			pass
+
+	def update_protocol(self):
+		self.demo.model.set_protocol(self.mode_val.get())
 
 	def update_demo_max_epoch_counter(self):
 		try:

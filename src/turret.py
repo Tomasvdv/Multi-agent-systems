@@ -23,9 +23,11 @@ class Turret(Agent):
 		self.shoot_plane = False
 
 	def clean_up_messages(self,agent1):
-		for (message, identifier, sender) in self.received_messages:
-			if sender is agent1.name:
-				self.received_messages.remove((message, identifier, sender))
+		# for (message, identifier, sender) in self.received_messages:
+		# 	if sender is agent1.name:
+		# 		self.received_messages.remove((message, identifier, sender))
+		self.received_messages = [(m, i, s) for (m, i, s) in self.received_messages if s is not agent1]
+		pass
 
 	def determine_closest_turret(self,plane):
 		for (message, identifier, sender) in self.received_messages:

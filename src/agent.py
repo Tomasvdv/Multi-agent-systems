@@ -20,11 +20,25 @@ class Agent:
 		self.counter = 0 ## used for counting the number of messages sent to plane
 		self.x = x
 		self.y = y
+		self.isdestroyed = False
+		self.isvisible = True
 
 		self.inbox = [] ## used for saving messages
 		self.pos = np.array((x, y))
 
 		self.model = model
+
+	def empty_messages(self):
+		self.inbox = []
+		self.sent_messages = []
+		self.received_messages = []
+		self.confirmed = {}
+		self.counter = 0
+		self.messageidx = 0
+
+	def clean_up_messages(self,agent1):
+		self.received_messages = [(m, i, s) for (m, i, s) in self.received_messages if s is not agent1]
+		
 
 	def broadcast(self, message):
 		#send message to all connected agents
@@ -36,9 +50,10 @@ class Agent:
 
 		#resend possibly failed messages
 		for (key, val) in self.confirmed.items():
+			print( "%s: %s %s " % (self.name, key, val))
 			if val == 0: ## message not received
 				self.resend_last_message(key)
- 
+
 
 	def to_model(self):
 		main_knowledge = min(self.knowledge, key=len) #Take shortest knowledge element for now, for simplicity
@@ -57,7 +72,6 @@ class Agent:
 
 	def resend_last_message(self, identifier):
 		self.model.message_sender.resend_message(self, identifier)
-
 	
 	def send_reply(self, other, message, identifier):
 		self.model.message_sender.reply(self, other, message, identifier)
