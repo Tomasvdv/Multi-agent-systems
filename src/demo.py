@@ -30,7 +30,6 @@ class Demo():
 		self.planeCounter = 0
 		self.numPlanes = 1
 		self.numTurrets = 3
-		self.numepochs = 10
 		self.turret_range = 4
 		
 		self.model = Model()
@@ -264,7 +263,7 @@ class Demo():
 		self.model.text.remove()
 		self.model.message_manager.remove()
 		counter = self.statistics.friendly_planes_shot_epoch_counter
-		self.model.run_epoch(self.numepochs, self.statistics)
+		self.model.run_epoch(self.statistics)
 		
 		if self.statistics.friendly_planes_shot_epoch_counter > counter:
 			print("friendly plane shot ")

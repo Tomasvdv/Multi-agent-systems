@@ -16,11 +16,11 @@ class Turret(Agent):
 		self.agents = [t for t in model.turrets if t.name != self.name]
 		self.tracked_planes = []
 		self.turret_range = 2
-		self.init = 1 
+		self.broadcasted_pos = False
 		self.closest = False
 		self.planecounters = {} ## dict of planes with a counter for each plane
 		self.max_message_count = 20
-		self.max_epochs = 5
+		self.max_epochs = 4
 		self.shoot_plane = False
 
 	def determine_closest_turret(self,plane):
@@ -49,19 +49,16 @@ class Turret(Agent):
 		print("COUNT: ", count)
 		return count
 
-	def run_epoch(self,numepochs,statistics):
-		if self.init == 1:
+	def run_epoch(self, statistics):
+		if not self.broadcasted_pos:
 			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y))
-			self.init = 0
-		if self.max_message_count != numepochs:
-			self.max_message_count = numepochs
+			self.broadcasted_pos = True
 
 		#resend possibly missed messages
 		self.update()
 		#check for any new planes
 		for plane in self.model.planes:
 			reason = ""
-			self.update_plane_knowledge(plane)
 			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
 
@@ -78,6 +75,7 @@ class Turret(Agent):
 					self.planecounters[plane] = 1 ## set nr of messages sent to 1
 				
 				else:
+					self.update_plane_knowledge(plane)
 					#check if there was a message from the plane
 					for (message, identifier, sender) in self.received_messages:
 						# print(message)
@@ -109,7 +107,7 @@ class Turret(Agent):
 			print("\nPLANE DESTROYED!\n")
 
 			if not plane.isdestroyed:
-				print("plane %s shot down by %s" % (plane.name, self.name))
+				print("plane %s shot down by %s. Reason: %s" % (plane.name, self.name, reason))
 				plane.destroy()
 				for turret in self.model.turrets:
 					turret.clean_up_messages(plane)

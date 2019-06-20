@@ -50,7 +50,6 @@ class Agent:
 
 		#resend possibly failed messages
 		for (key, val) in self.confirmed.items():
-			print( "%s: %s %s " % (self.name, key, val))
 			if val == 0: ## message not received
 				self.resend_last_message(key)
 

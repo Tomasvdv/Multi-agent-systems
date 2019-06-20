@@ -69,9 +69,9 @@ class Model:
 	def add_connection (self, turret1, turret2):
 		self.connections.append((turret1, turret2))
 
-	def run_epoch(self,numepochs,statistics):
+	def run_epoch(self,statistics):
 		for t in self.turrets:
-			t.run_epoch(numepochs, statistics)
+			t.run_epoch(statistics)
 
 		for p in self.planes:
 			p.run_epoch()
