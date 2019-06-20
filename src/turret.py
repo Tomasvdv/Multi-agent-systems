@@ -18,16 +18,10 @@ class Turret(Agent):
 		self.turret_range = 2
 		self.init = 1 
 		self.closest = False
+		self.planecounters = {} ## dict of planes with a counter for each plane
 		self.max_message_count = 20
 		self.max_epochs = 5
 		self.shoot_plane = False
-
-	def clean_up_messages(self,agent1):
-		# for (message, identifier, sender) in self.received_messages:
-		# 	if sender is agent1.name:
-		# 		self.received_messages.remove((message, identifier, sender))
-		self.received_messages = [(m, i, s) for (m, i, s) in self.received_messages if s is not agent1]
-		pass
 
 	def determine_closest_turret(self,plane):
 		for (message, identifier, sender) in self.received_messages:
@@ -43,7 +37,8 @@ class Turret(Agent):
 							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 	def update_plane_knowledge(self,plane):
-		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(plane.epoch_counter)+"epochs)")
+		self.planecounters[plane] += 1 ## set nr of messages sent to 1
+		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.planecounters[plane])+"epochs)")
 
 	#Verifies how many turrets have decided that a particular plane should be shot
 	def verify_turret_identifications(self, shoot_command):
@@ -77,8 +72,10 @@ class Turret(Agent):
 					self.broadcast("plane at %d %d" % (plane.pos[0], plane.pos[1]))
 					self.tracked_planes.append(plane)
 
+
 					#send message to plane
 					self.send_new_message(plane, "indentify")
+					self.planecounters[plane] = 1 ## set nr of messages sent to 1
 				
 				else:
 					#check if there was a message from the plane
