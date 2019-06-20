@@ -24,17 +24,20 @@ class Turret(Agent):
 		self.shoot_plane = False
 
 	def determine_closest_turret(self,plane):
-		for (message, identifier, sender) in self.received_messages:
-			if 'x' and 'y' in message:
-				for idx in range(0,len(message)):
-					if message[idx] == 'x':
-						x = int(message [idx+1])
-						y = int(message [idx+3])
-						pos = np.array((x, y))
-						if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
-							self.send_new_message(sender,"shoot"+plane.name)
-							return
-							# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
+		print("Im here")
+		for turret in self.model.turrets:
+			for knowledge in self.knowledge:
+				if "K_"+str(self.name) + "("+str(turret.name)+"at" in knowledge:
+					print(knowledge)
+					idx = knowledge.find('at')
+					x = int(knowledge[idx+2])
+					y = int(knowledge[idx+3])
+					pos = np.array((x, y))
+					print(turret.name,pos)
+					if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
+						self.send_new_message(turret,"shoot"+plane.name)
+						return
+						# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 	def update_plane_knowledge(self,plane):
 		self.planecounters[plane] += 1 ## set nr of messages sent to 1
@@ -51,7 +54,7 @@ class Turret(Agent):
 
 	def run_epoch(self, statistics):
 		if not self.broadcasted_pos:
-			self.broadcast(str(self.name) + "x"+ str(self.x) + "y"+ str(self.y))
+			self.broadcast(str(self.name) + "at"+ str(self.x) +str(self.y))
 			self.broadcasted_pos = True
 
 		#resend possibly missed messages
