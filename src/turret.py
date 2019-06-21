@@ -35,7 +35,7 @@ class Turret(Agent):
 					# self.knowledge.add("K_"+str(self.name)+"("+str(turret.name)+ 'at'+str(x)+str(y)+")")
 					if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
 						self.send_new_message(turret,"shoot"+plane.name)
-						print("Shoot")
+						# print("Shoot")
 					# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
 		
 	def update_plane_knowledge(self,plane):
@@ -48,7 +48,7 @@ class Turret(Agent):
 		for turret in self.model.turrets:
 			if shoot_command in turret.knowledge:
 				count += 1
-		print("COUNT: ", count)
+		# print("COUNT: ", count)
 		return count
 
 	def run_epoch(self, statistics):
@@ -94,7 +94,7 @@ class Turret(Agent):
 							self.send_new_message(plane, "indentified as friendly")
 						
 						if sender == plane:
-							print(self.knowledge)
+							# print(self.knowledge)
 							if "" in message:
 								reason = "no response"
 							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
@@ -121,10 +121,11 @@ class Turret(Agent):
 				for turret in self.model.turrets:
 					turret.clean_up_messages(plane)
 				self.model.draw_shots = False
-				if plane.isfriendly == False and reason is "max epochs":
-					statistics.enemy_planes_shot_epoch_counter += 1
-				else:
-					statistics.enemy_planes_shot_no_reponse += 1
+				if plane.isfriendly == False:
+					if reason is "max epochs":
+						statistics.enemy_planes_shot_epoch_counter += 1
+					else:
+						statistics.enemy_planes_shot_no_reponse += 1
 				if plane.isfriendly == True:
 					statistics.friendly_planes_shot_epoch_counter +=1
 					self.broadcast("Identification of %s took too long" % (plane.name))
@@ -132,3 +133,4 @@ class Turret(Agent):
 				self.broadcast("%s destroyed" % (plane.name))
 				self.tracked_planes.remove(plane)
 		
+ 

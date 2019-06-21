@@ -42,7 +42,7 @@ class Demo():
 		self.show_statistics = False
 		self.get_kb = False
 		self.show_messages = False
-		
+		self.simulation = 0
 
 
 	# Function to make the play buttion function 
@@ -181,11 +181,13 @@ class Demo():
 				for col in range(10):
 					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.land,anchor=NW)
 			
-
+			locations =[3,3,3,6,3,9]
 			#init and draw turrets
 			for idx in range(self.numTurrets):
-				row = random.randint(0,9)
-				col = random.randint(0,9)
+				row = locations[idx+self.turretCounter]
+				col = locations[idx+self.turretCounter+1]
+				# row = random.randint(0,9)
+				# col = random.randint(0,9)
 				name = "Turret_" + str(self.turretCounter)
 				self.model.add_turret(name,col,row)
 				self.model.turrets[idx].turret_range = self.turret_range
@@ -267,8 +269,18 @@ class Demo():
 		
 		if self.statistics.friendly_planes_shot_epoch_counter > counter:
 			print("friendly plane shot ")
-			self.messages_handler()
+			# self.messages_handler()
+			# self.pause_handler()
+
+		if self.simulation == 10:
+			self.model.text.remove()
+			self.statistics.showStatistics()
 			self.pause_handler()
+		if self.planeCounter > 99:
+			[agent.empty_messages() for agent in self.model.turrets]
+			self.planeCounter = 0
+			self.simulation += 1
+
 
 		self.canvas.delete("all")
 		
