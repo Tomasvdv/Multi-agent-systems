@@ -14,6 +14,7 @@ class Plane(Agent):
 		self.correct_identification = False
 		self.epoch_counter = 0
 		self.reply = self.generate_identification()
+		self.in_range = False
 
 
 	def generate_identification(self):

@@ -63,7 +63,12 @@ class Turret(Agent):
 			reason = ""
 			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
-
+				if plane.in_range == False:
+					plane.in_range = True
+					if plane.isfriendly == True:
+						statistics.friendly_planes_in_range += 1
+					else:
+						statistics.enemy_planes_in_range += 1
 				if plane not in self.tracked_planes: #plane is not yet being tracked
 					# print("turret %s spotted plane %s at loc (%d, %d)" % (self.name, plane.name, plane.pos[0], plane.pos[1]))
 
@@ -93,11 +98,9 @@ class Turret(Agent):
 							if "" in message:
 								reason = "no response"
 							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
-								print(reason)
 								reason = "max epochs"
 
 							if not "K_%s(friendly)" % plane.name in self.knowledge or not "ack(friendly)" in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
-									print("activated in the right place")
 									self.determine_closest_turret(plane)
 				shoot_command = "shoot"+str(plane.name)
 				#Shoot will be done in next round, first draw shots
