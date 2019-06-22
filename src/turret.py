@@ -53,8 +53,8 @@ class Turret(Agent):
 		return count
 	def determine_knowledge(self,plane):
 		for knowledge in self.knowledge:
-			if plane.name in knowledge:
-				print(knowledge)
+			# if plane.name in knowledge:
+			# 	print(knowledge)
 			if not "K_"+str(self.name)+"("+plane.name+"friendly)" in knowledge and self.model.messageprotocol is "A1":
 				return True
 			if not "ack("+plane.name+"friendly)" in self.knowledge and self.model.messageprotocol is not "A1":
@@ -93,7 +93,6 @@ class Turret(Agent):
 
 					#send message to plane
 					self.send_new_message(plane, "indentify")
-					print()
 					self.planecounters[plane] = 1 ## set nr of messages sent to 1
 				
 				else:
@@ -113,12 +112,12 @@ class Turret(Agent):
 							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
 								reason = "max epochs"
 								
-								print("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge)
-								print(plane.name+"counter"+str(plane.epoch_counter)+"max "+str(self.max_epochs))
+								# print("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge)
+								# print(plane.name+"counter"+str(plane.epoch_counter)+"max "+str(self.max_epochs))
 							else:
 								reason = "no response"
 
-							if "K_"+str(plane.name)+"(K_"+ str(self.name)+"(no response))" in self.knowledge or ("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
+							if ("K_"+str(plane.name)+"(K_"+ str(self.name)+"(no response))" in self.knowledge or "ack(no response)" in self.knowledge) and self.determine_knowledge(plane) or ("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
 									self.determine_closest_turret(plane)
 								
 									self.shoot_commands.add(plane.name + reason) 

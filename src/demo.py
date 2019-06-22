@@ -269,8 +269,8 @@ class Demo():
 		
 		if self.statistics.friendly_planes_shot_epoch_counter > counter:
 			print("friendly plane shot ")
-			self.messages_handler()
-			self.pause_handler()
+			# self.messages_handler()
+			# self.pause_handler()
 
 		if self.simulation == 10:
 			self.model.text.remove()
