@@ -16,6 +16,7 @@ class Model:
 		self.planes = []
 		self.connections = []
 		self.failprob = 0.1
+		self.numepochs = 20
 		self.draw_shots = False
 		self.messageprotocol = 'A1'
 		self.message_manager = Message_manager(self)
@@ -71,7 +72,7 @@ class Model:
 
 	def run_epoch(self,statistics):
 		for t in self.turrets:
-			t.run_epoch(statistics)
+			t.run_epoch(statistics,self.numepochs)
 
 		for p in self.planes:
 			p.run_epoch()

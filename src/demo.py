@@ -181,7 +181,7 @@ class Demo():
 				for col in range(10):
 					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.land,anchor=NW)
 			
-			locations =[3,3,3,6,3,9]
+			locations =[3,1,3,4,3,7]
 			#init and draw turrets
 			for idx in range(self.numTurrets):
 				row = locations[idx+self.turretCounter]
@@ -269,8 +269,8 @@ class Demo():
 		
 		if self.statistics.friendly_planes_shot_epoch_counter > counter:
 			print("friendly plane shot ")
-			# self.messages_handler()
-			# self.pause_handler()
+			self.messages_handler()
+			self.pause_handler()
 
 		if self.simulation == 10:
 			self.model.text.remove()

@@ -20,8 +20,9 @@ class Turret(Agent):
 		self.closest = False
 		self.planecounters = {} ## dict of planes with a counter for each plane
 		self.max_message_count = 20
-		self.max_epochs = 4
+		self.max_epochs = self.model.numepochs
 		self.shoot_plane = False
+		self.shoot_commands = set([])
 
 	def determine_closest_turret(self,plane):
 		for turret in self.model.turrets:
@@ -51,7 +52,10 @@ class Turret(Agent):
 		# print("COUNT: ", count)
 		return count
 
-	def run_epoch(self, statistics):
+	def run_epoch(self, statistics,max_epochs):
+		if max_epochs != self.max_epochs:
+			self.max_epochs = max_epochs
+
 		if not self.broadcasted_pos:
 			self.broadcast(str(self.name) + "at"+ str(self.x) +str(self.y))
 			self.broadcast_pos = True
@@ -60,7 +64,7 @@ class Turret(Agent):
 		self.update()
 		#check for any new planes
 		for plane in self.model.planes:
-			reason = ""
+			reason = " "
 			# print (self.name, plane.name, self.pos, plane.pos, np.linalg.norm(self.pos - plane.pos))
 			if np.linalg.norm(self.pos - plane.pos) <= (self.turret_range + 0.5) and plane.isvisible: #plane is visible and in range of the turret
 				if plane.in_range == False:
@@ -95,28 +99,45 @@ class Turret(Agent):
 						
 						if sender == plane:
 							# print(self.knowledge)
-							if "" in message:
-								reason = "no response"
-							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
+						
+							if not "K_"+str(self.name)+"("+plane.name+"friendly)" in self.knowledge or not "ack("+plane.name+"friendly)" in self.knowledge and "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
 								reason = "max epochs"
-
-							if not "K_%s(friendly)" % plane.name in self.knowledge or not "ack(friendly)" in self.knowledge or "" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge :
+								print("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge)
+								print(plane.name+"counter"+str(plane.epoch_counter)+"max "+str(self.max_epochs))
+							else:
+								reason = "no response"
+							if not "K_"+str(self.name)+"("+plane.name+"friendly)"  in self.knowledge or not "ack("+plane.name+"friendly)" in self.knowledge and ("" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
 									self.determine_closest_turret(plane)
+								
+									self.shoot_commands.add(plane.name + reason) 
+									# print("self.shoot"+self.name+plane.name + reason)
+					
 				shoot_command = "shoot"+str(plane.name)
 				#Shoot will be done in next round, first draw shots
-				if self.shoot_plane and (shoot_command in self.knowledge): #Last check is in case a plane crashed into the side of the window
-					self.shoot(plane,statistics,reason)
+				if self.shoot_plane and (shoot_command in self.knowledge): #Last check sis in case a plane crashed into the side of the window
+					self.shoot(plane,statistics)
 				self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
 				if self.shoot_plane:
 					self.model.draw_shots = True
 			
 
-	def shoot(self, plane, statistics,reason):
+	def shoot(self, plane, statistics):
+		
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
 			print("\nPLANE DESTROYED!\n")
-
+			reason = ""
+			for t in self.model.turrets:
+				if plane.name +"max epochs" in t.shoot_commands:
+					t.shoot_commands.remove(plane.name+"max epochs") 
+					reason = 'max epochs'
+				elif plane.name +"no response" in t.shoot_commands:
+					if reason is not "max epochs":
+						reason = "no response"
+					# print("inside shoot"+t.name + reason)
+					t.shoot_commands.remove(plane.name+"no response")
+			
 			if not plane.isdestroyed:
-				print("plane %s shot down by %s. Reason: %s" % (plane.name, self.name, reason))
+				print("plane %s shot down by %s. Reason: %s" % (plane.name, self.name,reason))
 				plane.destroy()
 				for turret in self.model.turrets:
 					turret.clean_up_messages(plane)
