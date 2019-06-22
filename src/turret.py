@@ -123,15 +123,15 @@ class Turret(Agent):
 								
 									self.shoot_commands.add(plane.name + reason) 
 									# print("self.shoot"+self.name+plane.name + reason)
-							
-							shoot_command = "shoot"+str(plane.name)
-							#Shoot will be done in next round, first draw shots
-							if self.shoot_plane and (shoot_command in self.knowledge): #Last check sis in case a plane crashed into the side of the window
-								self.shoot(plane,statistics)
-							self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
-							if self.shoot_plane:
-								self.model.draw_shots = True
-					
+						
+					shoot_command = "shoot"+str(plane.name)
+					#Shoot will be done in next round, first draw shots
+					if self.shoot_plane and (shoot_command in self.knowledge): #Last check sis in case a plane crashed into the side of the window
+						self.shoot(plane,statistics)
+					self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
+					if self.shoot_plane:
+						self.model.draw_shots = True
+				
 
 	def shoot(self, plane, statistics):
 		
