@@ -51,6 +51,16 @@ class Turret(Agent):
 				count += 1
 		# print("COUNT: ", count)
 		return count
+	def determine_knowledge(self,plane):
+		for knowledge in self.knowledge:
+			if plane.name in knowledge:
+				print(knowledge)
+			if not "K_"+str(self.name)+"("+plane.name+"friendly)" in knowledge and self.model.messageprotocol is "A1":
+				return True
+			if not "ack("+plane.name+"friendly)" in self.knowledge and self.model.messageprotocol is not "A1":
+				return True
+
+		return False
 
 	def run_epoch(self, statistics,max_epochs):
 		if max_epochs != self.max_epochs:
@@ -100,31 +110,36 @@ class Turret(Agent):
 						if sender == plane:
 							# print(self.knowledge)
 						
-							if not "K_"+str(self.name)+"("+plane.name+"friendly)" in self.knowledge or not "ack("+plane.name+"friendly)" in self.knowledge and "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
+							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
 								reason = "max epochs"
+								
 								print("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge)
 								print(plane.name+"counter"+str(plane.epoch_counter)+"max "+str(self.max_epochs))
 							else:
 								reason = "no response"
-							if not "K_"+str(self.name)+"("+plane.name+"friendly)"  in self.knowledge or not "ack("+plane.name+"friendly)" in self.knowledge and ("" in message or "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
+
+							if "K_"+str(plane.name)+"(K_"+ str(self.name)+"(no response))" in self.knowledge or ("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
 									self.determine_closest_turret(plane)
 								
 									self.shoot_commands.add(plane.name + reason) 
 									# print("self.shoot"+self.name+plane.name + reason)
+							
+							shoot_command = "shoot"+str(plane.name)
+							#Shoot will be done in next round, first draw shots
+							if self.shoot_plane and (shoot_command in self.knowledge): #Last check sis in case a plane crashed into the side of the window
+								self.shoot(plane,statistics)
+							self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
+							if self.shoot_plane:
+								self.model.draw_shots = True
 					
-				shoot_command = "shoot"+str(plane.name)
-				#Shoot will be done in next round, first draw shots
-				if self.shoot_plane and (shoot_command in self.knowledge): #Last check sis in case a plane crashed into the side of the window
-					self.shoot(plane,statistics)
-				self.shoot_plane = (shoot_command in self.knowledge) and (self.verify_turret_identifications(shoot_command) >= self.model.turret_enemy_threshold)
-				if self.shoot_plane:
-					self.model.draw_shots = True
-			
 
 	def shoot(self, plane, statistics):
 		
 		if np.linalg.norm(self.pos - plane.pos) <= self.turret_range+0.5: #plane is in range of the turret
 			print("\nPLANE DESTROYED!\n")
+			# for knowledge in self.knowledge:
+			# 	if plane.name in knowledge:
+			# 		print(knowledge)
 			reason = ""
 			for t in self.model.turrets:
 				if plane.name +"max epochs" in t.shoot_commands:

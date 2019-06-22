@@ -208,7 +208,7 @@ class GUI(Frame):
 		try:
 			new_num = int(self.numepochs_entry.get())
 			if new_num > 1:
-				self.demo.model.c = new_num
+				self.demo.model.numepochs = new_num
 			else:
 				print("Maximum number of messages must be > 1")
 		except:

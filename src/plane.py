@@ -22,7 +22,7 @@ class Plane(Agent):
 			self.correct_identification = True
 			return "key"+str(self.name)
 		else: 
-			return ""
+			return "no response"
 
 	def run_epoch(self):
 		self.epoch_counter += 1
