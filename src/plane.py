@@ -41,10 +41,10 @@ class Plane(Agent):
 					self.send_new_message(sender,self.reply)
 				if not self.correct_identification and not "K_%s()" % sender.name in self.knowledge and not "ack()" in self.knowledge:
 					self.send_new_message(sender, self.reply)
-		if "indentified as friendly" in self.knowledge:
-			for (message, identifier, sender) in self.received_messages:
-				if self.correct_identification and not "K_"+str(sender.name)+"("+self.name+"friendly)" in self.knowledge and not "ack("+str(self.name)+"friendly)" in self.knowledge:
-					self.send_new_message(sender,str(self.name)+"friendly")
+		# if "indentified as friendly" in self.knowledge:
+		# 	for (message, identifier, sender) in self.received_messages:
+		# 		if self.correct_identification and not "K_"+str(sender.name)+"("+self.name+"friendly)" in self.knowledge and not "ack("+str(self.name)+"friendly)" in self.knowledge:
+		# 			self.send_new_message(sender,str(self.name)+"friendly")
 
 	def destroy(self):
 		print('plane crashed')

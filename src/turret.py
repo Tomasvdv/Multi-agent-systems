@@ -103,12 +103,14 @@ class Turret(Agent):
 						self.to_model()
 											
 						
-						if sender == plane and  "key"+str(plane.name) in message  and not "K_%s(indentified as friendly)" % self.name in self.knowledge:
-							self.send_new_message(plane, "indentified as friendly")
+						if sender == plane and  "key"+str(plane.name) in message:
+							if  not "K_"+str(self.name)+"("+str(plane.name)+"friendly)"  in self.knowledge:
+								self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"friendly)")
+							
 						
 						if sender == plane:
 							# print(self.knowledge)
-						
+							
 							if "K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge:
 								reason = "max epochs"
 								
@@ -117,7 +119,7 @@ class Turret(Agent):
 							else:
 								reason = "no response"
 
-							if ("K_"+str(plane.name)+"(K_"+ str(self.name)+"(no response))" in self.knowledge or "ack(no response)" in self.knowledge) and self.determine_knowledge(plane) or ("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
+							if ("K_"+str(plane.name)+"(K_"+ str(self.name)+"(no response))" in self.knowledge) or ("no response" in self.knowledge and self.model.messageprotocol is not "A1") and self.determine_knowledge(plane) or ("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.max_epochs)+"epochs)" in self.knowledge) :
 									self.determine_closest_turret(plane)
 								
 									self.shoot_commands.add(plane.name + reason) 
