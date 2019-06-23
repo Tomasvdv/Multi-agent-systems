@@ -79,20 +79,44 @@ During the simulation the turret will keep track of each plane in its own range.
 When it is the case the plane has been encountered before, the turret will update its knowledge about how long the plane is already in sight.
 Next the turret will loop through its received messages and if one message is from a plane and it contains the message "key" and its name, the turret will add to its knowledge he knows that plane is friendly.
 
+The turret can decide to tricker the shooting procedure if:
 
-In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We can change the experiment parameters in two different categories; the envoriment of the simulation itself or the message protocols between agents.
-<br />
-There are 2 types of agents in the simulated model. Planes and turrets. A plane can either be enemy or friendly w.r.t. the turrets. A turret is a ground based air defense unit that is supposed to shoot down enemy planes that are within its shooting range.
+* K_turret(K_plane(K_turret(no response)))
+* it is the case the plane is not known as friendly
+* it has been in sight for too long.
+When the turret decides its time to shoot it will loop through all turrets locations and determines the closest turret relative to the plane. 
+In the next step of the simulation the turret will open fire if knows it needs to shoot down the plane and if it is the case the confidence threshold of number of turrets which identifies the plane as foe has been met.
 
-<b>The envoriment: </b>
- 1. The amount of turrets in the simulation.
- 2. The range of the turrets.
- 3. The amount of (friendly) planes in the simulation.
- 4. <!-- New agents for detecting the planes, while turrets can only shoot the planes. -->
-<br /><br /><b>The message protocols: </b>
- * The amount of messages correctly received can be changed.
- * False information can be inserted to interfere with the simulation.
- * If one category of agents is responsible for detecting the planes and others for shooting different kinds of messages can be tested.
+<b> Plane</b>
+The plane has at initialization a position in the border of our simulation world. It will receive a constant speed of one tile per iteration of the simulation in one direction and it will be following that direction until it will fly outside the world or until it has been shot.
+
+If a plane has "identify" in its knowledge base it will sent the message: K_sender(key+name) if its friendly, else it will sent the message: no response which represents no repsonse from the plane.
+
+There is also a function to destroy the plane if it is outside the simulation world.
+
+#### Experiment settings
+
+In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We will measure the following data points from the simulation:
+* Total of planes generated
+* Friendly planes generated
+* Enemy planes generated
+* Friendly planes in range
+* Enemy planes in range
+* Friendly planes shot max epochs
+* Enemy planes shot no response
+* Enemy planes shot epoch counter
+
+In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
+
+The following settings will be tested during the experiment:
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1 and 2
+* Number of epochs before shot: 20,15,10,15
+* Failure probability: 0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
+
+
  
 #### TCP protocol
 TCP labels its packets (bits of information) with numbers. It also uses a deadline before which a packet needs to reach its destination (time-out). For each received packet, the sender is notified by means of an acknowledgment. If a time-out occurs, no acknoledgment is recheived, on which the source sends another copy of the missing/delayed packet. In this way, packets are always assembled in order, without missing packets and in this way the protocol is robust against delays. 
