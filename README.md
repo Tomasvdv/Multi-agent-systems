@@ -3,8 +3,7 @@ The code for this project has been written in Python3 on Ubuntu.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
 2. Move to the right directory: ```cd Multi-agent-systems/src```
 3. If you don't have Python3 with tkinter install it with:```sudo apt-get install python3-tk ``` 
-3.1. Use pip 3 to install: ```sudo pip3 install networkx``` 
-3.2 ```sudo pip3 install matplotlib```
+3.1. Use pip 3 to install: ```sudo pip3 install networkx```and```sudo pip3 install matplotlib```
 4. Then run the code with: ```python3 main.py```
 <!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
@@ -50,7 +49,7 @@ This research focuses on analyzing a Friend or Foe Identification System (IFF). 
 Radar-based IFF systems generally consist of a sender that sends a (possibly encrypted) message to a plane. The plane's transponder responds by sending a message back to the sender, which is verified by the sender. The sender can be based on many platforms, e.g. ground defense bases, ships, other planes, etc. IFF systems are only able to positively identify friends. It is not the case (as the name may suggest) that IFF systems are able to positively identify enemy aircraft. 
 The latter is due to the fact that the sender can only derive that a plane is friendly if it gets a response back from the plane, but if it doesn't get a response, the plane does not neccessarily have to be a foe. 
 
-We decided to build an aplication using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the interal settings of the simulation influence the overall misclasification rate of friendly planes. The main research question is: How many friendly planes will be misclassified as enemy and which factors led to this misclassification?  
+We decided to build an aplication using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the interal settings of the simulation influence the overall misclasification rate of friendly planes. The main research question is: How many friendly planes will be misclassified as enemy and which factors led to this misclassification? In the methods section all internal mechanism will be explained w.r.t the interal knowledge of an agent about the world and how this knowledge expands during the simulation. Also the message protocol we implemented will be discussed with an example how these message lead to a certain conclusion within the knowledge base of the agent. One other element is the influences of the different simulation parameters on the knowledge of an agent about the world. 
 
 ### Methods
 In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We can change the experiment parameters in two different categories; the envoriment of the simulation itself or the message protocols between agents.
