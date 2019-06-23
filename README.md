@@ -49,9 +49,29 @@ This research focuses on analyzing a Friend or Foe Identification System (IFF). 
 Radar-based IFF systems generally consist of a sender that sends a (possibly encrypted) message to a plane. The plane's transponder responds by sending a message back to the sender, which is verified by the sender. The sender can be based on many platforms, e.g. ground defense bases, ships, other planes, etc. IFF systems are only able to positively identify friends. It is not the case (as the name may suggest) that IFF systems are able to positively identify enemy aircraft. 
 The latter is due to the fact that the sender can only derive that a plane is friendly if it gets a response back from the plane, but if it doesn't get a response, the plane does not neccessarily have to be a foe. 
 
-We decided to build an aplication using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the interal settings of the simulation influence the overall misclasification rate of friendly planes. The main research question is: How many friendly planes will be misclassified as enemy and which factors led to this misclassification? In the methods section all internal mechanism will be explained w.r.t the interal knowledge of an agent about the world and how this knowledge expands during the simulation. Also the message protocol we implemented will be discussed with an example how these message lead to a certain conclusion within the knowledge base of the agent. One other element is the influences of the different simulation parameters on the knowledge of an agent about the world. 
+We decided to build an aplication using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the interal settings of the simulation influence the overall misclasification rate of friendly planes. The main research question is: How many friendly planes will be misclassified as enemy and which factors led to this misclassification? In the methods section all internal mechanism will be explained w.r.t the interal knowledge of an agent about the world and how this knowledge expands during the simulation. Also the message protocol we implemented will be discussed with an example how these message lead to a certain conclusion within the knowledge base of the agent. One other element is the influence of the different simulation parameters on the knowledge of an agent about the world. 
 
 ### Methods
+First we are going to explain the core mechanism generating agents, the knowledge which can be aquired by those agents and the message system which enables the agents to share their knowledge with other agents.
+
+In our simulation we have to types of agents, namely planes and turrets. Before we explain the specifics about our implementation of planes and turrets we need to explain the basic knowledge and message system first.
+
+Each agent has it own list of sent messages, received messages and an inbox. At every epoch of the simulation an agent will check its inbox and perform the following action for each message in its inbox:
+* Add the content of the message to its knowledge base
+* Add the message to its list of received messages
+* Add the message to a message manager for display in the application
+* Send a reply to the sender
+The reply routine works as follows:
+
+* In case of our implementation of A1 the reply will be: K_agent1(message)
+* This reply is added to the agents knowledge base
+* If it is the case that K_a(K_b(K_a(K_b(message)))) set the message as confirmed
+* Else sent back replies until it is the case that K_a(K_b(K_a(K_b(message))))
+
+After all messages in the inbox are handled the agent will check whether one of its previous messages hasn't reached the other agent yet. It will resend all messages which aren't confirmed yet.
+
+<b>Turret<b />
+
 In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We can change the experiment parameters in two different categories; the envoriment of the simulation itself or the message protocols between agents.
 <br />
 There are 2 types of agents in the simulated model. Planes and turrets. A plane can either be enemy or friendly w.r.t. the turrets. A turret is a ground based air defense unit that is supposed to shoot down enemy planes that are within its shooting range.
