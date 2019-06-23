@@ -1,8 +1,9 @@
 # Run instructions
 The code for this project has been written in Python3.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
-2. move to the right directory: ```cd Multi-agent-systems/src```
-3. Then run the code with: ```python3 main.py```
+2. Move to the right directory: ```cd Multi-agent-systems/src```
+3. If you don't have Python3 with tkinter install it with:```sudo apt-get install python3-tk ``` 
+4. Then run the code with: ```python3 main.py```
 <!-- 3. When pushing the 'draw' button, the scene will change (i.e. the plane will fly over the grid cells). -->
 
 <!--
