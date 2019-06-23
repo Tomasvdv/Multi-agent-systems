@@ -53,7 +53,7 @@ We decided to build an aplication using Python3 to simulate an anti-aircraft sys
 
 ### Methods
 First we are going to explain the core mechanism generating agents, the knowledge which can be aquired by those agents and the message system which enables the agents to share their knowledge with other agents.
-
+#### Agents
 In our simulation we have to types of agents, namely planes and turrets. Before we explain the specifics about our implementation of planes and turrets we need to explain the basic knowledge and message system first.
 
 Each agent has it own list of sent messages, received messages and an inbox. At every epoch of the simulation an agent will check its inbox and perform the following action for each message in its inbox:
@@ -70,7 +70,15 @@ The reply routine works as follows:
 
 After all messages in the inbox are handled the agent will check whether one of its previous messages hasn't reached the other agent yet. It will resend all messages which aren't confirmed yet.
 
-<b>Turret<b />
+<b>Turret</b>
+
+At initialization each turret will send its position to other turrets. This will ensure its common knowledge for the turrets were each turret is relative to a plane and to enable a different turret to order another turret to fire when a plane is close.
+Each turret has also a specific range in which it can spot planes. 
+During the simulation the turret will keep track of each plane in its own range. If it is not encountered before by the turret it will first broadcast the planes position to the other turrets. It will sent a message to the plane to identify itself.
+
+When it is the case the plane has been encountered before, the turret will update its knowledge about how long the plane is already in sight.
+Next the turret will loop through its received messages and if one message is from a plane and it contains the message "key" and its name, the turret will add to its knowledge he knows that plane is friendly.
+
 
 In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We can change the experiment parameters in two different categories; the envoriment of the simulation itself or the message protocols between agents.
 <br />
