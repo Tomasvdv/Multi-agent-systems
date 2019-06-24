@@ -209,12 +209,17 @@ Simulation C:
 
 
 ### Results
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
 <p align="center">
   <img width="500" height="300" src="/img/threshold.png">
 </p>
+<p align="center">
+  <img width="500" height="300" src="/img/message_fail.png">
+</p>
+
 
 ### Discussion
 When the core program works as we want it to we have several possible extensions planned for the program.
