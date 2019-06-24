@@ -136,7 +136,9 @@ If a plane has "identify" in its knowledge base and the plane is friendly, it wi
 
 #### Experiment settings
 
-In this research we will perform multiple experiments to see how certain parameters setting effect amount of correctly identified planes. We will measure the following data points from the simulation:
+In this research we will perform multiple experiments to see how certain parameters setting affect the number of correctly identified planes. 
+
+The following data points will be measured in the simulation:
 * Total of planes generated
 * Friendly planes generated
 * Enemy planes generated
@@ -148,39 +150,11 @@ In this research we will perform multiple experiments to see how certain paramet
 
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
-There are three different scenarios in which we will test different settings of the simulation.
+Three different experiments will be done which will test different settings of the simulation.
+In the settings below, Turret confidence threshold denotes the amount of turrets that need to mark a plane as an enemy before it can be shot down. The number of epochs parameter denotes the number of epochs that need to be passed without a plane sending a response to a turret before it can be marked as an enemy by a turret.
+Failure probability denotes the probability that a message is not delivered to its recipient.
 
-For A1 message protocol 
-</br>
-Simulation A: 
-* Number of planes 1
-* Number of turrets 3
-* Range of turrets 4
-* Turret confidence threshold 1
-* Number of epochs before shot: 8,7,6,5,4,3,2
-* Failure probability: 0.1
-
-Simulation B: 
-
-* Number of planes 1
-* Number of turrets 3
-* Range of turrets 4
-* Turret confidence threshold 1,2,3
-* Number of epochs before shot: 8
-* Failure probability: 0.1
-
-Simulation C: 
-
-* Number of planes 1
-* Number of turrets 3
-* Range of turrets 4
-* Turret confidence threshold 1
-* Number of epochs before shot: 8
-* Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
-
-For TCP message protocol
-
-Simulation A: 
+Settings for the experiment on number of epochs: 
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
@@ -189,7 +163,7 @@ Simulation A:
 * Failure probability: 0.1
 
 
-Simulation B: 
+Settings for the experiment on the turret confidence threshold: 
 
 * Number of planes 1
 * Number of turrets 3
@@ -198,7 +172,7 @@ Simulation B:
 * Number of epochs before shot: 8
 * Failure probability: 0.1
 
-Simulation C: 
+Settings for the experiment on Failure probability: 
 
 * Number of planes 1
 * Number of turrets 3
@@ -209,7 +183,7 @@ Simulation C:
 
 
 ### Results
-The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom respectively) for the experiments on the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
@@ -223,11 +197,16 @@ The results for the experiments are shown in the barplots below. These are the r
 
 ### Conclusion and discussion
 W.r.t the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP outperforms A1 when the number of epochs is low (4 in the barplot), and A1 outperforms TCP when the number of epochs is high (8 in the barplot). The TCP protocol is faster than the A1 protocol. Therefore, when the plane is allowed little epochs to finish its protocol with a turret, the turret may not be able to identify the plane as friendly in time, and will shoot at the plane as a result. When given more epochs to finish its protocol, A1 performs allows for a situation in which friendly planes are never shot down. The same reasoning seems to hold for the statistics of enemy planes. Note that this is not enemy/friendly 
-<br />
+<br \>
 
 
-When the core program works as we want it to we have several possible extensions planned for the program.
-It might be interesting to split the current turret agent up into two separate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes and has to rely on the radar station to give it commands.
+#### The simulation
+The simulation turned out very nicely, with a large number of parameters that can be altered to test their influence. The speed at which the simulation executes makes for very easy testing of new settings. The only bottleneck of the system is when a large (bigger than five) number of planes are all flying in the simulation at once, as all turrets keep each other updated on the current state of all planes they see. Overal the simulation turned out very nicely and we are very pleased with the final product.
 
-Another interesting extension would be to expand on or change the communication protocols it uses and the amount of certainty that a turret needs to have before shooting down a plane.
 
+#### Future research and possible extensions
+There were several interesting extensions that were thought up while working on the project, that could not be included as the scale of the project would become too big. 
+
+One such extension would be to split the current turret agent up into two separate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes and has to rely on the radar station to give it commands.
+
+Another interesting extension would be to include a third messaging protocol to the system and see how it compares to the two already in place.
