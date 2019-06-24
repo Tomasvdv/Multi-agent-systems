@@ -42,7 +42,7 @@ In the left panel information about the model can be requested. There are 3 butt
 3. *Show messages*: Shows the messages for all turrets sent for a particular run. 
 
 # Multi-agent-systems Project Report
-## Identification, Friend or Foe system
+## Identification Friend or Foe system
 ### Introduction
 This research focuses on analyzing an Identification, Friend or Foe (IFF) System. Since the invention of radar for localizing enemy planes in WWII, the problem of identifying planes as either friend or foe has been present. In WW1 the planes were relatively slow and performed nearly exclusively close quarters combat (dogfights) and no targeted strikes, the planes could be marked with colours to help pilots distinguish enemy planes from friendly planes. However, as planes became faster, started flying at higher altitudes, and the range of their weapons increased, this identification method became obsolete. In WWII the first functional IFF systems were invented and put into use to prevent friendly fire incidents and to aid the overall decision making process in tactical plans. IFF was therefore originally developed and used by the military, and only later adapted and put in use for civilian air traffic.
 <br />
