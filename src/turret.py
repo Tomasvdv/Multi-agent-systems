@@ -26,22 +26,23 @@ class Turret(Agent):
 
 	def determine_closest_turret(self,plane):
 		for turret in self.model.turrets:
-			for knowledge in self.knowledge:
-				if "K_"+str(self.name) + "("+str(turret.name)+"at" in knowledge or "("+str(turret.name)+"at" in knowledge :
-					
-					idx = knowledge.find('at')
-					x = int(knowledge[idx+2])
-					y = int(knowledge[idx+3])
-					pos = np.array((x, y))
-					# self.knowledge.add("K_"+str(self.name)+"("+str(turret.name)+ 'at'+str(x)+str(y)+")")
-					if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
-						self.send_new_message(turret,"shoot"+plane.name)
-						# print("Shoot")
-					# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
-		
+			# for knowledge in self.knowledge:
+			# 	if "K_"+str(self.name) + "("+str(turret.name)+"at" in knowledge or "("+str(turret.name)+"at" in knowledge :
+				pos = turret.pos
+				# idx = knowledge.find('at')
+				# x = int(knowledge[idx+2])
+				# y = int(knowledge[idx+3])
+				# pos = np.array((x, y))
+				# self.knowledge.add("K_"+str(self.name)+"("+str(turret.name)+ 'at'+str(x)+str(y)+")")
+				if np.linalg.norm(pos - plane.pos) <= (self.turret_range + 0.5):
+					self.send_new_message(turret,"shoot"+plane.name)
+					# print("Shoot")
+				# 	# print("broadcast: "+str(sender.name)+ "is closest to "+plane.name)
+	
 	def update_plane_knowledge(self,plane):
 		self.planecounters[plane] += 1 ## set nr of messages sent to 1
 		self.knowledge.add("K_"+str(self.name)+"("+str(plane.name)+"is in sight for "+str(self.planecounters[plane])+"epochs)")
+		self.tracked_planes = [plane for plane in self.tracked_planes if not plane.isdestroyed]
 
 	#Verifies how many turrets have decided that a particular plane should be shot
 	def verify_turret_identifications(self, shoot_command):
@@ -67,9 +68,9 @@ class Turret(Agent):
 		if max_epochs != self.max_epochs:
 			self.max_epochs = max_epochs
 
-		if not self.broadcasted_pos:
-			self.broadcast(str(self.name) + "at"+ str(self.x) +str(self.y))
-			self.broadcast_pos = True
+		# if not self.broadcasted_pos:
+		# 	self.broadcast(str(self.name) + "at"+ str(self.x) +str(self.y))
+		# 	self.broadcasted_pos = True
 
 		#resend possibly missed messages
 		self.update()

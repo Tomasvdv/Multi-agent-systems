@@ -51,7 +51,7 @@ class Plane(Agent):
 		if self in self.model.planes: 
 			self.model.planes.remove(self)
 		for turret in self.model.turrets:
-					turret.clean_up_messages(self)
+			turret.clean_up_messages(self)
 		self.isdestroyed = True
 		self.isvisible = False
 		self.model.draw_shots = False
