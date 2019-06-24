@@ -150,7 +150,8 @@ In each experiment there will be 1000 planes generated in total. The amount of p
 
 There are three different scenarios in which we will test different settings of the simulation.
 
-For message protocol A1
+For A1 message protocol 
+</br>
 Simulation A: 
 * Number of planes 1
 * Number of turrets 3
@@ -158,6 +159,35 @@ Simulation A:
 * Turret confidence threshold 1
 * Number of epochs before shot: 8,7,6,5,4,3,2
 * Failure probability: 0.1
+
+Simulation B: 
+
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1,2,3
+* Number of epochs before shot: 8
+* Failure probability: 0.1
+
+Simulation C: 
+
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1
+* Number of epochs before shot: 8
+* Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
+
+For TCP message protocol
+
+Simulation A: 
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1
+* Number of epochs before shot: 8,4
+* Failure probability: 0.1
+
 
 Simulation B: 
 
