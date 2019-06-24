@@ -16,6 +16,6 @@ class Statistics():
 	def showStatistics(self):
 		if self.init != 1:
 			self.model.text.remove()
-		self.sentence = "Statistics \nTotal of planes generated:, " +str(self.friendly_planes_generated + self.enemy_planes_generated)+"\nFriendly planes generated;, "+str(self.friendly_planes_generated)+"\nEnemy planes generated;, "+str(self.enemy_planes_generated)+"\nFriendly planes in range:, "+str(self.friendly_planes_in_range) + "\nEnemy planes in range:, "+str(self.enemy_planes_in_range) + "\nFriendly planes shot max epochs:, "+str(self.friendly_planes_shot_epoch_counter)+"\nEnemy planes shot no response:, "+str(self.enemy_planes_shot_no_reponse)+"\nEnemy planes shot epoch counter:, "+str(self.enemy_planes_shot_epoch_counter)
+		self.sentence = "Statistics \nTotal of planes generated: " +str(self.friendly_planes_generated + self.enemy_planes_generated)+"\nFriendly planes generated: "+str(self.friendly_planes_generated)+"\nEnemy planes generated: "+str(self.enemy_planes_generated)+"\nFriendly planes in range: "+str(self.friendly_planes_in_range) + "\nEnemy planes in range: "+str(self.enemy_planes_in_range) + "\nFriendly planes shot max epoch reached: "+str(self.friendly_planes_shot_epoch_counter)+"\nEnemy planes shot no response:, "+str(self.enemy_planes_shot_no_reponse)+"\nEnemy planes shot max epoch reached: "+str(self.enemy_planes_shot_epoch_counter)
 		self. init = 0
 		self.model.text.print(self.sentence,"")
