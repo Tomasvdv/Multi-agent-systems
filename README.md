@@ -1,4 +1,4 @@
-# Run instructions
+# Running instructions
 The code for this project has been written in Python3 on Ubuntu.
 1. Clone the git repository: ```git clone https://github.com/Tomasvdv/Multi-agent-systems.git```
 2. Move to the right directory: ```cd Multi-agent-systems/src```
@@ -221,10 +221,7 @@ The results for the experiments are shown in the barplots below. These are the r
 </p>
 
 
-### Conclusion and discussion
-W.r.t the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP performs 
-
-
+### Discussion
 When the core program works as we want it to we have several possible extensions planned for the program.
 It might be interesting to split the current turret agent up into two separate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes and has to rely on the radar station to give it commands.
 
