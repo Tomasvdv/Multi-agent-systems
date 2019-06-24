@@ -28,7 +28,7 @@ There are a few entry fields.
 2. *Number of turrets*: adjusts the number of turrets in the simulation. 
 3. *Turret range*: adjusts the range of the turrets.
 4. *Turret confidence threshold*: the number of turrets that must agree on shooting down a plane before shooting. 
-5. *Number of epochs*: the number of steps that a plane can live.
+5. *Number of epochs*: the amount of steps that a plane can live.
 6. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
 7. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
 
@@ -40,17 +40,6 @@ In the left panel information about the model can be requested. There are 3 butt
 1. *Show statistics*: shows the overall statistics of the model over all epochs until so far. 
 2. *Show knowledge base*: shows the knowledge base of a particular turret. First select this button, then click on a turret to view its knowledge base at that moment. The knowledge base is cleared after a run (i.e. the plane has crashed or the plane has been destroyed). 
 3. *Show messages*: Shows the messages for all turrets sent for a particular run. 
-
-### Statistics panel
-1. *Total of planes generated*: Total number of planes generated in the simulation.
-2. *Friendly planes generated*: Total number of friendly planes generated in the simulation.
-3. *Enemy planes generated*: Total number of enemy planes generated in the simulation.
-4. *Friendly planes in range*: Total number of friendly planes that were in range of at least one turret.
-5. *Enemy planes in range*: Total number of enemy planes that were in range of at least one turret. 
-6. *Friendly planes shot max epochs reached*: Total number of friendly planes shot due the maximum life time before identification has been reached.
-7. *Enemy planes shot no response*: Total number of enemy planes shot due to no response on the indentification message.
-8. *Enemy planes shot max epochs reached*: Total number of enemy planes shot due the maximum life time before identification has been reached.
-
 
 # Multi-agent-systems Project Report
 ## Identification, Friend or Foe system
@@ -147,9 +136,7 @@ If a plane has "identify" in its knowledge base and the plane is friendly, it wi
 
 #### Experiment settings
 
-In this research we will perform multiple experiments to see how certain parameters setting affect the number of correctly identified planes. 
-
-The following data points will be measured in the simulation:
+In this research we will perform multiple experiments to see how certain parameters setting effect amount of correctly identified planes. We will measure the following data points from the simulation:
 * Total of planes generated
 * Friendly planes generated
 * Enemy planes generated
@@ -161,20 +148,19 @@ The following data points will be measured in the simulation:
 
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
-Three different experiments will be done which will test different settings of the simulation.
-In the settings below, Turret confidence threshold denotes the amount of turrets that need to mark a plane as an enemy before it can be shot down. The number of epochs parameter denotes the number of epochs that need to be passed without a plane sending a response to a turret before it can be marked as an enemy by a turret.
-Failure probability denotes the probability that a message is not delivered to its recipient.
+There are three different scenarios in which we will test different settings of the simulation.
 
-Settings for the experiment on number of epochs: 
+For A1 message protocol 
+</br>
+Simulation A: 
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
 * Turret confidence threshold 1
-* Number of epochs before shot: 8,4
+* Number of epochs before shot: 8,7,6,5,4,3,2
 * Failure probability: 0.1
 
-
-Settings for the experiment on the turret confidence threshold: 
+Simulation B: 
 
 * Number of planes 1
 * Number of turrets 3
@@ -183,7 +169,36 @@ Settings for the experiment on the turret confidence threshold:
 * Number of epochs before shot: 8
 * Failure probability: 0.1
 
-Settings for the experiment on Failure probability: 
+Simulation C: 
+
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1
+* Number of epochs before shot: 8
+* Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
+
+For TCP message protocol
+
+Simulation A: 
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1
+* Number of epochs before shot: 8,4
+* Failure probability: 0.1
+
+
+Simulation B: 
+
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1,2,3
+* Number of epochs before shot: 8
+* Failure probability: 0.1
+
+Simulation C: 
 
 * Number of planes 1
 * Number of turrets 3
@@ -194,7 +209,7 @@ Settings for the experiment on Failure probability:
 
 
 ### Results
-The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the number of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability. All other parameters are kept constant using the values given in the methods section.
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
@@ -206,7 +221,11 @@ The results for the experiments are shown in the barplots below. These are the r
 </p>
 
 
-### Discussion
+### Conclusion and discussion
+W.r.t the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP outperforms A1 when the number of epochs is low (4 in the barplot), and A1 outperforms TCP when the number of epochs is high (8 in the barplot). The TCP protocol is faster than the A1 protocol. Therefore, when the plane is allowed little epochs to finish its protocol with a turret, the turret may not be able to identify the plane as friendly in time, and will shoot at the plane as a result. When given more epochs to finish its protocol, A1 performs allows for a situation in which friendly planes are never shot down. The same reasoning seems to hold for the statistics of enemy planes. Note that this is not enemy/friendly 
+<br \>
+
+
 When the core program works as we want it to we have several possible extensions planned for the program.
 It might be interesting to split the current turret agent up into two separate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes and has to rely on the radar station to give it commands.
 
