@@ -28,7 +28,7 @@ There are a few entry fields.
 2. *Number of turrets*: adjusts the number of turrets in the simulation. 
 3. *Turret range*: adjusts the range of the turrets.
 4. *Turret confidence threshold*: the number of turrets that must agree on shooting down a plane before shooting. 
-5. *Number of epochs*: the amount of steps that a plane can live.
+5. *Number of epochs*: the number of steps that a plane can live.
 6. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
 7. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
 
@@ -136,7 +136,9 @@ If a plane has "identify" in its knowledge base and the plane is friendly, it wi
 
 #### Experiment settings
 
-In this research we will perform multiple experiments to see how certain parameters setting effect amount of correctly identified planes. We will measure the following data points from the simulation:
+In this research we will perform multiple experiments to see how certain parameters setting affect the number of correctly identified planes. 
+
+The following data points will be measured in the simulation:
 * Total of planes generated
 * Friendly planes generated
 * Enemy planes generated
@@ -148,39 +150,11 @@ In this research we will perform multiple experiments to see how certain paramet
 
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
-There are three different scenarios in which we will test different settings of the simulation.
+Three different experiments will be done which will test different settings of the simulation.
+In the settings below, Turret confidence threshold denotes the amount of turrets that need to mark a plane as an enemy before it can be shot down. The number of epochs parameter denotes the number of epochs that need to be passed without a plane sending a response to a turret before it can be marked as an enemy by a turret.
+Failure probability denotes the probability that a message is not delivered to its recipient.
 
-For A1 message protocol 
-</br>
-Simulation A: 
-* Number of planes 1
-* Number of turrets 3
-* Range of turrets 4
-* Turret confidence threshold 1
-* Number of epochs before shot: 8,7,6,5,4,3,2
-* Failure probability: 0.1
-
-Simulation B: 
-
-* Number of planes 1
-* Number of turrets 3
-* Range of turrets 4
-* Turret confidence threshold 1,2,3
-* Number of epochs before shot: 8
-* Failure probability: 0.1
-
-Simulation C: 
-
-* Number of planes 1
-* Number of turrets 3
-* Range of turrets 4
-* Turret confidence threshold 1
-* Number of epochs before shot: 8
-* Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
-
-For TCP message protocol
-
-Simulation A: 
+Settings for the experiment on number of epochs: 
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
@@ -189,7 +163,7 @@ Simulation A:
 * Failure probability: 0.1
 
 
-Simulation B: 
+Settings for the experiment on the turret confidence threshold: 
 
 * Number of planes 1
 * Number of turrets 3
@@ -198,7 +172,7 @@ Simulation B:
 * Number of epochs before shot: 8
 * Failure probability: 0.1
 
-Simulation C: 
+Settings for the experiment on Failure probability: 
 
 * Number of planes 1
 * Number of turrets 3
@@ -209,7 +183,7 @@ Simulation C:
 
 
 ### Results
-The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the number of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability. All other parameters are kept constant using the values given in the methods section.
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
