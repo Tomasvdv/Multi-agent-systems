@@ -196,8 +196,7 @@ The results for the experiments are shown in the barplots below. These are the r
 
 
 ### Conclusion and discussion
-W.r.t the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP outperforms A1 when the number of epochs is low (4 in the barplot), and A1 outperforms TCP when the number of epochs is high (8 in the barplot). The TCP protocol is faster than the A1 protocol. Therefore, when the plane is allowed little epochs to finish its protocol with a turret, the turret may not be able to identify the plane as friendly in time, and will shoot at the plane as a result. When given more epochs to finish its protocol, A1 performs allows for a situation in which friendly planes are never shot down. The same reasoning seems to hold for the statistics of enemy planes. Note that this is not enemy/friendly 
-<br \>
+W.r.t the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP outperforms A1 when the number of epochs is low (4 in the barplot), and A1 outperforms TCP when the number of epochs is high (8 in the barplot). The TCP protocol is faster than the A1 protocol. Therefore, when the plane is allowed little epochs to finish its protocol with a turret, the turret may not be able to identify the plane as friendly in time, and will shoot at the plane as a result. When given more epochs to finish its protocol, A1 performs allows for a situation in which friendly planes are never shot down. The same reasoning seems to hold for the statistics of enemy planes.
 
 
 #### The simulation
