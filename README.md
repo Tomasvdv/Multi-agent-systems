@@ -175,6 +175,12 @@ Simulation C:
 
 
 ### Results
+<p align="center">
+  <img width="500" height="300" src="/img/epochs.png">
+</p>
+<p align="center">
+  <img width="500" height="300" src="/img/threshold.png">
+</p>
 
 ### Discussion
 When the core program works as we want it to we have several possible extensions planned for the program.
