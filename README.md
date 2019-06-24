@@ -66,6 +66,8 @@ Each agent has it own list of sent messages, received messages and an inbox. At 
 * Add the message to a message manager for display in the application
 * (Optionally) send a reply to the sender to confirm that the message was received successfully.
 
+After all messages in the inbox are handled the agent will check whether one of its previous messages hasn't reached the other agent (i.e. it hasn't received a confirmation). It will resend all messages which aren't confirmed yet.
+
 ##### A1
 In the protocol A1, all agents reply to each message they receive with the fact that the contents of the message are now known by the agent. This continues until K_a(K_b(K_a(K_b(message)))) holds true in the model. 
 
@@ -78,10 +80,11 @@ The A1 protocol works as follows:
 * This process is repeated until  K_a(K_b(K_a(K_b(message)))) is true in the model
 * If it is the case that K_a(K_b(K_a(K_b(message)))), agent a can set the message as successfully received.
 
-After all messages in the inbox are handled the agent will check whether one of its previous messages hasn't reached the other agent (i.e. it hasn't received a confirmation). It will resend all messages which aren't confirmed yet.
 
 ##### TCP
-The TCP protocol is a bit simpler than the A1 protocol. This is due to the protocol only requiring one confirmation per send message. This confirmation is called an ack (short for acknowledgement). For every message that is received, the receiving agent replies with an ack message. An interesting aspect of TCP is that it numbers the messages it sends. This is due to the protocol originally being used for transfering packets of data over the internet. By numbering the packets, the original datastream can be reconstructed by ordering the packets in the right order. As this is not nescessary in our system, the explicit numbering of messages has been omitted and is done implicitly in the system.
+The TCP protocol is a bit simpler than the A1 protocol. This is due to the protocol only requiring one confirmation per send message. This confirmation is called an ack (short for acknowledgement). For every message that is received, the receiving agent replies with an ack message. If an ack is not received within a set amount of time, the sender will assume that something went wrong and resend the packet. 
+
+An interesting aspect of TCP is that it numbers the messages it sends. This is due to the protocol originally being used for transferring packets of data over the internet. By numbering the packets, the original datastream can be reconstructed by ordering the packets in the right order. As this is not necessary in our system, the explicit numbering of messages has been omitted and is instead done implicitly in the system.
 
 The protocol can be summarized as follows:
 * Again, a and b are agents
@@ -91,7 +94,7 @@ The protocol can be summarized as follows:
 * If the ack is not received, a resends the initial message to b again.
 * This continues until all of a's messages are labeled as successfully received.
 
-The TCP protocol is much faster than the A1 protocol, as b doesn't explicitly have to know that a has successfully received its replies. As all messages only contain facts that are sent from agent to agent duplicate facts won't make a difference in the resulting knowledge base and due to the implementation the knowledge base won't contain any duplicates, so there are no risks in receiveing a message twice.
+The TCP protocol is much faster than the A1 protocol, as b doesn't explicitly have to know that a has successfully received its replies. As all messages only contain facts that are sent from agent to agent duplicate facts won't make a difference in the resulting knowledge base and due to the implementation the knowledge base won't contain any duplicates, so there are no risks in receiving a message twice.
 
 
 #### Agents
@@ -129,9 +132,7 @@ If a plane has "identify" in its knowledge base and the plane is friendly, it wi
 
 #### Experiment settings
 
-#### Experiment settings
-
-In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We will measure the following data points from the simulation:
+In this research we will perform multiple experiments to see how certain parameters setting effect amount of correctly identified planes. We will measure the following data points from the simulation:
 * Total of planes generated
 * Friendly planes generated
 * Enemy planes generated
@@ -143,7 +144,7 @@ In this research we will perform multiple exeriments to see how certain paramete
 
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
-There are three different scenarios in wich we will test different settings of the simulation.
+There are three different scenarios in which we will test different settings of the simulation.
 
 For message protocol A1
 Simulation A: 
@@ -172,6 +173,7 @@ Simulation C:
 * Number of epochs before shot: 8
 * Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
 
+
 ### Results
 
 ### Discussion
@@ -179,7 +181,4 @@ When the core program works as we want it to we have several possible extensions
 It might be interesting to split the current turret agent up into two separate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes and has to rely on the radar station to give it commands.
 
 Another interesting extension would be to expand on or change the communication protocols it uses and the amount of certainty that a turret needs to have before shooting down a plane.
-
-#### TCP protocol
-TCP labels its packets (bits of information) with numbers. It also uses a deadline before which a packet needs to reach its destination (time-out). For each received packet, the sender is notified by means of an acknowledgment. If a time-out occurs, no acknowledgment is received, on which the source sends another copy of the missing/delayed packet. In this way, packets are always assembled in order, without missing packets and in this way the protocol is robust against delays. 
 
