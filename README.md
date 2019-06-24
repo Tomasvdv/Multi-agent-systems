@@ -49,9 +49,9 @@ This research focuses on analyzing an Identification, Friend or Foe (IFF) System
 Radar-based IFF systems generally consist of a sender that sends a (possibly encrypted) message to a plane, often called a challenge. The plane's transponder responds by solving the challenge (i.e. determining the correct response) and sending a response back to the sender, which is then verified by the sender. The sender can be based on many platforms, e.g. ground defense bases, ships, other planes, etc. IFF systems are only able to positively identify friendly units. It is not the case (as the name may suggest) that IFF systems are able to positively identify enemy aircraft. 
 The latter is due to the fact that the sender can only derive that a plane is friendly if it gets a response back from the plane, but if it doesn't get a response, the plane does not necessarily have to be a foe. It could be that something went wrong during the sending or receiving of the message.
 
-We decided to build an application using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the internal settings of the simulation influence the overall misclassification rate of friendly planes. 
+We decided to build an application using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model both a version of the A1 protocol (as in the LOK-web assignment) and the Transmission Control Protocol (TCP) between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the internal settings of the simulation influence the overall misclassification rate of friendly planes. 
 
-The main research question is: How many friendly planes will be misclassified as enemies and which factors led to this misclassification? 
+The main research question is: How many friendly planes will be misclassified as enemies and which factors led to this misclassification?
 
 In the methods section all internal mechanism will be explained w.r.t. the internal knowledge of an agent about the world and how this knowledge expands during the simulation. In addition, the message protocol we implemented will be discussed with an example of how these messages lead to a certain conclusion within the knowledge base of the agent. One other element is the influence of the different simulation parameters on the knowledge of an agent about the world. 
 
@@ -151,7 +151,7 @@ The following data points will be measured in the simulation:
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
 Three different experiments will be done which will test different settings of the simulation.
-In the settings below, Turret confidence threshold denotes the amount of turrets that need to mark a plane as an enemy before it can be shot down. The number of epochs parameter denotes the number of epochs that need to be passed without a plane sending a response to a turret before it can be marked as an enemy by a turret.
+In the settings below, turret confidence threshold denotes the amount of turrets that need to mark a plane as an enemy before it can be shot down. The number of epochs parameter denotes the number of epochs that need to be passed without a plane sending a response to a turret before it can be marked as an enemy by a turret.
 Failure probability denotes the probability that a message is not delivered to its recipient.
 
 Settings for the experiment on number of epochs: 
@@ -159,7 +159,7 @@ Settings for the experiment on number of epochs:
 * Number of turrets 3
 * Range of turrets 4
 * Turret confidence threshold 1
-* Number of epochs before shot: 8,4
+* Number of epochs before shot: [8,4]
 * Failure probability: 0.1
 
 
@@ -168,7 +168,7 @@ Settings for the experiment on the turret confidence threshold:
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confidence threshold 1,2,3
+* Turret confidence threshold [1,2,3]
 * Number of epochs before shot: 8
 * Failure probability: 0.1
 
@@ -179,11 +179,13 @@ Settings for the experiment on Failure probability:
 * Range of turrets 4
 * Turret confidence threshold 1
 * Number of epochs before shot: 8
-* Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
+* Failure probability: [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
+
+The simulation speed was set high (> 1000) to generate results quickly. 
 
 
 ### Results
-The results for the experiments are shown in the barplots below. These are the results (from top to bottom respectively) for the experiments on the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability (the probability that sending a message fails, e.g. because the message was lost or corrupted). The legend positioned on the right side of the barplots first lists the used protocol (A1 or TCP) and then the type of plane. The results are given in the amount of shot down planes over the amount of planes that were in range of a turret. 
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom respectively) for the experiments on the amount of epochs a plane is allowed to pass without sending a response (it will then be marked as 'enemy'), the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability (the probability that sending a message fails, e.g. because the message was lost or corrupted). The legend positioned on the right side of the barplots first lists the used protocol (A1 or TCP) and then the type of plane. The results are given in the amount of shot down planes over the amount of planes that were in range of a turret. 
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
@@ -196,15 +198,17 @@ The results for the experiments are shown in the barplots below. These are the r
 
 
 ### Conclusion and discussion
-With regard to the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP outperforms A1 when the number of epochs is low (4 in the barplot), and A1 outperforms TCP when the number of epochs is high (8 in the barplot). The TCP protocol is faster than the A1 protocol. Therefore, when the plane is allowed little epochs to finish its protocol with a turret, the turret may not be able to identify the plane as friendly in time, and will shoot at the plane as a result. When given more epochs to finish its protocol, A1 performs allows for a situation in which friendly planes are never shot down. The same reasoning seems to hold for the statistics of enemy planes.
+With regard to the number of epochs, there is no significant difference between the A1 and TCP protocol. TCP outperforms A1 when the number of epochs is low (4 in the barplot), and A1 outperforms TCP when the number of epochs is high (8 in the barplot). The TCP protocol is faster than the A1 protocol. Therefore, when the plane is allowed little epochs to finish its protocol with a turret, the turret may not be able to identify the plane as friendly in time, and will shoot at the plane as a result. When given more epochs to finish its protocol, A1 performs allows for a situation in which friendly planes are never shot down. The same reasoning seems to hold for the result of the enemy planes.
 <br />
 When looking at the confirmation threshold (the amount of turrets that must agree on shooting down a plane before it is shot down) we see that in general the number of friendly planes that are shot decreases as the confirmation threshold increases. This is easily explained by the fact that it is 'more certain' that a plane is an friend or foe when multiple turrets gave the same label to a plane. An interesting result is that the percentage of shot down friendly planes for the A1 protocol (red bar) is almost 0 for a threshold of 1 and 3, and around 10% for a threshold of 2. One would expect higher friendly plane kills for a threshold of 1. There is no straightforward explanation for this result. Moreover, we observe that the amount of shot enemy planes also decreases as the confirmation threshold increases. So the results show that there is a tradeoff when setting a higher confirmation threshold: the higher the threshold, less friendly planes will be shot down, but also less friendly planes will be shot down. 
 <br />
 The message send fail probability results (the probability that sending a message fails, e.g. because the message was lost or corrupted) show in general that the lower the fail probability, the less enemy planes are shot down. This pattern was expected since a higher fail probability in sending messages will result in a longer time needed for the identification of a plane. Moreover, the data shows that TCP results in more kills for both friendly and enemy planes (in most cases). This may be explained by the fact that TCP is a faster protocol, enabeling the turrets to identify planes faster and shoot them down before they fly out of range. 
+<br />
+In general we can say that the protocol shoots more enemy planes than friendly planes, which is good. However, still quite a lot of friendly planes are shot down. This may be due to the 'number of epochs before shot' parameter which is still a little too low. 
 
 
 #### The simulation
-The simulation turned out very nicely, with a large number of parameters that can be altered to test their influence. The speed at which the simulation executes makes for very easy testing of new settings. The only bottleneck of the system is when a large (bigger than five) number of planes are all flying in the simulation at once, as all turrets keep each other updated on the current state of all planes they see. Overal the simulation turned out very nicely and we are very pleased with the final product.
+The simulation turned out very nicely, with a large number of parameters that can be altered to test their influence. The speed at which the simulation executes makes for very easy testing of new settings. The only bottleneck of the system is when a large (bigger than five) number of planes are all flying in the simulation at once, as all turrets keep each other updated on the current state of all planes they see. Overal the simulation works well and we are very pleased with the final product.
 
 
 #### Future research and possible extensions
