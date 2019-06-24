@@ -28,9 +28,12 @@ class Demo():
 		self.init = 1
 		self.turretCounter = 0
 		self.planeCounter = 0
+		self.clear_messages_counter = 10 #Clears all messages when planeCounter exceeds this threshold
+		self.sim_stop = 100 #Number of resets of simulation
 		self.numPlanes = 1
 		self.numTurrets = 3
 		self.turret_range = 4
+
 		
 		self.model = Model()
 		self.model.turret_enemy_threshold = 1 #Number of turrets that need to identify a plane as enemy before any of the turrets start to shoot
@@ -272,11 +275,11 @@ class Demo():
 			# self.messages_handler()
 			# self.pause_handler()
 
-		if self.simulation == 10:
+		if self.simulation == self.sim_stop:
 			self.model.text.remove()
 			self.statistics.showStatistics()
 			self.pause_handler()
-		if self.planeCounter > 99:
+		if self.planeCounter > self.clear_messages_counter:
 			[agent.empty_messages() for agent in self.model.turrets]
 			self.planeCounter = 0
 			self.simulation += 1

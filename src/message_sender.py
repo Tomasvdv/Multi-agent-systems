@@ -51,6 +51,7 @@ class Message_sender:
 		agent1.update_message_manager(agent2, message, 0, 'reply')
 		if random.random() > self.model.failprob:
 			agent2.inbox.append((agent1, message))
+			agent1.confirmed[int(agent1.messageidx)] = 1
 
 	def send_message_A1(self, agent1, agent2, message):
 		identifier = str(agent1.messageidx) + agent1.name
