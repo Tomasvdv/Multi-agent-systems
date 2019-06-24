@@ -1,0 +1,7 @@
+
+Scenario 1
+Compare results of max epochs set to 4 and 8
+
+Scenario 2
+3 turrets, equally spaced over diagonal. 
+Compare the results of turret confidence thresholds set to 1 and 2. 

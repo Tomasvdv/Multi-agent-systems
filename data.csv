@@ -1,0 +1,110 @@
+,,Scenario 1,Number of epochs,turret confidence level,turrets,,,Scenario 2,Number of epochs,turret confidence level,,,,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,8,1,"0,1,5,5,9,9",Total of planes generated:,1000,,8,1,"[3,1,3,4,3,7]",Total of planes generated:,1000,,8,1,0,"[5,1,5,5,5,9]"
+Friendly planes generated;,232,,,,,Friendly planes generated;,262,,,,,Friendly planes generated;,267,,,,,
+Enemy planes generated;,768,,,,,Enemy planes generated;,738,,,,,Enemy planes generated;,733,,,,,
+Friendly planes in range:,176,,,,,Friendly planes in range:,228,,,,,Friendly planes in range:,267,,,,,
+Enemy planes in range:,588,,,,,Enemy planes in range:,645,,,,,Enemy planes in range:,733,,,,,
+Friendly planes shot max epochs:,0,,,,,Friendly planes shot max epochs:,0,,,,,Friendly planes shot max epochs:,21,,,,,
+Enemy planes shot no response:,352,,,,,Enemy planes shot no response:,420,,,,,Enemy planes shot no response:,460,,,,,
+Enemy planes shot epoch counter:,0,,,,,Enemy planes shot epoch counter:,0,,,,,Enemy planes shot epoch counter:,11,,,,,
+,,,,,,,,,,,,,,,,,,
+,,Scenario 1,Number of epochs,turret confidence level,,,,Scenario 2,Number of epochs,turret confidence level,,,,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,7,1,,Total of planes generated:,1000,,8,2,,Total of planes generated:,1000,,8,1,0.1,"[5,1,5,5,5,9]"
+Friendly planes generated;,255,,,,,Friendly planes generated;,276,,,,,Friendly planes generated;,254,,,,,
+Enemy planes generated;,745,,,,,Enemy planes generated;,724,,,,,Enemy planes generated;,746,,,,,
+Friendly planes in range:,202,,,,,Friendly planes in range:,244,,,,,Friendly planes in range:,254,,,,,
+Enemy planes in range:,547,,,,,Enemy planes in range:,613,,,,,Enemy planes in range:,746,,,,,
+Friendly planes shot max epochs:,43,,,,,Friendly planes shot max epochs:,21,,,,,Friendly planes shot max epochs:,19,,,,,
+Enemy planes shot no response:,293,,,,,Enemy planes shot no response:,290,,,,,Enemy planes shot no response:,471,,,,,
+Enemy planes shot epoch counter:,19,,,,,Enemy planes shot epoch counter:,35,,,,,Enemy planes shot epoch counter:,8,,,,,
+,,,,,,,,,,,,,,,,,,
+,,Scenario 1,Number of epochs,turret confidence level,,Total of planes generated:,1000,,Number of epochs,turret confidence level,,,,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,6,1,,Friendly planes generated;,256,,8,3,,Total of planes generated:,1000,,8,1,0.2,"[5,1,5,5,5,9]"
+Friendly planes generated;,269,,,,,Enemy planes generated;,744,,,,,Friendly planes generated;,272,,,,,
+Enemy planes generated;,731,,,,,Friendly planes in range:,222,,,,,Enemy planes generated;,728,,,,,
+Friendly planes in range:,195,,,,,Enemy planes in range:,642,,,,,Friendly planes in range:,272,,,,,
+Enemy planes in range:,561,,,,,Friendly planes shot max epochs:,0,,,,,Enemy planes in range:,728,,,,,
+Friendly planes shot max epochs:,73,,,,,Enemy planes shot no response:,212,,,,,Friendly planes shot max epochs:,20,,,,,
+Enemy planes shot no response:,295,,,,,Enemy planes shot epoch counter:,31,,,,,Enemy planes shot no response:,419,,,,,
+Enemy planes shot epoch counter:,56,,,,,,,,,,,Enemy planes shot epoch counter:,12,,,,,
+,,,,,,,,,,,,,,,,,,
+,,Scenario 1,Number of epochs,turret confidence level,,,,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,5,1,,Friendly planes shot,confidence level,,,,,Friendly planes generated;,254,,8,1,0.2,"[5,1,5,5,5,9]"
+Friendly planes generated;,247,,,,,0,1,,,,,Enemy planes generated;,746,,,,,
+Enemy planes generated;,753,,,,,0.086065573770492,2,,,,,Friendly planes in range:,254,,,,,
+Friendly planes in range:,184,,,,,0,3,,,,,Enemy planes in range:,476,,,,,
+Enemy planes in range:,564,,,,,,,,,,,Friendly planes shot max epochs:,21,,,,,
+Friendly planes shot max epochs:,95,,,,,,,,,,,Enemy planes shot no response:,416,,,,,
+Enemy planes shot no response:,128,,,,,friendly planes shot,max epoch,friendly planes shot,max epoch,,,Enemy planes shot epoch counter:,15,,,,,
+Enemy planes shot epoch counter:,222,,,,,0,8,0.786885245901639,2,,,,,,,,,
+,,,,,,0.212871287128713,7,0.664835164835165,3,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,Number of epochs,turret confidence level,,0.374358974358974,6,0.52970297029703,4,,,Friendly planes generated;,258,,8,1,0.3,"[5,1,5,5,5,9]"
+Friendly planes generated;,255,,4,1,,0.516304347826087,5,0.516304347826087,5,,,Enemy planes generated;,742,,,,,
+Enemy planes generated;,745,,,,,0.52970297029703,4,0.374358974358974,6,,,Friendly planes in range:,258,,,,,
+Friendly planes in range:,202,,,,,0.664835164835165,3,0.212871287128713,7,,,Enemy planes in range:,742,,,,,
+Enemy planes in range:,568,,,,,0.786885245901639,2,0,8,,,Friendly planes shot max epochs:,24,,,,,
+Friendly planes shot max epochs:,107,,,,,,,,,,,Enemy planes shot no response:,424,,,,,
+Enemy planes shot no response:,36,,,,,Friendly planes shot,fail prob,,,,,Enemy planes shot epoch counter:,9,,,,,
+Enemy planes shot epoch counter:,297,,,,,0.076086956521739,0,,,,,,,,,,,
+,,,,,,0.074803149606299,0.1,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,Number of epochs,turret confidence level,,0.073529411764706,0.2,,,,,Friendly planes generated;,269,,8,1,0.4,"[5,1,5,5,5,9]"
+Friendly planes generated;,260,,3,1,,0.093023255813954,0.3,,,,,Enemy planes generated;,731,,,,,
+Enemy planes generated;,740,,,,,0.107806691449814,0.4,,,,,Friendly planes in range:,269,,,,,
+Friendly planes in range:,182,,,,,0.102880658436214,0.5,,,,,Enemy planes in range:,731,,,,,
+Enemy planes in range:,566,,,,,0.091286307053942,0.6,,,,,Friendly planes shot max epochs:,29,,,,,
+Friendly planes shot max epochs:,121,,,,,0.086956521739131,0.7,,,,,Enemy planes shot no response:,345,,,,,
+Enemy planes shot no response:,0,,,,,0.040816326530612,0.8,,,,,Enemy planes shot epoch counter:,19,,,,,
+Enemy planes shot epoch counter:,395,,,,,0.008547008547009,0.9,,,,,,,,,,,
+,,,,,,0,1,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+Total of planes generated:,1000,,Number of epochs,turret confidence level,,,,,,,,Friendly planes generated;,243,,8,1,0.5,"[5,1,5,5,5,9]"
+Friendly planes generated;,250,,2,1,,,,,,,,Enemy planes generated;,757,,,,,
+Enemy planes generated;,750,,,,,,,,,,,Friendly planes in range:,243,,,,,
+Friendly planes in range:,183,,,,,,,,,,,Enemy planes in range:,757,,,,,
+Enemy planes in range:,560,,,,,,,,,,,Friendly planes shot max epochs:,25,,,,,
+Friendly planes shot max epochs:,144,,,,,,,,,,,Enemy planes shot no response:,291,,,,,
+Enemy planes shot no response:,0,,,,,,,,,,,Enemy planes shot epoch counter:,35,,,,,
+Enemy planes shot epoch counter:,442,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+,,,,,,,,,,,,Friendly planes generated;,241,,8,1,0.6,"[5,1,5,5,5,9]"
+,,,,,,,,,,,,Enemy planes generated;,759,,,,,
+,,,,,,,,,,,,Friendly planes in range:,241,,,,,
+,,,,,,,,,,,,Enemy planes in range:,759,,,,,
+,,,,,,,,,,,,Friendly planes shot max epochs:,22,,,,,
+,,,,,,,,,,,,Enemy planes shot no response:,170,,,,,
+,,,,,,,,,,,,Enemy planes shot epoch counter:,52,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+,,,,,,,,,,,,Friendly planes generated;,253,,8,1,0.7,"[5,1,5,5,5,9]"
+,,,,,,,,,,,,Enemy planes generated;,747,,,,,
+,,,,,,,,,,,,Friendly planes in range:,253,,,,,
+,,,,,,,,,,,,Enemy planes in range:,747,,,,,
+,,,,,,,,,,,,Friendly planes shot max epochs:,22,,,,,
+,,,,,,,,,,,,Enemy planes shot no response:,73,,,,,
+,,,,,,,,,,,,Enemy planes shot epoch counter:,59,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+,,,,,,,,,,,,Friendly planes generated;,245,,8,1,0.8,"[5,1,5,5,5,9]"
+,,,,,,,,,,,,Enemy planes generated;,755,,,,,
+,,,,,,,,,,,,Friendly planes in range:,245,,,,,
+,,,,,,,,,,,,Enemy planes in range:,755,,,,,
+,,,,,,,,,,,,Friendly planes shot max epochs:,10,,,,,
+,,,,,,,,,,,,Enemy planes shot no response:,28,,,,,
+,,,,,,,,,,,,Enemy planes shot epoch counter:,30,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+,,,,,,,,,,,,Friendly planes generated;,234,,8,1,0.9,"[5,1,5,5,5,9]"
+,,,,,,,,,,,,Enemy planes generated;,766,,,,,
+,,,,,,,,,,,,Friendly planes in range:,234,,,,,
+,,,,,,,,,,,,Enemy planes in range:,766,,,,,
+,,,,,,,,,,,,Friendly planes shot max epochs:,2,,,,,
+,,,,,,,,,,,,Enemy planes shot no response:,0,,,,,
+,,,,,,,,,,,,Enemy planes shot epoch counter:,10,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,Total of planes generated:,1000,Scenario 3,Number of epochs,turret confidence level,failure prob.,turrets at
+,,,,,,,,,,,,Friendly planes generated;,237,,8,1,1,"[5,1,5,5,5,9]"
+,,,,,,,,,,,,Enemy planes generated;,763,,,,,
+,,,,,,,,,,,,Friendly planes in range:,237,,,,,
+,,,,,,,,,,,,Enemy planes in range:,763,,,,,
+,,,,,,,,,,,,Friendly planes shot max epochs:,0,,,,,
+,,,,,,,,,,,,Enemy planes shot no response:,0,,,,,
+,,,,,,,,,,,,Enemy planes shot epoch counter:,0,,,,,
