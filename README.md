@@ -41,6 +41,17 @@ In the left panel information about the model can be requested. There are 3 butt
 2. *Show knowledge base*: shows the knowledge base of a particular turret. First select this button, then click on a turret to view its knowledge base at that moment. The knowledge base is cleared after a run (i.e. the plane has crashed or the plane has been destroyed). 
 3. *Show messages*: Shows the messages for all turrets sent for a particular run. 
 
+### Statistics panel
+1. *Total of planes generated*: Total number of planes generated in the simulation.
+2. *Friendly planes generated*: Total number of friendly planes generated in the simulation.
+3. *Enemy planes generated*: Total number of enemy planes generated in the simulation.
+4. *Friendly planes in range*: Total number of friendly planes that were in range of at least one turret.
+5. *Enemy planes in range*: Total number of enemy planes that were in range of at least one turret. 
+6. *Friendly planes shot max epochs reached*: Total number of friendly planes shot due the maximum life time before identification has been reached.
+7. *Enemy planes shot no response*: Total number of enemy planes shot due to no response on the indentification message.
+8. *Enemy planes shot max epochs reached*: Total number of enemy planes shot due the maximum life time before identification has been reached.
+
+
 # Multi-agent-systems Project Report
 ## Identification, Friend or Foe system
 ### Introduction
