@@ -82,7 +82,7 @@ class GUI(Frame):
 		self.turret_range_text = StringVar()
 		self.turret_range_text.set( "Turret range:\t\t\t")
 		self.turret_conf_text = StringVar()
-		self.turret_conf_text.set( "Turret confidence threshold:\t")
+		self.turret_conf_text.set( "Turret confirmation threshold:\t")
 		self.numEpochs_text = StringVar()
 		self.numEpochs_text.set("Number of epochs:\t\t")
 		self.failprob_text = StringVar()
