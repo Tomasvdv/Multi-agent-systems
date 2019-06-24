@@ -20,7 +20,7 @@ When running instructions above, you will be shown the main interface of the app
   <img width="800" height="300" src="/img/app.png">
 </p>
 
-### Right panel
+### Left panel
 This panel is used for interaction between the user and the model. Most important are the *play, pause and step button* on the bottom of the panel. The *play* button lets the simulation run with the speed defined above in the *simulation speed* box. The *pause* button does what it says. And the *step* button lets the simulation run for one step at a time. 
 <br />
 There are a few entry fields.
@@ -35,7 +35,7 @@ There are a few entry fields.
 ### Middle panel
 In the middle panel the turrets and planes are shown. The turrets have connections between them (black lines). The message sending and shooting range of the turrets is shown as a black circle (these distances are equal for simplicity). The turret names are printed in blue. The planes can either be friendly or enemy. The change of spawning a friendly plane is 25%. The name of a plane is printed in red for enemy planes, and in lime-green for friendly planes.
 
-### Left panel
+### Right panel
 In the left planel information about the model can be requested. There are 3 buttons at the bottom of the panel. 
 1. *Show statistics*: shows the overall statistics of the model over all epochs until so far. 
 2. *Show knowledge base*: shows the knowledge base of a particular turret. First select this button, then click on a turret to view its knowledge base at that moment. The knowledge base is cleared after a run (i.e. the plane has crashed or the plane has been destroyed). 
@@ -44,55 +44,72 @@ In the left planel information about the model can be requested. There are 3 but
 # Multi-agent-systems Project Report
 ## Friend or Foe Identification system
 ### Introduction
-This research focuses on analyzing a Friend or Foe Identification System (IFF). Since the invention of radar for localizing enemy planes in WWII, the problem of identifying planes as friend or foe has been around. Because in WW1 the planes were relatively slow and performed more close combat, the planes could be marked with colours to help distinguishing between friends and foes. However, as planes became faster and were flying at higher altitudes, this identification method became obsolete. In WWII the first IFF systems were invented to prevent friendly fire incidents and to aid the overall decision making process in tactical plans. IFF was therefore first used by the military, but the system was later on also used for civilian air traffic.
+This research focuses on analyzing a Friend or Foe Identification System (IFF). Since the invention of radar for localizing enemy planes in WWII, the problem of identifying planes as either friend or foe has been present in every military system on the planet. In WW1 the planes were relatively slow and performed nearly exclusively close combat and no targeted strikes, the planes could be marked with colours to help pilots distinguish enemy planes from friendly planes. However, as planes became faster and started flying at higher altitudes, this identification method became obsolete. In WWII the first IFF systems were invented and put into use to prevent friendly fire incidents and to aid the overall decision making process in tactical plans. IFF was therefore first used by the military, and only later adapted and put in use for civilian air traffic.
 <br />
-Radar-based IFF systems generally consist of a sender that sends a (possibly encrypted) message to a plane. The plane's transponder responds by sending a message back to the sender, which is verified by the sender. The sender can be based on many platforms, e.g. ground defense bases, ships, other planes, etc. IFF systems are only able to positively identify friends. It is not the case (as the name may suggest) that IFF systems are able to positively identify enemy aircraft. 
-The latter is due to the fact that the sender can only derive that a plane is friendly if it gets a response back from the plane, but if it doesn't get a response, the plane does not neccessarily have to be a foe. 
+Radar-based IFF systems generally consist of a sender that sends a (possibly encrypted) message to a plane, often called a challenge. The plane's transponder responds by solving the challenge (i.e. determining the correct response) and sending a response back to the sender, which is then verified by the sender. The sender can be based on many platforms, e.g. ground defense bases, ships, other planes, etc. IFF systems are only able to positively identify friends. It is not the case (as the name may suggest) that IFF systems are able to positively identify enemy aircraft. 
+The latter is due to the fact that the sender can only derive that a plane is friendly if it gets a response back from the plane, but if it doesn't get a response, the plane does not neccessarily have to be a foe. It could be that something went wrong during the sending or receiving of the message.
 
-We decided to build an aplication using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the interal settings of the simulation influence the overall misclasification rate of friendly planes. The main research question is: How many friendly planes will be misclassified as enemy and which factors led to this misclassification? In the methods section all internal mechanism will be explained w.r.t the interal knowledge of an agent about the world and how this knowledge expands during the simulation. Also the message protocol we implemented will be discussed with an example how these message lead to a certain conclusion within the knowledge base of the agent. One other element is the influence of the different simulation parameters on the knowledge of an agent about the world. 
+We decided to build an aplication using Python3 to simulate an anti-aircraft system which uses a very simplified version of the IFF system to determine if an incoming plane is friend or foe. In our application we decided to model a version of the A1 protocol between anti-aircraft systems (turrets) and an incoming plane. With our application we want to experiment with how the interal settings of the simulation influence the overall misclasification rate of friendly planes. The main research question is: How many friendly planes will be misclassified as enemies and which factors led to this misclassification? In the methods section all internal mechanism will be explained w.r.t. the interal knowledge of an agent about the world and how this knowledge expands during the simulation. In addition, the message protocol we implemented will be discussed with an example of how these messages lead to a certain conclusion within the knowledge base of the agent. One other element is the influence of the different simulation parameters on the knowledge of an agent about the world. 
 
 ### Methods
-First we are going to explain the core mechanism generating agents, the knowledge which can be aquired by those agents and the message system which enables the agents to share their knowledge with other agents.
-#### Agents
-In our simulation we have to types of agents, namely planes and turrets. Before we explain the specifics about our implementation of planes and turrets we need to explain the basic knowledge and message system first.
+<!-- First we are going to explain the core mechanism generating agents, the knowledge which can be aquired by those agents and the message system which enables the agents to share their knowledge with other agents. -->
+In this section, the core mechanisms of the simulation will be discussed. This includes the way messages are passed in the simulation and the different kinds of knowledge that agents can acquire over the course of the simulation.
+
+<!--Before we explain the specifics about our implementation of planes and turrets we need to explain the basic knowledge and message system first.-->
+#### Message protocol
+All agents communicate to each other using messages. Messages are marked as successfully received throught the A1 protocol.
+Every message that is send has a chance of not reaching its destination. This probability can be set using the command panel in the simulation. 
 
 Each agent has it own list of sent messages, received messages and an inbox. At every epoch of the simulation an agent will check its inbox and perform the following action for each message in its inbox:
-* Add the content of the message to its knowledge base
-* Add the message to its list of received messages
+* Add the contents of the message to its knowledge base
+* Add the message to its list of received messages, along with a note on who has sent the message
 * Add the message to a message manager for display in the application
-* Send a reply to the sender
-The reply routine works as follows:
+* (Optionally) send a reply to the sender to confirm that the message was received successfully.
 
-* In case of our implementation of A1 the reply will be: K_agent1(message)
-* This reply is added to the agents knowledge base
-* If it is the case that K_a(K_b(K_a(K_b(message)))) set the message as confirmed
-* Else sent back replies until it is the case that K_a(K_b(K_a(K_b(message))))
+The confirmation routine works as follows:
+* Assume that the sender is called a, and the receiver is called b.
+* a sends a message to b. The contents are 'message'
+* The reply of agent b to agent a will be: K_b(message). This means that message is known to b.
+* If the reply is successfully received by agent a, K_a(K_b(message)) will be added and send back to agent b.
+* In the case that a message does not reach the receiving agent, the message will be resent the next epoch. 
+* This process is repeated untill  K_a(K_b(K_a(K_b(message)))) is true in the model
+* If it is the case that K_a(K_b(K_a(K_b(message)))), agent a can set the message as successfully received.
 
-After all messages in the inbox are handled the agent will check whether one of its previous messages hasn't reached the other agent yet. It will resend all messages which aren't confirmed yet.
+After all messages in the inbox are handled the agent will check whether one of its previous messages hasn't reached the other agent (i.e. it hasn't received a confirmation). It will resend all messages which aren't confirmed yet.
 
-<b>Turret</b>
+#### Agents
+The simulation consists of two different types of agents; planes and turrets. Turrets can send challenges to planes and can communicate with other turrets on the contents of their knowledge base. <!--This will be elaborated on in more detail further on in the paper.-->
 
-At initialization each turret will send its position to other turrets. This will ensure its common knowledge for the turrets were each turret is relative to a plane and to enable a different turret to order another turret to fire when a plane is close.
-Each turret has also a specific range in which it can spot planes. 
-During the simulation the turret will keep track of each plane in its own range. If it is not encountered before by the turret it will first broadcast the planes position to the other turrets. It will sent a message to the plane to identify itself.
+##### Turrets
+During the first epoch of the simulation each turret will send its position in the world to other turrets. This will ensure that it's common knowledge among all turrets where each turret is located. This allows turrets to calculate which turret is closest to a plane and therefore is best suited to shoot down the plane if it is identified as an enemy.
 
-When it is the case the plane has been encountered before, the turret will update its knowledge about how long the plane is already in sight.
-Next the turret will loop through its received messages and if one message is from a plane and it contains the message "key" and its name, the turret will add to its knowledge he knows that plane is friendly.
+Each turret has also a specific range in which it can spot planes. This is indicated in the simulation as a circle around the turret.
+During the simulation the turret will keep track of all planes that enter its range. If it is not yet detected or identified by any of the other turrets it will broadcast the position of the plane to the other turrets. It will then send a message to the plane ordering it to identify itself.
 
-The turret can decide to tricker the shooting procedure if:
+When it is the case the plane has been encountered before, the turret will update its knowledge about how long the plane is already in sight and how many messages it has ignored (or not received).
+Next the turret will loop through its received messages and if one message is from a plane and it contains the message "key" and its name, the turret will add to its knowledge the fact that the plane is friendly, and broadcast this knowledge to the other turrets.
 
-* K_turret(K_plane(K_turret(no response)))
-* it is the case the plane is not known as friendly
-* it has been in sight for too long.
-When the turret decides its time to shoot it will loop through all turrets locations and determines the closest turret relative to the plane. 
-In the next step of the simulation the turret will open fire if knows it needs to shoot down the plane and if it is the case the confidence threshold of number of turrets which identifies the plane as foe has been met.
+If the plane ignores enough messages sent by the turret, the turret will mark the plane as not friendly.
 
-<b> Plane</b>
-The plane has at initialization a position in the border of our simulation world. It will receive a constant speed of one tile per iteration of the simulation in one direction and it will be following that direction until it will fly outside the world or until it has been shot.
+The turret can decide to trigger the shooting procedure if the following three facts are true in the model:
 
-If a plane has "identify" in its knowledge base it will sent the message: K_sender(key+name) if its friendly, else it will sent the message: no response which represents no repsonse from the plane.
+* The plane hasn't responded for a set number of epochs
+* It is the case the plane is not known as friendly
+* The plane has been in sight for too long.
+* A set number of turrets marked the plane as probably not friendly.
 
-There is also a function to destroy the plane if it is outside the simulation world.
+When the turret decides its time to shoot it will loop through all turrets locations and determines the closest turret relative to the plane. It will then send a message to the turret ordering it to shoot down the plane.
+
+In the next epoch of the simulation the turret receiving the message will shoot down the plane if the message was correctly received and the plane is still in range of the turret.
+
+<!--open fire if it knows it needs to shoot down the plane and if it is the case the confidence threshold of number of turrets which identifies the plane as foe has been met.-->
+
+##### Planes
+On initialization a plane is given a location the border of our simulation world. It will receive a constant speed of one tile per epoch of the simulation. It flies in a straight line until it either reaches another border of the simulation, or it is shot down by one of the turrets.
+
+When a plane receives a message from a turret asking it to identify itself, it saves this in its knowledge base.
+If a plane has "identify" in its knowledge base and the plane is friendly, it will sent the message: K_sender(key+name) as a response to the turret that asked the plane to identify itself. If the plane is not friendy it will sent the message: no response to the turret. This message is used as a practical implementation of not getting a reply from the plane.
+
 
 #### Experiment settings
 
@@ -117,17 +134,14 @@ The following settings will be tested during the experiment:
 * Failure probability: 0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
 
 
- 
-#### TCP protocol
-TCP labels its packets (bits of information) with numbers. It also uses a deadline before which a packet needs to reach its destination (time-out). For each received packet, the sender is notified by means of an acknowledgment. If a time-out occurs, no acknoledgment is recheived, on which the source sends another copy of the missing/delayed packet. In this way, packets are always assembled in order, without missing packets and in this way the protocol is robust against delays. 
- 
 ### Results
 
 ### Discussion
 When the core program works as we want it to we have several possible extensions planned for the program.
-It might be interesting to split the current turret agent up into two seperate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes.
+It might be interesting to split the current turret agent up into two seperate agents: a radar station that can see and identify planes, but can't shoot at them; and a turret that cannot see or communicate with planes, but is able to shoot at planes and has to rely on the radar station to give it commands.
 
-We could also make the simulation more dynamic, by including entry fields for maximal number of planes, maximal number of turrets, turret range and size of the world. This way the simulation doesn't have to be restarted every time the user wants to change some values. 
+Another interesting extension would be to expand on or change the communication protocols it uses and the amount of certainty that a turret needs to have before shooting down a plane.
 
-Another interesting extension would be to expand on or change the communication protocols it uses and the amount of certainty that a turret needs to have before shooting down a plane. 
+#### TCP protocol
+TCP labels its packets (bits of information) with numbers. It also uses a deadline before which a packet needs to reach its destination (time-out). For each received packet, the sender is notified by means of an acknowledgment. If a time-out occurs, no acknoledgment is recheived, on which the source sends another copy of the missing/delayed packet. In this way, packets are always assembled in order, without missing packets and in this way the protocol is robust against delays. 
 
