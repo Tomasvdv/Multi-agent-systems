@@ -129,7 +129,9 @@ If a plane has "identify" in its knowledge base and the plane is friendly, it wi
 
 #### Experiment settings
 
-In this research we will perform multiple experiments to see how certain parameters setting effect amount of correctly identified planes. We will measure the following data points from the simulation:
+#### Experiment settings
+
+In this research we will perform multiple exeriments to see how certain parameters setting effect amount of correctly indentified planes. We will measure the following data points from the simulation:
 * Total of planes generated
 * Friendly planes generated
 * Enemy planes generated
@@ -137,18 +139,38 @@ In this research we will perform multiple experiments to see how certain paramet
 * Enemy planes in range
 * Friendly planes shot max epochs
 * Enemy planes shot no response
-* Enemy planes shot epoch counter
+* Enemy planes shot max epoch counter
 
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
-The following settings will be tested during the experiment:
+There are three different scenarios in wich we will test different settings of the simulation.
+
+For message protocol A1
+Simulation A: 
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confidence threshold 1 and 2
-* Number of epochs before shot: 20,15,10,15
-* Failure probability: 0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
+* Turret confidence threshold 1
+* Number of epochs before shot: 8,7,6,5,4,3,2
+* Failure probability: 0.1
 
+Simulation B: 
+
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1,2,3
+* Number of epochs before shot: 8
+* Failure probability: 0.1
+
+Simulation C: 
+
+* Number of planes 1
+* Number of turrets 3
+* Range of turrets 4
+* Turret confidence threshold 1
+* Number of epochs before shot: 8
+* Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
 
 ### Results
 
