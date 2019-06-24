@@ -27,7 +27,7 @@ There are a few entry fields.
 1. *Number of planes*: adjusts the number of planes in the simulation. However, for simplicity it is advised to use only 1 plane.
 2. *Number of turrets*: adjusts the number of turrets in the simulation. 
 3. *Turret range*: adjusts the range of the turrets.
-4. *Turret confirmation threshold*: the number of turrets that must agree on shooting down a plane before shooting. 
+4. *Turret confidence threshold*: the number of turrets that must agree on shooting down a plane before shooting. 
 5. *Number of epochs*: the amount of steps that a plane can live.
 6. *Failure probability*: the probability that sending a message fails (e.g. message gets lost).  
 7. *Simulation speed (iter/second)*: adjusts the speed of the simulation when run with the *play* button. 
@@ -142,9 +142,9 @@ In this research we will perform multiple experiments to see how certain paramet
 * Enemy planes generated
 * Friendly planes in range
 * Enemy planes in range
-* Friendly planes shot max epochs reached
+* Friendly planes shot max epochs
 * Enemy planes shot no response
-* Enemy planes shot max epochs reached
+* Enemy planes shot max epoch counter
 
 In each experiment there will be 1000 planes generated in total. The amount of planes in range versus the reason it got shot down will serve as a measurement of the simulation performance.
 
@@ -156,7 +156,7 @@ Simulation A:
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confirmation threshold 1
+* Turret confidence threshold 1
 * Number of epochs before shot: 8,7,6,5,4,3,2
 * Failure probability: 0.1
 
@@ -165,7 +165,7 @@ Simulation B:
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confirmation threshold 1,2,3
+* Turret confidence threshold 1,2,3
 * Number of epochs before shot: 8
 * Failure probability: 0.1
 
@@ -174,7 +174,7 @@ Simulation C:
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confirmation threshold 1
+* Turret confidence threshold 1
 * Number of epochs before shot: 8
 * Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
 
@@ -194,7 +194,7 @@ Simulation B:
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confirmation threshold 1,2,3
+* Turret confidence threshold 1,2,3
 * Number of epochs before shot: 8
 * Failure probability: 0.1
 
@@ -203,18 +203,23 @@ Simulation C:
 * Number of planes 1
 * Number of turrets 3
 * Range of turrets 4
-* Turret confirmation threshold 1
+* Turret confidence threshold 1
 * Number of epochs before shot: 8
 * Failure probability: 0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
 
 
 ### Results
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom) for the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
 <p align="center">
   <img width="500" height="300" src="/img/threshold.png">
 </p>
+<p align="center">
+  <img width="500" height="300" src="/img/message_fail.png">
+</p>
+
 
 ### Discussion
 When the core program works as we want it to we have several possible extensions planned for the program.
