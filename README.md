@@ -183,7 +183,7 @@ Settings for the experiment on Failure probability:
 
 
 ### Results
-The results for the experiments are shown in the barplots below. These are the results (from top to bottom respectively) for the experiments on the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability.
+The results for the experiments are shown in the barplots below. These are the results (from top to bottom respectively) for the experiments on the amount of epochs a plane is allowed to live, the confirmation threshold (i.e. by how many turrets a plane must be marked as 'enemy' before being shot at) and the message fail probability (the probability that sending a message fails, e.g. because the message was lost or corrupted). The legend positioned on the right side of the barplots first lists the used protocol (A1 or TCP) and then the type of plane. The results are given in the amount of shot down planes over the amount of planes that were in range of a turret. 
 <p align="center">
   <img width="500" height="300" src="/img/epochs.png">
 </p>
