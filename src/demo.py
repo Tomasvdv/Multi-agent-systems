@@ -181,7 +181,7 @@ class Demo():
 				for col in range(10):
 					self.canvas.create_image(col*cellwidth,row*cellheight,image=self.canvas.land,anchor=NW)
 			
-			locations =[3,1,3,4,3,7]
+			locations =[5,1,5,5,5,9]
 			#init and draw turrets
 			for idx in range(self.numTurrets):
 				row = locations[idx+self.turretCounter]
